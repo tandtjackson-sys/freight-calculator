@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+&#x20;   <meta charset="UTF-8">
+
+&#x20;   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+&#x20;   <title>Freight Dim Weight \& Density Calculator | Free Logistics Tool</title>
+
+&#x20;   <style>
+
+&#x20;       :root {
+
+&#x20;           --primary: #1e3a8a;
+
+&#x20;           --accent: #2563eb;
+
+&#x20;           --bg: #f8fafc;
+
+&#x20;           --surface: #ffffff;
+
+&#x20;           --text: #0f172a;
+
+&#x20;           --border: #cbd5e1;
+
+&#x20;       }
+
+
+
+&#x20;       body {
+
+&#x20;           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+&#x20;           background-color: var(--bg);
+
+&#x20;           color: var(--text);
+
+&#x20;           margin: 0;
+
+&#x20;           padding: 20px;
+
+&#x20;       }
+
+
+
+&#x20;       .container {
+
+&#x20;           max-width: 1000px;
+
+&#x20;           margin: 0 auto;
+
+&#x20;           display: grid;
+
+&#x20;           grid-template-columns: 1fr 300px;
+
+&#x20;           gap: 20px;
+
+&#x20;       }
+
+
+
+&#x20;       .main-content {
+
+&#x20;           background: var(--surface);
+
+&#x20;           padding: 24px;
+
+&#x20;           border-radius: 8px;
+
+&#x20;           box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+
+&#x20;       }
+
+
+
+&#x20;       .ad-banner {
+
+&#x20;           background: #e2e8f0;
+
+&#x20;           border: 1px dashed var(--border);
+
+&#x20;           text-align: center;
+
+&#x20;           color: #64748b;
+
+&#x20;           font-size: 0.8rem;
+
+&#x20;           display: flex;
+
+&#x20;           align-items: center;
+
+&#x20;           justify-content: center;
+
+&#x20;           margin-bottom: 20px;
+
+&#x20;       }
+
+
+
+&#x20;       .ad-top { height: 90px; width: 100%; }
+
+&#x20;       .ad-sidebar { height: 600px; width: 100%; position: sticky; top: 20px; }
+
+
+
+&#x20;       h1 { margin-top: 0; color: var(--primary); font-size: 1.5rem; }
+
+&#x20;       
+
+&#x20;       .form-grid {
+
+&#x20;           display: grid;
+
+&#x20;           grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+
+&#x20;           gap: 12px;
+
+&#x20;           margin-bottom: 20px;
+
+&#x20;       }
+
+
+
+&#x20;       .input-group {
+
+&#x20;           display: flex;
+
+&#x20;           flex-direction: column;
+
+&#x20;       }
+
+
+
+&#x20;       label {
+
+&#x20;           font-size: 0.85rem;
+
+&#x20;           font-weight: 600;
+
+&#x20;           margin-bottom: 4px;
+
+&#x20;       }
+
+
+
+&#x20;       input, select {
+
+&#x20;           padding: 10px;
+
+&#x20;           border: 1px solid var(--border);
+
+&#x20;           border-radius: 4px;
+
+&#x20;           font-size: 1rem;
+
+&#x20;       }
+
+
+
+&#x20;       button {
+
+&#x20;           grid-column: 1 / -1;
+
+&#x20;           background: var(--accent);
+
+&#x20;           color: white;
+
+&#x20;           border: none;
+
+&#x20;           padding: 12px;
+
+&#x20;           font-size: 1rem;
+
+&#x20;           font-weight: bold;
+
+&#x20;           border-radius: 4px;
+
+&#x20;           cursor: pointer;
+
+&#x20;       }
+
+
+
+&#x20;       button:hover { background: var(--primary); }
+
+
+
+&#x20;       .results {
+
+&#x20;           margin-top: 24px;
+
+&#x20;           display: none;
+
+&#x20;       }
+
+
+
+&#x20;       .results-table {
+
+&#x20;           width: 100%;
+
+&#x20;           border-collapse: collapse;
+
+&#x20;           margin-top: 10px;
+
+&#x20;       }
+
+
+
+&#x20;       .results-table th, .results-table td {
+
+&#x20;           padding: 12px;
+
+&#x20;           text-align: left;
+
+&#x20;           border-bottom: 1px solid var(--border);
+
+&#x20;       }
+
+
+
+&#x20;       .results-table th { background: #f1f5f9; }
+
+
+
+&#x20;       .highlight-box {
+
+&#x20;           background: #eff6ff;
+
+&#x20;           border-left: 4px solid var(--accent);
+
+&#x20;           padding: 12px;
+
+&#x20;           margin-top: 15px;
+
+&#x20;       }
+
+
+
+&#x20;       @media (max-width: 768px) {
+
+&#x20;           .container { grid-template-columns: 1fr; }
+
+&#x20;           .ad-sidebar { display: none; }
+
+&#x20;       }
+
+&#x20;   </style>
+
+</head>
+
+<body>
+
+
+
+<div class="container">
+
+&#x20;   <div class="main-content">
+
+&#x20;       <div class="ad-banner ad-top">AdSpace: Leaderboard (728x90 / Responsive)</div>
+
+
+
+&#x20;       <h1>Freight \& Logistics Dim Weight Calculator</h1>
+
+&#x20;       <p style="font-size: 0.9rem; color: #475569;">Calculate billable dimensional weight across major carriers and estimate your LTL Freight Density Class.</p>
+
+
+
+&#x20;       <form id="calc-form">
+
+&#x20;           <div class="form-grid">
+
+&#x20;               <div class="input-group">
+
+&#x20;                   <label for="unit">Units</label>
+
+&#x20;                   <select id="unit">
+
+&#x20;                       <option value="imp">Inches / Lbs</option>
+
+&#x20;                       <option value="met">CM / Kgs</option>
+
+&#x20;                   </select>
+
+&#x20;               </div>
+
+&#x20;               <div class="input-group">
+
+&#x20;                   <label for="length">Length</label>
+
+&#x20;                   <input type="number" id="length" step="0.1" required>
+
+&#x20;               </div>
+
+&#x20;               <div class="input-group">
+
+&#x20;                   <label for="width">Width</label>
+
+&#x20;                   <input type="number" id="width" step="0.1" required>
+
+&#x20;               </div>
+
+&#x20;               <div class="input-group">
+
+&#x20;                   <label for="height">Height</label>
+
+&#x20;                   <input type="number" id="height" step="0.1" required>
+
+&#x20;               </div>
+
+&#x20;               <div class="input-group">
+
+&#x20;                   <label for="weight">Actual Weight</label>
+
+&#x20;                   <input type="number" id="weight" step="0.1" required>
+
+&#x20;               </div>
+
+&#x20;               <button type="button" onclick="calculate()">Calculate Billable Weight</button>
+
+&#x20;           </div>
+
+&#x20;       </form>
+
+
+
+&#x20;       <div id="results" class="results">
+
+&#x20;           <h3>Carrier Comparison</h3>
+
+&#x20;           <table class="results-table">
+
+&#x20;               <thead>
+
+&#x20;                   <tr>
+
+&#x20;                       <th>Carrier / Mode</th>
+
+&#x20;                       <th>Dim Factor</th>
+
+&#x20;                       <th>Dim Weight</th>
+
+&#x20;                       <th>Billable Weight</th>
+
+&#x20;                   </tr>
+
+&#x20;               </thead>
+
+&#x20;               <tbody id="results-body"></tbody>
+
+&#x20;           </table>
+
+
+
+&#x20;           <div class="highlight-box">
+
+&#x20;               <strong>Estimated LTL Freight Density Class:</strong> <span id="freight-class">--</span>
+
+&#x20;               <br>
+
+&#x20;               <small>Calculated Density: <span id="density-val">--</span> lbs/cu.ft.</small>
+
+&#x20;           </div>
+
+&#x20;       </div>
+
+&#x20;   </div>
+
+
+
+&#x20;   <div class="sidebar">
+
+&#x20;       <div class="ad-banner ad-sidebar">AdSpace: Sticky Skyscraper (300x600)</div>
+
+&#x20;   </div>
+
+</div>
+
+
+
+<script>
+
+function calculate() {
+
+&#x20;   const unit = document.getElementById('unit').value;
+
+&#x20;   const l = parseFloat(document.getElementById('length').value);
+
+&#x20;   const w = parseFloat(document.getElementById('width').value);
+
+&#x20;   const h = parseFloat(document.getElementById('height').value);
+
+&#x20;   const actualW = parseFloat(document.getElementById('weight').value);
+
+
+
+&#x20;   if (!l || !w || !h || !actualW) return;
+
+
+
+&#x20;   const cubicVolume = l \* w \* h; // Cubic Inches or CM
+
+&#x20;   
+
+&#x20;   // Standard Divisors (Imperial)
+
+&#x20;   const carriers = \[
+
+&#x20;       { name: "FedEx / UPS (Domestic)", divisor: 139 },
+
+&#x20;       { name: "DHL Express (Intl)", divisor: 139 },
+
+&#x20;       { name: "USPS (Priority)", divisor: 166 },
+
+&#x20;       { name: "Air Freight Standard", divisor: 166 }
+
+&#x20;   ];
+
+
+
+&#x20;   let resultsHtml = '';
+
+&#x20;   
+
+&#x20;   carriers.forEach(c => {
+
+&#x20;       let dimWeight = Math.ceil(cubicVolume / c.divisor);
+
+&#x20;       let billable = Math.max(actualW, dimWeight);
+
+&#x20;       let unitLabel = unit === 'imp' ? 'lbs' : 'kg';
+
+
+
+&#x20;       resultsHtml += `
+
+&#x20;           <tr>
+
+&#x20;               <td><strong>${c.name}</strong></td>
+
+&#x20;               <td>1/${c.divisor}</td>
+
+&#x20;               <td>${dimWeight} ${unitLabel}</td>
+
+&#x20;               <td><span style="color: var(--accent); font-weight: bold;">${billable} ${unitLabel}</span></td>
+
+&#x20;           </tr>
+
+&#x20;       `;
+
+&#x20;   });
+
+
+
+&#x20;   document.getElementById('results-body').innerHTML = resultsHtml;
+
+
+
+&#x20;   // LTL Density \& Class Calculation (Pounds per Cubic Foot)
+
+&#x20;   let cubicFeet = cubicVolume / 1728;
+
+&#x20;   let density = actualW / cubicFeet;
+
+&#x20;   let freightClass = getFreightClass(density);
+
+
+
+&#x20;   document.getElementById('density-val').innerText = density.toFixed(2);
+
+&#x20;   document.getElementById('freight-class').innerText = `Class ${freightClass}`;
+
+
+
+&#x20;   document.getElementById('results').style.display = 'block';
+
+}
+
+
+
+function getFreightClass(density) {
+
+&#x20;   if (density < 1) return "500";
+
+&#x20;   if (density < 2) return "400";
+
+&#x20;   if (density < 4) return "250";
+
+&#x20;   if (density < 6) return "175";
+
+&#x20;   if (density < 8) return "125";
+
+&#x20;   if (density < 10) return "100";
+
+&#x20;   if (density < 12) return "92.5";
+
+&#x20;   if (density < 15) return "85";
+
+&#x20;   if (density < 22.5) return "70";
+
+&#x20;   if (density < 30) return "60";
+
+&#x20;   return "50";
+
+}
+
+</script>
+
+
+
+</body>
+
+</html>
+
