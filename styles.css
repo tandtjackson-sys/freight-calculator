@@ -1281,4 +1281,53 @@ td {
 
 
 }
+/* =========================================================
+   FONT RESTORE — force the calculator back to the clean
+   modern sans-serif appearance
+   ========================================================= */
 
+html,
+body,
+button,
+input,
+select,
+textarea {
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+label,
+.package-title,
+.package-count,
+.primary-button,
+.secondary-button,
+.rule-title,
+.rule-description,
+.rule-meta,
+.summary-label,
+.summary-value,
+.density-label,
+.density-value,
+.freight-class,
+.site-footer {
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif !important;
+}
