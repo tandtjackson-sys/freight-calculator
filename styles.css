@@ -674,7 +674,16 @@ select:focus {
 &#x20;   color:#3730a3;
 
 }
-
+.secondary-button {
+    margin-top:14px;
+    padding:10px 14px;
+    border:0;
+    border-radius:10px;
+    background:#eef2ff;
+    color:#3730a3;
+    cursor:pointer;
+    font-weight:800;
+}
 
 
 .results-section {
