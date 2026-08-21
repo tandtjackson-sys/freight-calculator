@@ -1,728 +1,2377 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
-&#x20;   <meta charset="UTF-8">
-
-&#x20;   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-&#x20;   <title>Freight Dim Weight \& Density Calculator</title>
-
-&#x20;   <style>
-
-&#x20;       :root {
-
-&#x20;           --primary: #0f172a;
-
-&#x20;           --accent: #2563eb;
-
-&#x20;           --accent-hover: #1d4ed8;
-
-&#x20;           --bg: #f8fafc;
-
-&#x20;           --surface: #ffffff;
-
-&#x20;           --text: #1e293b;
-
-&#x20;           --text-muted: #64748b;
-
-&#x20;           --border: #cbd5e1;
-
-&#x20;           --radius: 10px;
-
-&#x20;       }
-
-
-
-&#x20;       \* {
-
-&#x20;           box-sizing: border-box;
-
-&#x20;       }
-
-
-
-&#x20;       body {
-
-&#x20;           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-
-&#x20;           background-color: var(--bg);
-
-&#x20;           color: var(--text);
-
-&#x20;           margin: 0;
-
-&#x20;           padding: 32px 16px;
-
-&#x20;           font-size: 18px;
-
-&#x20;           line-height: 1.5;
-
-&#x20;       }
-
-
-
-&#x20;       .container {
-
-&#x20;           max-width: 1100px;
-
-&#x20;           margin: 0 auto;
-
-&#x20;           display: grid;
-
-&#x20;           grid-template-columns: 1fr 300px;
-
-&#x20;           gap: 32px;
-
-&#x20;       }
-
-
-
-&#x20;       .main-card {
-
-&#x20;           background: var(--surface);
-
-&#x20;           padding: 40px;
-
-&#x20;           border-radius: var(--radius);
-
-&#x20;           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-
-&#x20;           border: 1px solid var(--border);
-
-&#x20;       }
-
-
-
-&#x20;       .ad-placeholder {
-
-&#x20;           background: #f1f5f9;
-
-&#x20;           border: 2px dashed #94a3b8;
-
-&#x20;           border-radius: var(--radius);
-
-&#x20;           display: flex;
-
-&#x20;           align-items: center;
-
-&#x20;           justify-content: center;
-
-&#x20;           color: var(--text-muted);
-
-&#x20;           font-size: 14px;
-
-&#x20;           font-weight: 600;
-
-&#x20;           letter-spacing: 0.5px;
-
-&#x20;           text-transform: uppercase;
-
-&#x20;       }
-
-
-
-&#x20;       .ad-top {
-
-&#x20;           width: 100%;
-
-&#x20;           height: 90px;
-
-&#x20;           margin-bottom: 32px;
-
-&#x20;       }
-
-
-
-&#x20;       .ad-sidebar {
-
-&#x20;           width: 100%;
-
-&#x20;           height: 600px;
-
-&#x20;           position: sticky;
-
-&#x20;           top: 32px;
-
-&#x20;       }
-
-
-
-&#x20;       h1 {
-
-&#x20;           margin: 0 0 8px 0;
-
-&#x20;           color: var(--primary);
-
-&#x20;           font-size: 2.2rem;
-
-&#x20;           letter-spacing: -0.5px;
-
-&#x20;       }
-
-
-
-&#x20;       .subtitle {
-
-&#x20;           margin: 0 0 32px 0;
-
-&#x20;           color: var(--text-muted);
-
-&#x20;           font-size: 1.1rem;
-
-&#x20;       }
-
-
-
-&#x20;       .form-grid {
-
-&#x20;           display: grid;
-
-&#x20;           grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-
-&#x20;           gap: 20px;
-
-&#x20;           margin-bottom: 24px;
-
-&#x20;       }
-
-
-
-&#x20;       .input-group {
-
-&#x20;           display: flex;
-
-&#x20;           flex-direction: column;
-
-&#x20;       }
-
-
-
-&#x20;       label {
-
-&#x20;           font-size: 0.95rem;
-
-&#x20;           font-weight: 700;
-
-&#x20;           margin-bottom: 8px;
-
-&#x20;           color: var(--primary);
-
-&#x20;       }
-
-
-
-&#x20;       input, select {
-
-&#x20;           padding: 14px 16px;
-
-&#x20;           border: 2px solid var(--border);
-
-&#x20;           border-radius: 8px;
-
-&#x20;           font-size: 1.1rem;
-
-&#x20;           background: #ffffff;
-
-&#x20;           color: var(--text);
-
-&#x20;           transition: border-color 0.15s ease;
-
-&#x20;       }
-
-
-
-&#x20;       input:focus, select:focus {
-
-&#x20;           border-color: var(--accent);
-
-&#x20;           outline: none;
-
-&#x20;       }
-
-
-
-&#x20;       .calc-btn {
-
-&#x20;           grid-column: 1 / -1;
-
-&#x20;           background: var(--accent);
-
-&#x20;           color: #ffffff;
-
-&#x20;           border: none;
-
-&#x20;           padding: 18px;
-
-&#x20;           font-size: 1.25rem;
-
-&#x20;           font-weight: 700;
-
-&#x20;           border-radius: 8px;
-
-&#x20;           cursor: pointer;
-
-&#x20;           transition: background-color 0.15s ease;
-
-&#x20;           margin-top: 8px;
-
-&#x20;       }
-
-
-
-&#x20;       .calc-btn:hover {
-
-&#x20;           background: var(--accent-hover);
-
-&#x20;       }
-
-
-
-&#x20;       .results-section {
-
-&#x20;           margin-top: 40px;
-
-&#x20;           padding-top: 32px;
-
-&#x20;           border-top: 2px solid var(--bg);
-
-&#x20;       }
-
-
-
-&#x20;       .results-title {
-
-&#x20;           font-size: 1.4rem;
-
-&#x20;           margin: 0 0 16px 0;
-
-&#x20;           color: var(--primary);
-
-&#x20;       }
-
-
-
-&#x20;       .table-wrapper {
-
-&#x20;           overflow-x: auto;
-
-&#x20;       }
-
-
-
-&#x20;       table {
-
-&#x20;           width: 100%;
-
-&#x20;           border-collapse: collapse;
-
-&#x20;           text-align: left;
-
-&#x20;       }
-
-
-
-&#x20;       th {
-
-&#x20;           background-color: #f1f5f9;
-
-&#x20;           color: var(--primary);
-
-&#x20;           padding: 16px;
-
-&#x20;           font-weight: 700;
-
-&#x20;           font-size: 1rem;
-
-&#x20;           border-bottom: 2px solid var(--border);
-
-&#x20;       }
-
-
-
-&#x20;       td {
-
-&#x20;           padding: 18px 16px;
-
-&#x20;           border-bottom: 1px solid var(--border);
-
-&#x20;           font-size: 1.05rem;
-
-&#x20;       }
-
-
-
-&#x20;       .highlight-val {
-
-&#x20;           color: var(--accent);
-
-&#x20;           font-weight: 800;
-
-&#x20;           font-size: 1.2rem;
-
-&#x20;       }
-
-
-
-&#x20;       .density-card {
-
-&#x20;           background: #eff6ff;
-
-&#x20;           border: 2px solid #bfdbfe;
-
-&#x20;           border-radius: var(--radius);
-
-&#x20;           padding: 24px;
-
-&#x20;           margin-top: 32px;
-
-&#x20;       }
-
-
-
-&#x20;       .density-title {
-
-&#x20;           font-size: 1.3rem;
-
-&#x20;           font-weight: 800;
-
-&#x20;           color: var(--primary);
-
-&#x20;           margin-bottom: 6px;
-
-&#x20;       }
-
-
-
-&#x20;       .density-sub {
-
-&#x20;           color: var(--text-muted);
-
-&#x20;           font-size: 1rem;
-
-&#x20;       }
-
-
-
-&#x20;       @media (max-width: 850px) {
-
-&#x20;           .container {
-
-&#x20;               grid-template-columns: 1fr;
-
-&#x20;           }
-
-&#x20;           .ad-sidebar {
-
-&#x20;               display: none;
-
-&#x20;           }
-
-&#x20;           .main-card {
-
-&#x20;               padding: 24px;
-
-&#x20;           }
-
-&#x20;       }
-
-&#x20;   </style>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Freight DIM & Density Calculator</title>
+
+<meta
+    name="description"
+    content="Calculate dimensional weight, billable weight, freight density, volume and density-based LTL freight class estimates."
+>
+
+<style>
+/* =========================================================
+   FREIGHT CALCULATOR
+   Modern, responsive, self-contained UI
+   ========================================================= */
+
+:root {
+    --navy-950: #08111f;
+    --navy-900: #0f172a;
+    --navy-800: #172033;
+    --navy-700: #24324a;
+
+    --blue-700: #1d4ed8;
+    --blue-600: #2563eb;
+    --blue-500: #3b82f6;
+    --blue-100: #dbeafe;
+    --blue-50: #eff6ff;
+
+    --green-700: #047857;
+    --green-600: #059669;
+    --green-100: #d1fae5;
+    --green-50: #ecfdf5;
+
+    --amber-700: #b45309;
+    --amber-100: #fef3c7;
+    --amber-50: #fffbeb;
+
+    --red-700: #b91c1c;
+    --red-100: #fee2e2;
+    --red-50: #fef2f2;
+
+    --slate-900: #0f172a;
+    --slate-700: #334155;
+    --slate-600: #475569;
+    --slate-500: #64748b;
+    --slate-400: #94a3b8;
+    --slate-300: #cbd5e1;
+    --slate-200: #e2e8f0;
+    --slate-100: #f1f5f9;
+    --slate-50: #f8fafc;
+
+    --white: #ffffff;
+
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 18px;
+    --radius-xl: 24px;
+
+    --shadow-sm: 0 1px 3px rgba(15, 23, 42, .06);
+    --shadow-md: 0 8px 24px rgba(15, 23, 42, .08);
+    --shadow-lg: 0 18px 45px rgba(15, 23, 42, .10);
+
+    --max-width: 1180px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background:
+        radial-gradient(circle at 15% 0%, rgba(37, 99, 235, .08), transparent 28rem),
+        linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+    color: var(--slate-900);
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+button,
+input,
+select {
+    font: inherit;
+}
+
+button {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.container {
+    width: min(calc(100% - 32px), var(--max-width));
+    margin: 0 auto;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.site-header {
+    background: var(--navy-950);
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.site-header::after {
+    content: "";
+    position: absolute;
+    width: 520px;
+    height: 520px;
+    right: -220px;
+    top: -300px;
+    border-radius: 50%;
+    background: rgba(37, 99, 235, .18);
+    pointer-events: none;
+}
+
+.header-inner {
+    min-height: 86px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    position: relative;
+    z-index: 1;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.brand-mark {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 11px;
+    background: linear-gradient(135deg, var(--blue-500), var(--blue-700));
+    box-shadow: 0 8px 22px rgba(37, 99, 235, .35);
+    font-size: 21px;
+}
+
+.brand-name {
+    font-weight: 800;
+    letter-spacing: -.02em;
+    font-size: 18px;
+}
+
+.brand-sub {
+    color: #94a3b8;
+    font-size: 12px;
+    margin-top: 1px;
+}
+
+.header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: #cbd5e1;
+    font-size: 13px;
+}
+
+.header-badge::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 0 4px rgba(34, 197, 94, .12);
+}
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.hero {
+    padding: 52px 0 34px;
+}
+
+.hero-content {
+    max-width: 760px;
+}
+
+.eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--blue-700);
+    background: var(--blue-50);
+    border: 1px solid var(--blue-100);
+    padding: 6px 11px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+
+.hero h1 {
+    margin: 14px 0 10px;
+    color: var(--navy-950);
+    font-size: clamp(32px, 5vw, 50px);
+    line-height: 1.05;
+    letter-spacing: -.045em;
+}
+
+.hero p {
+    max-width: 680px;
+    margin: 0;
+    color: var(--slate-600);
+    font-size: 17px;
+}
+
+/* =========================================================
+   LAYOUT
+   ========================================================= */
+
+.page-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: 28px;
+    align-items: start;
+    padding-bottom: 60px;
+}
+
+.calculator {
+    min-width: 0;
+}
+
+.card {
+    background: rgba(255, 255, 255, .96);
+    border: 1px solid var(--slate-200);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+}
+
+.ad {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed var(--slate-300);
+    background: rgba(255, 255, 255, .65);
+    color: var(--slate-400);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    border-radius: var(--radius-md);
+}
+
+.ad-top {
+    height: 76px;
+    margin-bottom: 22px;
+}
+
+.ad-sidebar {
+    height: 600px;
+    position: sticky;
+    top: 20px;
+}
+
+/* =========================================================
+   CALCULATOR CARD
+   ========================================================= */
+
+.calculator-card {
+    overflow: hidden;
+}
+
+.calculator-header {
+    padding: 26px 28px 22px;
+    border-bottom: 1px solid var(--slate-200);
+}
+
+.section-kicker {
+    color: var(--slate-500);
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .09em;
+    margin-bottom: 6px;
+}
+
+.calculator-header h2 {
+    margin: 0;
+    font-size: 23px;
+    letter-spacing: -.025em;
+}
+
+.calculator-header p {
+    margin: 5px 0 0;
+    color: var(--slate-500);
+    font-size: 14px;
+}
+
+/* =========================================================
+   MODE SELECTOR
+   ========================================================= */
+
+.mode-section {
+    padding: 22px 28px 0;
+}
+
+.mode-switch {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    padding: 5px;
+    background: var(--slate-100);
+    border-radius: 12px;
+}
+
+.mode-option {
+    position: relative;
+}
+
+.mode-option input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.mode-option label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 50px;
+    padding: 9px 10px;
+    border-radius: 9px;
+    cursor: pointer;
+    color: var(--slate-600);
+    font-size: 14px;
+    font-weight: 750;
+    transition: .18s ease;
+    text-align: center;
+}
+
+.mode-option input:checked + label {
+    background: white;
+    color: var(--navy-900);
+    box-shadow: var(--shadow-sm);
+}
+
+.mode-option label:hover {
+    color: var(--navy-900);
+}
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.form-body {
+    padding: 24px 28px 28px;
+}
+
+.form-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.field-label {
+    display: block;
+    color: var(--slate-700);
+    font-size: 12px;
+    font-weight: 800;
+    margin-bottom: 7px;
+}
+
+.unit-select {
+    min-width: 190px;
+}
+
+input,
+select {
+    width: 100%;
+    min-height: 48px;
+    border: 1px solid var(--slate-300);
+    border-radius: 9px;
+    background: white;
+    color: var(--slate-900);
+    padding: 11px 13px;
+    outline: none;
+    transition:
+        border-color .15s ease,
+        box-shadow .15s ease,
+        background .15s ease;
+}
+
+input:hover,
+select:hover {
+    border-color: var(--slate-400);
+}
+
+input:focus,
+select:focus {
+    border-color: var(--blue-500);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, .12);
+}
+
+input::placeholder {
+    color: #a8b3c2;
+}
+
+input.invalid {
+    border-color: #ef4444;
+    background: var(--red-50);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.field {
+    min-width: 0;
+}
+
+.field.full {
+    grid-column: 1 / -1;
+}
+
+.input-wrap {
+    position: relative;
+}
+
+.input-unit {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--slate-400);
+    font-size: 12px;
+    font-weight: 700;
+    pointer-events: none;
+}
+
+.input-wrap input {
+    padding-right: 55px;
+}
+
+.handling-unit {
+    border: 1px solid var(--slate-200);
+    border-radius: 15px;
+    padding: 18px;
+    background: #fbfdff;
+    margin-bottom: 12px;
+}
+
+.handling-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.handling-title {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-weight: 800;
+    font-size: 14px;
+}
+
+.handling-number {
+    width: 27px;
+    height: 27px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    background: var(--navy-900);
+    color: white;
+    font-size: 12px;
+}
+
+.handling-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.text-button {
+    border: 0;
+    background: transparent;
+    color: var(--blue-700);
+    font-size: 13px;
+    font-weight: 750;
+    cursor: pointer;
+    padding: 6px;
+}
+
+.text-button:hover {
+    color: var(--blue-600);
+}
+
+.remove-button {
+    color: var(--red-700);
+}
+
+.remove-button:hover {
+    color: #991b1b;
+}
+
+.add-unit {
+    width: 100%;
+    min-height: 48px;
+    border: 1px dashed var(--slate-300);
+    background: white;
+    color: var(--blue-700);
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 750;
+    transition: .15s ease;
+}
+
+.add-unit:hover {
+    border-color: var(--blue-500);
+    background: var(--blue-50);
+}
+
+.calculate-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.calculate-button {
+    flex: 1;
+    min-height: 56px;
+    border: 0;
+    border-radius: 11px;
+    color: white;
+    background: linear-gradient(135deg, var(--blue-600), var(--blue-700));
+    font-weight: 800;
+    font-size: 15px;
+    cursor: pointer;
+    box-shadow: 0 8px 18px rgba(37, 99, 235, .20);
+    transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.calculate-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 11px 25px rgba(37, 99, 235, .25);
+}
+
+.calculate-button:active {
+    transform: translateY(0);
+}
+
+.reset-button {
+    min-height: 56px;
+    padding: 0 18px;
+    border: 1px solid var(--slate-300);
+    border-radius: 11px;
+    background: white;
+    color: var(--slate-600);
+    font-weight: 750;
+    cursor: pointer;
+}
+
+.reset-button:hover {
+    background: var(--slate-50);
+}
+
+/* =========================================================
+   RESULTS
+   ========================================================= */
+
+.results {
+    margin-top: 28px;
+    display: none;
+}
+
+.results.visible {
+    display: block;
+    animation: resultIn .28s ease both;
+}
+
+@keyframes resultIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.results-header {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 14px;
+}
+
+.results-header h2 {
+    margin: 0;
+    font-size: 23px;
+    letter-spacing: -.025em;
+}
+
+.results-header p {
+    margin: 3px 0 0;
+    color: var(--slate-500);
+    font-size: 13px;
+}
+
+.print-button {
+    border: 1px solid var(--slate-300);
+    background: white;
+    border-radius: 9px;
+    padding: 9px 13px;
+    color: var(--slate-700);
+    font-size: 13px;
+    font-weight: 750;
+    cursor: pointer;
+}
+
+.print-button:hover {
+    background: var(--slate-50);
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 11px;
+}
+
+.summary-card {
+    min-width: 0;
+    background: white;
+    border: 1px solid var(--slate-200);
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: var(--shadow-sm);
+}
+
+.summary-label {
+    color: var(--slate-500);
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+}
+
+.summary-value {
+    color: var(--navy-950);
+    font-size: 25px;
+    line-height: 1.1;
+    font-weight: 850;
+    letter-spacing: -.035em;
+    margin-top: 7px;
+    white-space: nowrap;
+}
+
+.summary-note {
+    color: var(--slate-500);
+    font-size: 11px;
+    margin-top: 6px;
+}
+
+.summary-card.billable {
+    background: linear-gradient(145deg, #eff6ff, #ffffff);
+    border-color: #bfdbfe;
+}
+
+.summary-card.billable .summary-value {
+    color: var(--blue-700);
+}
+
+.summary-card.density {
+    background: linear-gradient(145deg, #ecfdf5, #ffffff);
+    border-color: #bbf7d0;
+}
+
+.summary-card.class-card {
+    background: linear-gradient(145deg, #f8fafc, #ffffff);
+}
+
+/* =========================================================
+   DETAILED RESULTS
+   ========================================================= */
+
+.detail-card {
+    margin-top: 12px;
+    background: white;
+    border: 1px solid var(--slate-200);
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.detail-card-header {
+    padding: 17px 18px;
+    border-bottom: 1px solid var(--slate-200);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.detail-card-header h3 {
+    margin: 0;
+    font-size: 15px;
+}
+
+.detail-card-header span {
+    color: var(--slate-500);
+    font-size: 12px;
+}
+
+.result-table-wrap {
+    overflow-x: auto;
+}
+
+.result-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 620px;
+}
+
+.result-table th {
+    padding: 12px 17px;
+    background: var(--slate-50);
+    color: var(--slate-500);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.result-table td {
+    padding: 15px 17px;
+    border-top: 1px solid var(--slate-100);
+    font-size: 13px;
+    color: var(--slate-700);
+}
+
+.result-table td strong {
+    color: var(--navy-900);
+}
+
+.billable-cell {
+    color: var(--blue-700) !important;
+    font-weight: 850;
+}
+
+/* =========================================================
+   DENSITY / CLASS CARD
+   ========================================================= */
+
+.class-estimate {
+    margin-top: 12px;
+    border-radius: 15px;
+    border: 1px solid #bfdbfe;
+    background: linear-gradient(135deg, #eff6ff, #f8fbff);
+    padding: 21px;
+}
+
+.class-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.class-label {
+    color: var(--slate-500);
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+}
+
+.class-title {
+    margin-top: 4px;
+    font-size: 19px;
+    font-weight: 850;
+    color: var(--navy-950);
+}
+
+.class-number {
+    min-width: 78px;
+    height: 66px;
+    display: grid;
+    place-items: center;
+    border-radius: 13px;
+    background: white;
+    border: 1px solid #bfdbfe;
+    color: var(--blue-700);
+    font-size: 26px;
+    font-weight: 900;
+}
+
+.warning {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    padding: 12px 13px;
+    border-radius: 9px;
+    background: var(--amber-50);
+    border: 1px solid #fde68a;
+    color: var(--amber-700);
+    font-size: 12px;
+    line-height: 1.45;
+}
+
+/* =========================================================
+   CALCULATION BREAKDOWN
+   ========================================================= */
+
+details {
+    margin-top: 12px;
+    background: white;
+    border: 1px solid var(--slate-200);
+    border-radius: 15px;
+}
+
+summary {
+    cursor: pointer;
+    padding: 17px 18px;
+    font-weight: 800;
+    font-size: 14px;
+    color: var(--navy-900);
+    list-style: none;
+}
+
+summary::-webkit-details-marker {
+    display: none;
+}
+
+summary::after {
+    content: "+";
+    float: right;
+    color: var(--slate-400);
+    font-size: 19px;
+    line-height: 1;
+}
+
+details[open] summary::after {
+    content: "−";
+}
+
+.breakdown {
+    padding: 0 18px 18px;
+    border-top: 1px solid var(--slate-200);
+}
+
+.breakdown-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 9px;
+    margin-top: 15px;
+}
+
+.breakdown-item {
+    padding: 13px;
+    background: var(--slate-50);
+    border-radius: 9px;
+}
+
+.breakdown-label {
+    color: var(--slate-500);
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.breakdown-value {
+    color: var(--navy-900);
+    font-size: 14px;
+    font-weight: 800;
+    margin-top: 3px;
+}
+
+/* =========================================================
+   HELP TEXT
+   ========================================================= */
+
+.helper {
+    margin-top: 17px;
+    color: var(--slate-500);
+    font-size: 12px;
+}
+
+.helper strong {
+    color: var(--slate-700);
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.site-footer {
+    border-top: 1px solid var(--slate-200);
+    padding: 28px 0 45px;
+    color: var(--slate-500);
+    font-size: 12px;
+}
+
+.footer-inner {
+    display: flex;
+    justify-content: space-between;
+    gap: 25px;
+}
+
+.footer-inner p {
+    margin: 0;
+    max-width: 760px;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1000px) {
+    .page-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ad-sidebar {
+        display: none;
+    }
+
+    .summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 700px) {
+    .container {
+        width: min(calc(100% - 22px), var(--max-width));
+    }
+
+    .header-inner {
+        min-height: 72px;
+    }
+
+    .header-badge {
+        display: none;
+    }
+
+    .hero {
+        padding: 35px 0 25px;
+    }
+
+    .hero h1 {
+        font-size: 34px;
+    }
+
+    .hero p {
+        font-size: 15px;
+    }
+
+    .calculator-header,
+    .mode-section,
+    .form-body {
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+
+    .mode-switch {
+        grid-template-columns: 1fr;
+    }
+
+    .mode-option label {
+        min-height: 43px;
+    }
+
+    .form-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .unit-select {
+        min-width: 0;
+    }
+
+    .form-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .field.full {
+        grid-column: 1 / -1;
+    }
+
+    .handling-unit {
+        padding: 14px;
+    }
+
+    .calculate-row {
+        flex-direction: column;
+    }
+
+    .calculate-button,
+    .reset-button {
+        width: 100%;
+    }
+
+    .results-header {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .summary-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .summary-value {
+        font-size: 21px;
+    }
+
+    .class-top {
+        align-items: flex-start;
+    }
+
+    .footer-inner {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 470px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .field.full {
+        grid-column: auto;
+    }
+
+    .summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .summary-card {
+        padding: 16px;
+    }
+
+    .summary-value {
+        font-size: 25px;
+    }
+
+    .class-top {
+        flex-direction: column;
+    }
+
+    .class-number {
+        width: 100%;
+    }
+}
+
+/* =========================================================
+   PRINT
+   ========================================================= */
+
+@media print {
+    body {
+        background: white;
+    }
+
+    .site-header,
+    .hero,
+    .ad,
+    .mode-section,
+    .form-body,
+    .print-button,
+    .site-footer {
+        display: none !important;
+    }
+
+    .page-grid {
+        display: block;
+        padding: 0;
+    }
+
+    .card,
+    .summary-card,
+    .detail-card,
+    .class-estimate,
+    details {
+        box-shadow: none;
+        break-inside: avoid;
+    }
+
+    .results {
+        display: block !important;
+        margin-top: 0;
+    }
+}
+</style>
 </head>
 
 <body>
 
+<header class="site-header">
+    <div class="container header-inner">
+        <div class="brand">
+            <div class="brand-mark" aria-hidden="true">↗</div>
+            <div>
+                <div class="brand-name">FreightTools</div>
+                <div class="brand-sub">DIM & Density Calculator</div>
+            </div>
+        </div>
 
+        <div class="header-badge">
+            Calculator ready
+        </div>
+    </div>
+</header>
 
-<div class="container">
 
-&#x20;   <main class="main-card">
+<main>
 
-&#x20;       <div class="ad-placeholder ad-top">AdSpace: Leaderboard (728x90)</div>
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <span class="eyebrow">Freight calculation tool</span>
 
+                <h1>Freight DIM & Density Calculator</h1>
 
+                <p>
+                    Calculate dimensional weight, billable weight, shipment volume,
+                    density and a density-based LTL freight class estimate.
+                </p>
+            </div>
+        </div>
+    </section>
 
-&#x20;       <h1>Freight \& Logistics Dim Weight Calculator</h1>
 
-&#x20;       <p class="subtitle">Calculate billable dimensional weight across major carriers and estimate your LTL Freight Class.</p>
+    <div class="container page-grid">
 
+        <section class="calculator">
 
+            <div class="ad ad-top">
+                Advertisement · 728 × 90
+            </div>
 
-&#x20;       <form id="calc-form" onsubmit="return false;">
 
-&#x20;           <div class="form-grid">
+            <div class="card calculator-card">
 
-&#x20;               <div class="input-group">
+                <div class="calculator-header">
+                    <div class="section-kicker">Shipment calculator</div>
 
-&#x20;                   <label for="unit">Unit System</label>
+                    <h2>Build your shipment</h2>
 
-&#x20;                   <select id="unit" onchange="runCalculation()">
+                    <p>
+                        Enter each package, pallet or handling unit separately.
+                    </p>
+                </div>
 
-&#x20;                       <option value="imp">Inches / Lbs</option>
 
-&#x20;                       <option value="met">CM / Kgs</option>
+                <div class="mode-section">
 
-&#x20;                   </select>
+                    <div class="mode-switch">
 
-&#x20;               </div>
+                        <div class="mode-option">
+                            <input
+                                type="radio"
+                                name="mode"
+                                id="mode-parcel"
+                                value="parcel"
+                                checked
+                            >
+                            <label for="mode-parcel">Parcel DIM</label>
+                        </div>
 
-&#x20;               <div class="input-group">
+                        <div class="mode-option">
+                            <input
+                                type="radio"
+                                name="mode"
+                                id="mode-ltl"
+                                value="ltl"
+                            >
+                            <label for="mode-ltl">LTL Freight</label>
+                        </div>
 
-&#x20;                   <label for="length">Length</label>
+                        <div class="mode-option">
+                            <input
+                                type="radio"
+                                name="mode"
+                                id="mode-air"
+                                value="air"
+                            >
+                            <label for="mode-air">Air Freight</label>
+                        </div>
 
-&#x20;                   <input type="number" id="length" step="any" placeholder="e.g. 18" oninput="runCalculation()">
+                    </div>
 
-&#x20;               </div>
+                </div>
 
-&#x20;               <div class="input-group">
 
-&#x20;                   <label for="width">Width</label>
+                <div class="form-body">
 
-&#x20;                   <input type="number" id="width" step="any" placeholder="e.g. 14" oninput="runCalculation()">
+                    <div class="form-toolbar">
 
-&#x20;               </div>
+                        <div>
+                            <label class="field-label" for="unit">
+                                Unit system
+                            </label>
 
-&#x20;               <div class="input-group">
+                            <select id="unit" class="unit-select">
+                                <option value="imperial">US — Inches / lbs</option>
+                                <option value="metric">Metric — cm / kg</option>
+                            </select>
+                        </div>
 
-&#x20;                   <label for="height">Height</label>
+                    </div>
+
+
+                    <div id="handling-units"></div>
+
+
+                    <button
+                        type="button"
+                        id="add-unit"
+                        class="add-unit"
+                    >
+                        + Add another handling unit
+                    </button>
 
-&#x20;                   <input type="number" id="height" step="any" placeholder="e.g. 12" oninput="runCalculation()">
 
-&#x20;               </div>
+                    <div class="calculate-row">
 
-&#x20;               <div class="input-group">
+                        <button
+                            type="button"
+                            id="calculate"
+                            class="calculate-button"
+                        >
+                            Calculate Shipment
+                        </button>
+
+                        <button
+                            type="button"
+                            id="reset"
+                            class="reset-button"
+                        >
+                            Reset
+                        </button>
+
+                    </div>
+
+                    <div class="helper">
+                        <strong>Tip:</strong>
+                        For multiple identical packages, enter the quantity in
+                        the handling-unit row rather than creating every package individually.
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- RESULTS -->
+
+            <section
+                id="results"
+                class="results"
+                aria-live="polite"
+            >
+
+                <div class="results-header">
+
+                    <div>
+                        <div class="section-kicker">Calculated shipment</div>
+                        <h2>Shipment Results</h2>
+                        <p id="result-subtitle">
+                            Your shipment calculation is ready.
+                        </p>
+                    </div>
+
+                    <button
+                        type="button"
+                        id="print-results"
+                        class="print-button"
+                    >
+                        Print Results
+                    </button>
+
+                </div>
+
+
+                <div class="summary-grid">
+
+                    <div class="summary-card">
+                        <div class="summary-label">Actual Weight</div>
+                        <div class="summary-value" id="actual-weight">—</div>
+                        <div class="summary-note">Total entered weight</div>
+                    </div>
 
-&#x20;                   <label for="weight">Actual Weight</label>
+                    <div class="summary-card">
+                        <div class="summary-label">DIM Weight</div>
+                        <div class="summary-value" id="dim-weight">—</div>
+                        <div class="summary-note" id="dim-note">
+                            Calculated dimensional weight
+                        </div>
+                    </div>
 
-&#x20;                   <input type="number" id="weight" step="any" placeholder="e.g. 15" oninput="runCalculation()">
+                    <div class="summary-card billable">
+                        <div class="summary-label">Billable Weight</div>
+                        <div class="summary-value" id="billable-weight">—</div>
+                        <div class="summary-note">
+                            Greater of actual or DIM weight
+                        </div>
+                    </div>
 
-&#x20;               </div>
+                    <div class="summary-card">
+                        <div class="summary-label">Volume</div>
+                        <div class="summary-value" id="volume">—</div>
+                        <div class="summary-note" id="volume-note">
+                            Total shipment volume
+                        </div>
+                    </div>
 
-&#x20;               <button type="button" class="calc-btn" onclick="runCalculation()">Calculate Billable Weight</button>
+                </div>
 
-&#x20;           </div>
 
-&#x20;       </form>
+                <div class="summary-grid" style="margin-top:11px;">
 
+                    <div class="summary-card density">
+                        <div class="summary-label">Density</div>
+                        <div class="summary-value" id="density">—</div>
+                        <div class="summary-note">
+                            Pounds per cubic foot
+                        </div>
+                    </div>
 
+                    <div class="summary-card class-card">
+                        <div class="summary-label">Class Estimate</div>
+                        <div class="summary-value" id="class-value">—</div>
+                        <div class="summary-note">
+                            Density-based estimate
+                        </div>
+                    </div>
 
-&#x20;       <div id="results-container" class="results-section" style="display: none;">
+                    <div class="summary-card">
+                        <div class="summary-label">Handling Units</div>
+                        <div class="summary-value" id="unit-count">—</div>
+                        <div class="summary-note">
+                            Package / pallet lines
+                        </div>
+                    </div>
 
-&#x20;           <h2 class="results-title">Carrier Comparison</h2>
+                    <div class="summary-card">
+                        <div class="summary-label">Calculation Mode</div>
+                        <div class="summary-value" id="mode-value">—</div>
+                        <div class="summary-note">
+                            Selected shipment mode
+                        </div>
+                    </div>
 
-&#x20;           <div class="table-wrapper">
+                </div>
 
-&#x20;               <table>
 
-&#x20;                   <thead>
+                <!-- Carrier / DIM details -->
 
-&#x20;                       <tr>
+                <div class="detail-card">
 
-&#x20;                           <th>Carrier / Mode</th>
+                    <div class="detail-card-header">
+                        <h3>DIM Weight Details</h3>
+                        <span id="rule-description">
+                            Applied calculation rule
+                        </span>
+                    </div>
+
+                    <div class="result-table-wrap">
+
+                        <table class="result-table">
+
+                            <thead>
+                                <tr>
+                                    <th>Handling Unit</th>
+                                    <th>Quantity</th>
+                                    <th>Dimensions</th>
+                                    <th>Actual</th>
+                                    <th>DIM</th>
+                                    <th>Billable</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="result-table-body"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Class estimate -->
+
+                <div class="class-estimate">
+
+                    <div class="class-top">
+
+                        <div>
+                            <div class="class-label">
+                                Density-based LTL class estimate
+                            </div>
+
+                            <div class="class-title" id="class-title">
+                                —
+                            </div>
+                        </div>
+
+                        <div class="class-number" id="class-number">
+                            —
+                        </div>
 
-&#x20;                           <th>Dim Factor</th>
+                    </div>
 
-&#x20;                           <th>Dim Weight</th>
+                    <div class="warning">
+                        <span aria-hidden="true">⚠</span>
 
-&#x20;                           <th>Billable Weight</th>
+                        <span>
+                            This is a <strong>density-based estimate</strong>,
+                            not a guaranteed NMFC classification. Actual freight
+                            classification may depend on the commodity, handling,
+                            stowability, liability and applicable NMFC provisions.
+                        </span>
+                    </div>
 
-&#x20;                       </tr>
+                </div>
 
-&#x20;                   </thead>
 
-&#x20;                   <tbody id="results-body"></tbody>
+                <!-- Breakdown -->
 
-&#x20;               </table>
+                <details>
 
-&#x20;           </div>
+                    <summary>
+                        How was this calculated?
+                    </summary>
 
+                    <div class="breakdown">
 
+                        <div class="breakdown-grid">
 
-&#x20;           <div class="density-card">
+                            <div class="breakdown-item">
+                                <div class="breakdown-label">
+                                    DIM divisor
+                                </div>
+                                <div
+                                    class="breakdown-value"
+                                    id="breakdown-divisor"
+                                >
+                                    —
+                                </div>
+                            </div>
 
-&#x20;               <div class="density-title">Estimated LTL Freight Class: <span id="freight-class-val" style="color: var(--accent);">--</span></div>
+                            <div class="breakdown-item">
+                                <div class="breakdown-label">
+                                    Total cubic volume
+                                </div>
+                                <div
+                                    class="breakdown-value"
+                                    id="breakdown-volume"
+                                >
+                                    —
+                                </div>
+                            </div>
 
-&#x20;               <div class="density-sub">Calculated Density: <strong id="density-num-val">--</strong> lbs/cu.ft.</div>
+                            <div class="breakdown-item">
+                                <div class="breakdown-label">
+                                    Actual shipment weight
+                                </div>
+                                <div
+                                    class="breakdown-value"
+                                    id="breakdown-actual"
+                                >
+                                    —
+                                </div>
+                            </div>
 
-&#x20;           </div>
+                            <div class="breakdown-item">
+                                <div class="breakdown-label">
+                                    Calculated DIM weight
+                                </div>
+                                <div
+                                    class="breakdown-value"
+                                    id="breakdown-dim"
+                                >
+                                    —
+                                </div>
+                            </div>
 
-&#x20;       </div>
+                        </div>
 
-&#x20;   </main>
+                    </div>
 
+                </details>
 
+            </section>
 
-&#x20;   <aside class="sidebar">
+        </section>
 
-&#x20;       <div class="ad-placeholder ad-sidebar">AdSpace: Sticky Skyscraper (300x600)</div>
 
-&#x20;   </aside>
+        <aside>
+            <div class="ad ad-sidebar">
+                Advertisement · 300 × 600
+            </div>
+        </aside>
 
-</div>
+    </div>
 
+</main>
+
+
+<footer class="site-footer">
+
+    <div class="container footer-inner">
+
+        <p>
+            Freight DIM & Density Calculator. Calculation results are estimates
+            intended for planning and informational purposes. Always verify
+            applicable carrier, service, tariff and NMFC rules before tendering freight.
+        </p>
+
+        <p>
+            © <span id="year"></span> FreightTools
+        </p>
+
+    </div>
+
+</footer>
 
 
 <script>
-
-function runCalculation() {
-
-&#x20;   var unitEl = document.getElementById('unit');
-
-&#x20;   var lengthEl = document.getElementById('length');
-
-&#x20;   var widthEl = document.getElementById('width');
-
-&#x20;   var heightEl = document.getElementById('height');
-
-&#x20;   var weightEl = document.getElementById('weight');
-
-&#x20;   var resultsDiv = document.getElementById('results-container');
-
-
-
-&#x20;   var unit = unitEl.value;
-
-&#x20;   var length = parseFloat(lengthEl.value) || 0;
-
-&#x20;   var width = parseFloat(widthEl.value) || 0;
-
-&#x20;   var height = parseFloat(heightEl.value) || 0;
-
-&#x20;   var weight = parseFloat(weightEl.value) || 0;
-
-
-
-&#x20;   if (length <= 0 || width <= 0 || height <= 0 || weight <= 0) {
-
-&#x20;       resultsDiv.style.display = 'none';
-
-&#x20;       return;
-
-&#x20;   }
-
-
-
-&#x20;   var cubicVolume = length \* width \* height;
-
-&#x20;   var unitLabel = unit === 'imp' ? 'lbs' : 'kg';
-
-
-
-&#x20;   var carriers = \[
-
-&#x20;       { name: "FedEx / UPS (Domestic)", divisor: 139 },
-
-&#x20;       { name: "DHL Express (Intl)", divisor: 139 },
-
-&#x20;       { name: "USPS (Priority Mail)", divisor: 166 },
-
-&#x20;       { name: "Air Freight Standard", divisor: 166 }
-
-&#x20;   ];
-
-
-
-&#x20;   var htmlOutput = '';
-
-&#x20;   for (var i = 0; i < carriers.length; i++) {
-
-&#x20;       var c = carriers\[i];
-
-&#x20;       var dimWeight = Math.ceil(cubicVolume / c.divisor);
-
-&#x20;       var billable = Math.max(weight, dimWeight);
-
-
-
-&#x20;       htmlOutput += '<tr>' +
-
-&#x20;           '<td><strong>' + c.name + '</strong></td>' +
-
-&#x20;           '<td>1/' + c.divisor + '</td>' +
-
-&#x20;           '<td>' + dimWeight + ' ' + unitLabel + '</td>' +
-
-&#x20;           '<td><span class="highlight-val">' + billable + ' ' + unitLabel + '</span></td>' +
-
-&#x20;           '</tr>';
-
-&#x20;   }
-
-
-
-&#x20;   document.getElementById('results-body').innerHTML = htmlOutput;
-
-
-
-&#x20;   var density = 0;
-
-&#x20;   if (unit === 'imp') {
-
-&#x20;       var cubicFeet = cubicVolume / 1728;
-
-&#x20;       density = weight / cubicFeet;
-
-&#x20;   } else {
-
-&#x20;       var cubicFeetMetric = (cubicVolume / 1000000) \* 35.3147;
-
-&#x20;       var lbs = weight \* 2.20462;
-
-&#x20;       density = lbs / cubicFeetMetric;
-
-&#x20;   }
-
-
-
-&#x20;   var freightClass = calculateClass(density);
-
-
-
-&#x20;   document.getElementById('density-num-val').innerText = density.toFixed(2);
-
-&#x20;   document.getElementById('freight-class-val').innerText = 'Class ' + freightClass;
-
-
-
-&#x20;   resultsDiv.style.display = 'block';
-
+"use strict";
+
+/* =========================================================
+   CONFIGURATION
+   ========================================================= */
+
+const DIM_RULES = {
+    parcel: {
+        imperial: {
+            name: "Parcel DIM",
+            divisor: 139,
+            divisorUnit: "in³/lb"
+        },
+        metric: {
+            name: "Parcel DIM",
+            divisor: 5000,
+            divisorUnit: "cm³/kg"
+        }
+    },
+
+    ltl: {
+        imperial: {
+            name: "LTL Freight",
+            divisor: 139,
+            divisorUnit: "in³/lb"
+        },
+        metric: {
+            name: "LTL Freight",
+            divisor: 5000,
+            divisorUnit: "cm³/kg"
+        }
+    },
+
+    air: {
+        imperial: {
+            name: "Air Freight",
+            divisor: 166,
+            divisorUnit: "in³/lb"
+        },
+        metric: {
+            name: "Air Freight",
+            divisor: 6000,
+            divisorUnit: "cm³/kg"
+        }
+    }
+};
+
+
+/*
+ * Density-based NMFC estimate.
+ *
+ * This follows the commonly used density breakpoints:
+ *
+ * < 1       -> 500
+ * 1 to <2   -> 400
+ * 2 to <4   -> 300
+ * 4 to <6   -> 175
+ * 6 to <8   -> 125
+ * 8 to <10  -> 100
+ * 10 to <12 -> 92.5
+ * 12 to <15 -> 85
+ * 15 to <22.5 -> 70
+ * 22.5 to <30 -> 65
+ * 30 to <35 -> 60
+ * 35 to <50 -> 55
+ * 50+       -> 50
+ */
+
+function densityClass(density) {
+
+    if (density < 1) return "500";
+    if (density < 2) return "400";
+    if (density < 4) return "300";
+    if (density < 6) return "175";
+    if (density < 8) return "125";
+    if (density < 10) return "100";
+    if (density < 12) return "92.5";
+    if (density < 15) return "85";
+    if (density < 22.5) return "70";
+    if (density < 30) return "65";
+    if (density < 35) return "60";
+    if (density < 50) return "55";
+
+    return "50";
 }
 
 
+/* =========================================================
+   STATE
+   ========================================================= */
 
-function calculateClass(density) {
+let unitCounter = 0;
 
-&#x20;   if (density < 1) return "500";
+const state = {
+    mode: "parcel",
+    unit: "imperial"
+};
 
-&#x20;   if (density < 2) return "400";
 
-&#x20;   if (density < 4) return "250";
+/* =========================================================
+   DOM
+   ========================================================= */
 
-&#x20;   if (density < 6) return "175";
+const unitSelect = document.getElementById("unit");
+const handlingUnits = document.getElementById("handling-units");
+const addUnitButton = document.getElementById("add-unit");
+const calculateButton = document.getElementById("calculate");
+const resetButton = document.getElementById("reset");
+const results = document.getElementById("results");
+const printButton = document.getElementById("print-results");
 
-&#x20;   if (density < 8) return "125";
 
-&#x20;   if (density < 10) return "100";
+/* =========================================================
+   UTILITIES
+   ========================================================= */
 
-&#x20;   if (density < 12) return "92.5";
+function formatNumber(value, decimals = 2) {
 
-&#x20;   if (density < 15) return "85";
+    if (!Number.isFinite(value)) {
+        return "—";
+    }
 
-&#x20;   if (density < 22.5) return "70";
-
-&#x20;   if (density < 30) return "60";
-
-&#x20;   return "50";
-
+    return new Intl.NumberFormat("en-US", {
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals
+    }).format(value);
 }
 
+
+function roundUp(value) {
+    return Math.ceil(value);
+}
+
+
+function getUnitLabels() {
+
+    if (state.unit === "imperial") {
+
+        return {
+            dimension: "in",
+            weight: "lb",
+            volume: "ft³"
+        };
+
+    }
+
+    return {
+        dimension: "cm",
+        weight: "kg",
+        volume: "m³"
+    };
+}
+
+
+/* =========================================================
+   HANDLING UNIT CREATION
+   ========================================================= */
+
+function createHandlingUnit(defaults = {}) {
+
+    unitCounter++;
+
+    const wrapper = document.createElement("div");
+
+    wrapper.className = "handling-unit";
+
+    wrapper.dataset.unitId = unitCounter;
+
+    wrapper.innerHTML = `
+        <div class="handling-header">
+
+            <div class="handling-title">
+                <span class="handling-number">${unitCounter}</span>
+                <span>Handling Unit</span>
+            </div>
+
+            <div class="handling-actions">
+                ${
+                    unitCounter > 1
+                    ? `<button type="button" class="text-button remove-button">
+                           Remove
+                       </button>`
+                    : ""
+                }
+            </div>
+
+        </div>
+
+        <div class="form-grid">
+
+            <div class="field">
+                <label class="field-label">
+                    Quantity
+                </label>
+
+                <input
+                    type="number"
+                    class="quantity"
+                    min="1"
+                    step="1"
+                    value="${defaults.quantity || 1}"
+                    inputmode="numeric"
+                >
+            </div>
+
+            <div class="field">
+                <label class="field-label">
+                    Length
+                </label>
+
+                <div class="input-wrap">
+                    <input
+                        type="number"
+                        class="length"
+                        min="0"
+                        step="any"
+                        placeholder="48"
+                        value="${defaults.length || ""}"
+                        inputmode="decimal"
+                    >
+                    <span class="input-unit dimension-unit">in</span>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="field-label">
+                    Width
+                </label>
+
+                <div class="input-wrap">
+                    <input
+                        type="number"
+                        class="width"
+                        min="0"
+                        step="any"
+                        placeholder="40"
+                        value="${defaults.width || ""}"
+                        inputmode="decimal"
+                    >
+                    <span class="input-unit dimension-unit">in</span>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="field-label">
+                    Height
+                </label>
+
+                <div class="input-wrap">
+                    <input
+                        type="number"
+                        class="height"
+                        min="0"
+                        step="any"
+                        placeholder="48"
+                        value="${defaults.height || ""}"
+                        inputmode="decimal"
+                    >
+                    <span class="input-unit dimension-unit">in</span>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="field-label">
+                    Actual weight
+                </label>
+
+                <div class="input-wrap">
+                    <input
+                        type="number"
+                        class="weight"
+                        min="0"
+                        step="any"
+                        placeholder="425"
+                        value="${defaults.weight || ""}"
+                        inputmode="decimal"
+                    >
+                    <span class="input-unit weight-unit">lb</span>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="field-label">
+                    Type
+                </label>
+
+                <select class="package-type">
+                    <option value="Carton">Carton</option>
+                    <option value="Pallet">Pallet</option>
+                    <option value="Crate">Crate</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+        </div>
+    `;
+
+    const removeButton = wrapper.querySelector(".remove-button");
+
+    if (removeButton) {
+
+        removeButton.addEventListener("click", () => {
+
+            wrapper.remove();
+
+            renumberUnits();
+
+        });
+    }
+
+    handlingUnits.appendChild(wrapper);
+
+    updateUnitLabels();
+}
+
+
+function renumberUnits() {
+
+    const units = [...handlingUnits.querySelectorAll(".handling-unit")];
+
+    units.forEach((unit, index) => {
+
+        const number = unit.querySelector(".handling-number");
+
+        if (number) {
+            number.textContent = index + 1;
+        }
+
+    });
+}
+
+
+/* =========================================================
+   UNIT SYSTEM
+   ========================================================= */
+
+function updateUnitLabels() {
+
+    const labels = getUnitLabels();
+
+    document.querySelectorAll(".dimension-unit")
+        .forEach(el => el.textContent = labels.dimension);
+
+    document.querySelectorAll(".weight-unit")
+        .forEach(el => el.textContent = labels.weight);
+}
+
+
+/* =========================================================
+   READ INPUTS
+   ========================================================= */
+
+function readUnits() {
+
+    const units = [];
+
+    const rows = handlingUnits.querySelectorAll(".handling-unit");
+
+    rows.forEach((row, index) => {
+
+        const quantity = Number(
+            row.querySelector(".quantity").value
+        );
+
+        const length = Number(
+            row.querySelector(".length").value
+        );
+
+        const width = Number(
+            row.querySelector(".width").value
+        );
+
+        const height = Number(
+            row.querySelector(".height").value
+        );
+
+        const weight = Number(
+            row.querySelector(".weight").value
+        );
+
+        const type = row.querySelector(".package-type").value;
+
+        units.push({
+            number: index + 1,
+            quantity,
+            length,
+            width,
+            height,
+            weight,
+            type
+        });
+
+    });
+
+    return units;
+}
+
+
+/* =========================================================
+   VALIDATION
+   ========================================================= */
+
+function validateUnits(units) {
+
+    let valid = true;
+
+    const rows = handlingUnits.querySelectorAll(".handling-unit");
+
+    rows.forEach(row => {
+
+        row.querySelectorAll("input").forEach(input => {
+            input.classList.remove("invalid");
+        });
+
+    });
+
+    units.forEach((unit, index) => {
+
+        const row = rows[index];
+
+        const fields = [
+            ["quantity", unit.quantity],
+            ["length", unit.length],
+            ["width", unit.width],
+            ["height", unit.height],
+            ["weight", unit.weight]
+        ];
+
+        fields.forEach(([className, value]) => {
+
+            if (!Number.isFinite(value) || value <= 0) {
+
+                const input = row.querySelector(`.${className}`);
+
+                if (input) {
+                    input.classList.add("invalid");
+                }
+
+                valid = false;
+            }
+
+        });
+
+    });
+
+    return valid;
+}
+
+
+/* =========================================================
+   CALCULATIONS
+   ========================================================= */
+
+function calculateUnit(unit, divisor) {
+
+    const quantity = unit.quantity;
+
+    let cubicVolume;
+    let dimWeight;
+
+    if (state.unit === "imperial") {
+
+        cubicVolume =
+            unit.length *
+            unit.width *
+            unit.height;
+
+        dimWeight =
+            roundUp(cubicVolume / divisor);
+
+    } else {
+
+        cubicVolume =
+            unit.length *
+            unit.width *
+            unit.height;
+
+        dimWeight =
+            roundUp(cubicVolume / divisor);
+
+    }
+
+    return {
+        ...unit,
+        cubicVolume,
+        dimWeight,
+        billableWeight: Math.max(unit.weight, dimWeight),
+
+        totalActualWeight:
+            unit.weight * quantity,
+
+        totalDimWeight:
+            dimWeight * quantity,
+
+        totalBillableWeight:
+            Math.max(unit.weight, dimWeight) * quantity,
+
+        totalVolume:
+            cubicVolume * quantity
+    };
+}
+
+
+/* =========================================================
+   TOTAL VOLUME
+   ========================================================= */
+
+function getTotalVolumeCubicFeet(units) {
+
+    if (state.unit === "imperial") {
+
+        const cubicInches = units.reduce(
+            (sum, unit) => sum + unit.totalVolume,
+            0
+        );
+
+        return cubicInches / 1728;
+
+    }
+
+    const cubicCentimeters = units.reduce(
+        (sum, unit) => sum + unit.totalVolume,
+        0
+    );
+
+    return cubicCentimeters / 28316846.592;
+}
+
+
+/* =========================================================
+   MAIN CALCULATION
+   ========================================================= */
+
+function calculateShipment() {
+
+    const units = readUnits();
+
+    if (!validateUnits(units)) {
+
+        results.classList.remove("visible");
+
+        return;
+    }
+
+    const rule = DIM_RULES[state.mode][state.unit];
+
+    const calculatedUnits = units.map(
+        unit => calculateUnit(unit, rule.divisor)
+    );
+
+    const actualWeight = calculatedUnits.reduce(
+        (sum, unit) => sum + unit.totalActualWeight,
+        0
+    );
+
+    const dimWeight = calculatedUnits.reduce(
+        (sum, unit) => sum + unit.totalDimWeight,
+        0
+    );
+
+    const billableWeight = Math.max(
+        actualWeight,
+        dimWeight
+    );
+
+    const totalVolumeFt3 =
+        getTotalVolumeCubicFeet(calculatedUnits);
+
+    const actualWeightLb =
+        state.unit === "imperial"
+            ? actualWeight
+            : actualWeight * 2.2046226218;
+
+    const density =
+        totalVolumeFt3 > 0
+            ? actualWeightLb / totalVolumeFt3
+            : 0;
+
+    const classEstimate =
+        densityClass(density);
+
+    renderResults({
+        calculatedUnits,
+        actualWeight,
+        dimWeight,
+        billableWeight,
+        totalVolumeFt3,
+        density,
+        classEstimate,
+        rule
+    });
+}
+
+
+/* =========================================================
+   RENDER RESULTS
+   ========================================================= */
+
+function renderResults(data) {
+
+    const labels = getUnitLabels();
+
+    const {
+        calculatedUnits,
+        actualWeight,
+        dimWeight,
+        billableWeight,
+        totalVolumeFt3,
+        density,
+        classEstimate,
+        rule
+    } = data;
+
+    document.getElementById("actual-weight").textContent =
+        `${formatNumber(actualWeight, 0)} ${labels.weight}`;
+
+    document.getElementById("dim-weight").textContent =
+        `${formatNumber(dimWeight, 0)} ${labels.weight}`;
+
+    document.getElementById("billable-weight").textContent =
+        `${formatNumber(billableWeight, 0)} ${labels.weight}`;
+
+    if (state.unit === "imperial") {
+
+        document.getElementById("volume").textContent =
+            `${formatNumber(totalVolumeFt3, 2)} ft³`;
+
+        document.getElementById("volume-note").textContent =
+            "Cubic feet";
+
+    } else {
+
+        const cubicMeters =
+            totalVolumeFt3 / 35.3146667;
+
+        document.getElementById("volume").textContent =
+            `${formatNumber(cubicMeters, 3)} m³`;
+
+        document.getElementById("volume-note").textContent =
+            "Cubic meters";
+    }
+
+    document.getElementById("density").textContent =
+        `${formatNumber(density, 2)} lb/ft³`;
+
+    document.getElementById("class-value").textContent =
+        classEstimate;
+
+    document.getElementById("unit-count").textContent =
+        calculatedUnits.length;
+
+    document.getElementById("mode-value").textContent =
+        rule.name;
+
+    document.getElementById("dim-note").textContent =
+        `Using ${rule.divisor} ${rule.divisorUnit}`;
+
+    document.getElementById("result-subtitle").textContent =
+        `${calculatedUnits.length} handling unit line${calculatedUnits.length === 1 ? "" : "s"} calculated.`;
+
+    document.getElementById("rule-description").textContent =
+        `Divisor: ${rule.divisor} ${rule.divisorUnit}`;
+
+    document.getElementById("breakdown-divisor").textContent =
+        `${rule.divisor} ${rule.divisorUnit}`;
+
+    document.getElementById("breakdown-volume").textContent =
+        state.unit === "imperial"
+            ? `${formatNumber(totalVolumeFt3, 2)} ft³`
+            : `${formatNumber(totalVolumeFt3 / 35.3146667, 3)} m³`;
+
+    document.getElementById("breakdown-actual").textContent =
+        `${formatNumber(actualWeight, 2)} ${labels.weight}`;
+
+    document.getElementById("breakdown-dim").textContent =
+        `${formatNumber(dimWeight, 2)} ${labels.weight}`;
+
+    document.getElementById("class-title").textContent =
+        `Class ${classEstimate} based on shipment density`;
+
+    document.getElementById("class-number").textContent =
+        classEstimate;
+
+
+    /* Table */
+
+    const tbody =
+        document.getElementById("result-table-body");
+
+    tbody.innerHTML = "";
+
+    calculatedUnits.forEach(unit => {
+
+        const tr = document.createElement("tr");
+
+        const dimensions =
+            `${formatNumber(unit.length, 0)} × ` +
+            `${formatNumber(unit.width, 0)} × ` +
+            `${formatNumber(unit.height, 0)} ${labels.dimension}`;
+
+        tr.innerHTML = `
+            <td>
+                <strong>${unit.type}</strong>
+            </td>
+
+            <td>
+                ${unit.quantity}
+            </td>
+
+            <td>
+                ${dimensions}
+            </td>
+
+            <td>
+                ${formatNumber(unit.totalActualWeight, 0)}
+                ${labels.weight}
+            </td>
+
+            <td>
+                ${formatNumber(unit.totalDimWeight, 0)}
+                ${labels.weight}
+            </td>
+
+            <td class="billable-cell">
+                ${formatNumber(unit.totalBillableWeight, 0)}
+                ${labels.weight}
+            </td>
+        `;
+
+        tbody.appendChild(tr);
+    });
+
+
+    results.classList.add("visible");
+
+    results.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+}
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+function resetCalculator() {
+
+    handlingUnits.innerHTML = "";
+
+    unitCounter = 0;
+
+    createHandlingUnit();
+
+    results.classList.remove("visible");
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+/* =========================================================
+   EVENT LISTENERS
+   ========================================================= */
+
+document.querySelectorAll('input[name="mode"]')
+    .forEach(input => {
+
+        input.addEventListener("change", event => {
+
+            state.mode = event.target.value;
+
+        });
+
+    });
+
+
+unitSelect.addEventListener("change", event => {
+
+    state.unit = event.target.value;
+
+    updateUnitLabels();
+
+});
+
+
+addUnitButton.addEventListener("click", () => {
+
+    createHandlingUnit();
+
+});
+
+
+calculateButton.addEventListener("click", () => {
+
+    calculateShipment();
+
+});
+
+
+resetButton.addEventListener("click", () => {
+
+    resetCalculator();
+
+});
+
+
+printButton.addEventListener("click", () => {
+
+    window.print();
+
+});
+
+
+/* =========================================================
+   INITIALIZE
+   ========================================================= */
+
+document.getElementById("year").textContent =
+    new Date().getFullYear();
+
+createHandlingUnit();
 </script>
 
-
-
 </body>
-
 </html>
-
