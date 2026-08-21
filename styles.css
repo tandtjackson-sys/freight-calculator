@@ -555,8 +555,9 @@ select:focus {
 }
 .package-grid {
     display:grid;
-    grid-template-columns:repeat(5, minmax(0, 1fr));
+    grid-template-columns:110px 180px 180px 180px 190px;
     gap:14px;
+    align-items:start;
 }
 
 
