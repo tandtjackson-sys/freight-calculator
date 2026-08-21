@@ -50,7 +50,7 @@ Never activate an unverified rule.
 
 =========================================================
 
-*\
+*/
 
 
 
@@ -60,927 +60,928 @@ const CARRIER_RULES = {
 
 
 
-&#x20;   /\* ===================================================
+    /* ===================================================
 
-&#x20;      GENERAL
+       GENERAL
 
-&#x20;   =================================================== \*/
+    =================================================== */
 
 
 
-&#x20;   general: {
+    general: {
 
 
 
-&#x20;       name: "General",
+        name: "General",
 
 
 
-&#x20;       services: {
+        services: {
 
 
 
-&#x20;           standard: {
+            standard: {
 
 
 
-&#x20;               name: "Standard DIM",
+                name: "Standard DIM",
 
 
 
-&#x20;               status: "active",
+                status: "active",
 
 
 
-&#x20;               imperialDivisor: 139,
+                imperialDivisor: 139,
 
 
 
-&#x20;               metricDivisor: 5000,
+                metricDivisor: 5000,
 
 
 
-&#x20;               dimensionRounding: "carrier",
+                dimensionRounding: "carrier",
 
 
 
-&#x20;               weightRounding: "up",
+                weightRounding: "up",
 
 
 
-&#x20;               effectiveFrom: "General",
+                effectiveFrom: "General",
 
 
 
-&#x20;               lastVerified: "2026-08-21",
+                lastVerified: "2026-08-21",
 
 
 
-&#x20;               sourceName: "General industry reference",
+                sourceName: "General industry reference",
 
 
 
-&#x20;               sourceUrl: null,
+                sourceUrl: null,
 
 
 
-&#x20;               notes:
+                notes:
 
-&#x20;                   "Use only when a specific carrier/service rule is not selected."
+                    "Use only when a specific carrier/service rule is not selected."
 
 
 
-&#x20;           }
+            }
 
 
 
-&#x20;       }
+        }
 
 
 
-&#x20;   },
+    },
 
 
 
 
 
-&#x20;   /\* ===================================================
+    /* ===================================================
 
-&#x20;      UPS
+       UPS
 
-&#x20;   =================================================== \*/
+    =================================================== */
 
 
 
-&#x20;   ups: {
+    ups: {
 
 
 
-&#x20;       name: "UPS",
+        name: "UPS",
 
 
 
-&#x20;       services: {
+        services: {
 
 
 
 
 
-&#x20;           daily: {
+            daily: {
 
 
 
-&#x20;               name: "Daily Rates",
+                name: "Daily Rates",
 
 
 
-&#x20;               status: "active",
+                status: "active",
 
 
 
-&#x20;               imperialDivisor: 139,
+                imperialDivisor: 139,
 
 
 
-&#x20;               metricDivisor: 5000,
+                metricDivisor: 5000,
 
 
 
-&#x20;               dimensionRounding: "nearest",
+                dimensionRounding: "nearest",
 
 
 
-&#x20;               weightRounding: "up",
+                weightRounding: "up",
 
 
 
-&#x20;               effectiveFrom: "2026-01-01",
+                effectiveFrom: "2026-01-01",
 
 
 
-&#x20;               lastVerified: "2026-08-21",
+                lastVerified: "2026-08-21",
 
 
 
-&#x20;               sourceName:
+                sourceName:
 
-&#x20;                   "UPS Package Dimensions, Size Limits and Weight Guide",
+                    "UPS Package Dimensions, Size Limits and Weight Guide",
 
 
 
-&#x20;               sourceUrl:
+                sourceUrl:
 
-&#x20;                   "https://www.ups.com/us/en/support/shipping-support/shipping-dimensions-weight",
+                    "https://www.ups.com/us/en/support/shipping-support/shipping-dimensions-weight",
 
 
 
-&#x20;               notes:
+                notes:
 
-&#x20;                   "UPS states the Daily Rate divisor is 139."
+                    "UPS states the Daily Rate divisor is 139."
 
 
 
-&#x20;           },
+            },
 
 
 
 
 
-&#x20;           retail: {
+            retail: {
 
 
 
-&#x20;               name: "Retail Rates",
+                name: "Retail Rates",
 
 
 
-&#x20;               status: "active",
+                status: "active",
 
 
 
-&#x20;               imperialDivisor: 166,
+                imperialDivisor: 166,
 
 
 
-&#x20;               metricDivisor: 5000,
+                metricDivisor: 5000,
 
 
 
-&#x20;               dimensionRounding: "nearest",
+                dimensionRounding: "nearest",
 
 
 
-&#x20;               weightRounding: "up",
+                weightRounding: "up",
 
 
 
-&#x20;               effectiveFrom: "2026-01-01",
+                effectiveFrom: "2026-01-01",
 
 
 
-&#x20;               lastVerified: "2026-08-21",
+                lastVerified: "2026-08-21",
 
 
 
-&#x20;               sourceName:
+                sourceName:
 
-&#x20;                   "UPS Package Dimensions, Size Limits and Weight Guide",
+                    "UPS Package Dimensions, Size Limits and Weight Guide",
 
 
 
-&#x20;               sourceUrl:
+                sourceUrl:
 
-&#x20;                   "https://www.ups.com/us/en/support/shipping-support/shipping-dimensions-weight",
+                    "https://www.ups.com/us/en/support/shipping-support/shipping-dimensions-weight",
 
 
 
-&#x20;               notes:
+                notes:
 
-&#x20;                   "UPS states the Retail Rate divisor is 166."
+                    "UPS states the Retail Rate divisor is 166."
 
 
 
-&#x20;           }
+            }
 
 
 
-&#x20;       }
+        }
 
 
 
-&#x20;   },
+    },
 
 
 
 
 
-&#x20;   /\* ===================================================
+    /* ===================================================
 
-&#x20;      FEDEX
+       FEDEX
 
-&#x20;   =================================================== \*/
+    =================================================== */
 
 
 
-&#x20;   fedex: {
+    fedex: {
 
 
 
-&#x20;       name: "FedEx",
+        name: "FedEx",
 
 
 
-&#x20;       services: {
+        services: {
 
 
 
 
 
-&#x20;           expressDomestic: {
+            expressDomestic: {
 
 
 
-&#x20;               name: "Express — U.S. Domestic",
+                name: "Express — U.S. Domestic",
 
 
 
-&#x20;               status: "active",
+                status: "active",
 
 
 
-&#x20;               imperialDivisor: 139,
+                imperialDivisor: 139,
 
 
 
-&#x20;               metricDivisor: 5000,
+                metricDivisor: 5000,
 
 
 
-&#x20;               dimensionRounding: "nearest",
+                dimensionRounding: "nearest",
 
 
 
-&#x20;               weightRounding: "up",
+                weightRounding: "up",
 
 
 
-&#x20;               effectiveFrom: "2025-01-01",
+                effectiveFrom: "2025-01-01",
 
 
 
-&#x20;               lastVerified: "2026-08-21",
+                lastVerified: "2026-08-21",
 
 
 
-&#x20;               sourceName:
+                sourceName:
 
-&#x20;                   "FedEx Dimensional Weight Calculator / 2026 Service Guide",
+                    "FedEx Dimensional Weight Calculator / 2026 Service Guide",
 
 
 
-&#x20;               sourceUrl:
+                sourceUrl:
 
-&#x20;                   "https://page.message.fedex.com/weight\_calculator",
+                    "https://page.message.fedex.com/weight_calculator",
 
 
 
-&#x20;               notes:
+                notes:
 
-&#x20;                   "FedEx states DIM weight applies to Express packages."
+                    "FedEx states DIM weight applies to Express packages."
 
 
 
-&#x20;           },
+            },
 
 
 
 
 
-&#x20;           groundDomestic: {
+            groundDomestic: {
 
 
 
-&#x20;               name: "Ground — U.S. Domestic",
+                name: "Ground — U.S. Domestic",
 
 
 
-&#x20;               status: "active",
+                status: "active",
 
 
 
-&#x20;               imperialDivisor: 139,
+                imperialDivisor: 139,
 
 
 
-&#x20;               metricDivisor: 5000,
+                metricDivisor: 5000,
 
 
 
-&#x20;               dimensionRounding: "nearest",
+                dimensionRounding: "nearest",
 
 
 
-&#x20;               weightRounding: "up",
+                weightRounding: "up",
 
 
 
-&#x20;               effectiveFrom: "2025-01-01",
+                effectiveFrom: "2025-01-01",
 
 
 
-&#x20;               lastVerified: "2026-08-21",
+                lastVerified: "2026-08-21",
 
 
 
-&#x20;               sourceName:
+                sourceName:
 
-&#x20;                   "FedEx Dimensional Weight Calculator / 2026 Service Guide",
+                    "FedEx Dimensional Weight Calculator / 2026 Service Guide",
 
 
 
-&#x20;               sourceUrl:
+                sourceUrl:
 
-&#x20;                   "https://page.message.fedex.com/weight\_calculator",
+                    "https://page.message.fedex.com/weight_calculator",
 
 
 
-&#x20;               notes:
+                notes:
 
-&#x20;                   "FedEx states DIM weight applies to Ground packages."
+                    "FedEx states DIM weight applies to Ground packages."
 
 
 
-&#x20;           },
+            },
 
 
 
 
 
-&#x20;           expressInternational: {
+            expressInternational: {
 
 
 
-&#x20;               name: "Express — International",
+                name: "Express — International",
 
 
 
-&#x20;               status: "active",
+                status: "active",
 
 
 
-&#x20;               imperialDivisor: 139,
+                imperialDivisor: 139,
 
 
 
-&#x20;               metricDivisor: 5000,
+                metricDivisor: 5000,
 
 
 
-&#x20;               dimensionRounding: "nearest",
+                dimensionRounding: "nearest",
 
 
 
-&#x20;               weightRounding: "up",
+                weightRounding: "up",
 
 
 
-&#x20;               effectiveFrom: "2026-01-01",
+                effectiveFrom: "2026-01-01",
 
 
 
-&#x20;               lastVerified: "2026-08-21",
+                lastVerified: "2026-08-21",
 
 
 
-&#x20;               sourceName:
+                sourceName:
 
-&#x20;                   "FedEx 2026 Service Guide",
+                    "FedEx 2026 Service Guide",
 
 
 
-&#x20;               sourceUrl:
+                sourceUrl:
 
-&#x20;                   "https://www.fedex.com/content/dam/fedex/us-united-states/services/Service\_Guide\_2026.pdf",
+                    "https://www.fedex.com/content/dam/fedex/us-united-states/services/Service_Guide_2026.pdf",
 
 
 
-&#x20;               notes:
+                notes:
 
-&#x20;                   "International service rules can vary by origin, destination and service."
+                    "International service rules can vary by origin, destination and service."
 
 
 
-&#x20;           },
+            },
 
 
 
 
 
-&#x20;           groundInternational: {
+            groundInternational: {
 
 
 
-&#x20;               name: "Ground — International",
+                name: "Ground — International",
 
 
 
-&#x20;               status: "active",
+                status: "active",
 
 
 
-&#x20;               imperialDivisor: 139,
+                imperialDivisor: 139,
 
 
 
-&#x20;               metricDivisor: 5000,
+                metricDivisor: 5000,
 
 
 
-&#x20;               dimensionRounding: "nearest",
+                dimensionRounding: "nearest",
 
 
 
-&#x20;               weightRounding: "up",
+                weightRounding: "up",
 
 
 
-&#x20;               effectiveFrom: "2026-01-01",
+                effectiveFrom: "2026-01-01",
 
 
 
-&#x20;               lastVerified: "2026-08-21",
+                lastVerified: "2026-08-21",
 
 
 
-&#x20;               sourceName:
+                sourceName:
 
-&#x20;                   "FedEx 2026 Service Guide",
+                    "FedEx 2026 Service Guide",
 
 
 
-&#x20;               sourceUrl:
+                sourceUrl:
 
-&#x20;                   "https://www.fedex.com/content/dam/fedex/us-united-states/services/Service\_Guide\_2026.pdf",
+                    "https://www.fedex.com/content/dam/fedex/us-united-states/services/Service_Guide_2026.pdf",
 
 
 
-&#x20;               notes:
+                notes:
 
-&#x20;                   "International service rules can vary by origin, destination and service."
+                    "International service rules can vary by origin, destination and service."
 
 
 
-&#x20;           }
+            }
 
 
 
-&#x20;       }
+        }
 
 
 
-&#x20;   },
+    },
 
 
 
 
 
-&#x20;   /\* ===================================================
+    /* ===================================================
 
-&#x20;      USPS
+       USPS
 
-&#x20;   =================================================== \*/
+    =================================================== */
 
 
 
-&#x20;   usps: {
+    usps: {
 
 
 
-&#x20;       name: "USPS",
+        name: "USPS",
 
 
 
-&#x20;       services: {
+        services: {
 
 
 
 
 
-&#x20;           groundAdvantage: {
+            groundAdvantage: {
 
 
 
-&#x20;               name: "Ground Advantage",
+                name: "Ground Advantage",
 
 
 
-&#x20;               status: "active",
+                status: "active",
 
 
 
-&#x20;               imperialDivisor: 139,
+                imperialDivisor: 139,
 
 
 
-&#x20;               metricDivisor: 5000,
+                metricDivisor: 5000,
 
 
 
-&#x20;               dimensionRounding: "up",
+                dimensionRounding: "up",
 
 
 
-&#x20;               weightRounding: "up",
+                weightRounding: "up",
 
 
 
-&#x20;               effectiveFrom: "2026-07-12",
+                effectiveFrom: "2026-07-12",
 
 
 
-&#x20;               lastVerified: "2026-08-21",
+                lastVerified: "2026-08-21",
 
 
 
-&#x20;               sourceName:
+                sourceName:
 
-&#x20;                   "USPS Postal Bulletin 22705",
+                    "USPS Postal Bulletin 22705",
 
 
 
-&#x20;               sourceUrl:
+                sourceUrl:
 
-&#x20;                   "https://about.usps.com/postal-bulletin/2026/pb22705/html/updt\_001.htm",
+                    "https://about.usps.com/postal-bulletin/2026/pb22705/html/updt_001.htm",
 
 
 
-&#x20;               notes:
+                notes:
 
-&#x20;                   "USPS changed the DIM factor to 139 effective July 12, 2026."
+                    "USPS changed the DIM factor to 139 effective July 12, 2026."
 
 
 
-&#x20;           },
+            },
 
 
 
 
 
-&#x20;           priorityMail: {
+            priorityMail: {
 
 
 
-&#x20;               name: "Priority Mail",
+                name: "Priority Mail",
 
 
 
-&#x20;               status: "active",
+                status: "active",
 
 
 
-&#x20;               imperialDivisor: 139,
+                imperialDivisor: 139,
 
 
 
-&#x20;               metricDivisor: 5000,
+                metricDivisor: 5000,
 
 
 
-&#x20;               dimensionRounding: "up",
+                dimensionRounding: "up",
 
 
 
-&#x20;               weightRounding: "up",
+                weightRounding: "up",
 
 
 
-&#x20;               effectiveFrom: "2026-07-12",
+                effectiveFrom: "2026-07-12",
 
 
 
-&#x20;               lastVerified: "2026-08-21",
+                lastVerified: "2026-08-21",
 
 
 
-&#x20;               sourceName:
+                sourceName:
 
-&#x20;                   "USPS Postal Bulletin 22705",
+                    "USPS Postal Bulletin 22705",
 
 
 
-&#x20;               sourceUrl:
+                sourceUrl:
 
-&#x20;                   "https://about.usps.com/postal-bulletin/2026/pb22705/html/updt\_001.htm",
+                    "https://about.usps.com/postal-bulletin/2026/pb22705/html/updt_001.htm",
 
 
 
-&#x20;               notes:
+                notes:
 
-&#x20;                   "USPS changed the DIM factor to 139 effective July 12, 2026."
+                    "USPS changed the DIM factor to 139 effective July 12, 2026."
 
 
 
-&#x20;           },
+            },
 
 
 
 
 
-&#x20;           priorityMailExpress: {
+            priorityMailExpress: {
 
 
 
-&#x20;               name: "Priority Mail Express",
+                name: "Priority Mail Express",
 
 
 
-&#x20;               status: "active",
+                status: "active",
 
 
 
-&#x20;               imperialDivisor: 139,
+                imperialDivisor: 139,
 
 
 
-&#x20;               metricDivisor: 5000,
+                metricDivisor: 5000,
 
 
 
-&#x20;               dimensionRounding: "up",
+                dimensionRounding: "up",
 
 
 
-&#x20;               weightRounding: "up",
+                weightRounding: "up",
 
 
 
-&#x20;               effectiveFrom: "2026-07-12",
+                effectiveFrom: "2026-07-12",
 
 
 
-&#x20;               lastVerified: "2026-08-21",
+                lastVerified: "2026-08-21",
 
 
 
-&#x20;               sourceName:
+                sourceName:
 
-&#x20;                   "USPS Postal Bulletin 22705",
+                    "USPS Postal Bulletin 22705",
 
 
 
-&#x20;               sourceUrl:
+                sourceUrl:
 
-&#x20;                   "https://about.usps.com/postal-bulletin/2026/pb22705/html/updt\_001.htm",
+                    "https://about.usps.com/postal-bulletin/2026/pb22705/html/updt_001.htm",
 
 
 
-&#x20;               notes:
+                notes:
 
-&#x20;                   "USPS changed the DIM factor to 139 effective July 12, 2026."
+                    "USPS changed the DIM factor to 139 effective July 12, 2026."
 
 
 
-&#x20;           },
+            },
 
 
 
 
 
-&#x20;           parcelSelect: {
+            parcelSelect: {
 
 
 
-&#x20;               name: "Parcel Select",
+                name: "Parcel Select",
 
 
 
-&#x20;               status: "active",
+                status: "active",
 
 
 
-&#x20;               imperialDivisor: 139,
+                imperialDivisor: 139,
 
 
 
-&#x20;               metricDivisor: 5000,
+                metricDivisor: 5000,
 
 
 
-&#x20;               dimensionRounding: "up",
+                dimensionRounding: "up",
 
 
 
-&#x20;               weightRounding: "up",
+                weightRounding: "up",
 
 
 
-&#x20;               effectiveFrom: "2026-07-12",
+                effectiveFrom: "2026-07-12",
 
 
 
-&#x20;               lastVerified: "2026-08-21",
+                lastVerified: "2026-08-21",
 
 
 
-&#x20;               sourceName:
+                sourceName:
 
-&#x20;                   "USPS Postal Bulletin 22705",
+                    "USPS Postal Bulletin 22705",
 
 
 
-&#x20;               sourceUrl:
+                sourceUrl:
 
-&#x20;                   "https://about.usps.com/postal-bulletin/2026/pb22705/html/updt\_001.htm",
+                    "https://about.usps.com/postal-bulletin/2026/pb22705/html/updt_001.htm",
 
 
 
-&#x20;               notes:
+                notes:
 
-&#x20;                   "USPS changed the DIM factor to 139 effective July 12, 2026."
+                    "USPS changed the DIM factor to 139 effective July 12, 2026."
 
 
 
-&#x20;           }
+            }
 
 
 
-&#x20;       }
+        }
 
 
 
-&#x20;   },
+    },
 
 
 
 
 
-&#x20;   /\* ===================================================
+    /* ===================================================
 
-&#x20;      DHL
+       DHL
 
-&#x20;   =================================================== \*/
+    =================================================== */
 
 
 
-&#x20;   dhl: {
+    dhl: {
 
 
 
-&#x20;       name: "DHL",
+        name: "DHL",
 
 
 
-&#x20;       services: {
+        services: {
 
 
 
 
 
-&#x20;           express: {
+            express: {
 
 
 
-&#x20;               name: "Express",
+                name: "Express",
 
 
 
-&#x20;               status: "active",
+                status: "active",
 
 
 
-&#x20;               imperialDivisor: 139,
+                imperialDivisor: 139,
 
 
 
-&#x20;               metricDivisor: 5000,
+                metricDivisor: 5000,
 
 
 
-&#x20;               dimensionRounding: "carrier",
+                dimensionRounding: "carrier",
 
 
 
-&#x20;               weightRounding: "up",
+                weightRounding: "up",
 
 
 
-&#x20;               effectiveFrom: "2026-01-01",
+                effectiveFrom: "2026-01-01",
 
 
 
-&#x20;               lastVerified: "2026-08-21",
+                lastVerified: "2026-08-21",
 
 
 
-&#x20;               sourceName:
+                sourceName:
 
-&#x20;                   "DHL Express Volumetric Weight Guidance",
+                    "DHL Express Volumetric Weight Guidance",
 
 
 
-&#x20;               sourceUrl:
+                sourceUrl:
 
-&#x20;                   "https://www.dhl.com/discover/en-sg/ship-with-dhl/start-shipping/how-to-calculate-dhl-volumetric-weight",
+                    "https://www.dhl.com/discover/en-sg/ship-with-dhl/start-shipping/how-to-calculate-dhl-volumetric-weight",
 
 
 
-&#x20;               notes:
+                notes:
 
-&#x20;                   "DHL Express commonly documents 5000 cm³/kg."
+                    "DHL Express commonly documents 5000 cm³/kg."
 
 
 
-&#x20;           },
+            },
 
 
 
 
 
-&#x20;           ecommerce: {
+            ecommerce: {
 
 
 
-&#x20;               name: "eCommerce",
+                name: "eCommerce",
 
 
 
-&#x20;               status: "active",
+                status: "active",
 
 
 
-&#x20;               imperialDivisor: 166,
+                imperialDivisor: 166,
 
 
 
-&#x20;               metricDivisor: 6000,
+                metricDivisor: 6000,
 
 
 
-&#x20;               dimensionRounding: "carrier",
+                dimensionRounding: "carrier",
 
 
 
-&#x20;               weightRounding: "up",
+                weightRounding: "up",
 
 
 
-&#x20;               effectiveFrom: "2026-01-01",
+                effectiveFrom: "2026-01-01",
 
 
 
-&#x20;               lastVerified: "2026-08-21",
+                lastVerified: "2026-08-21",
 
 
 
-&#x20;               sourceName:
+                sourceName:
 
-&#x20;                   "DHL eCommerce Chargeable Shipping Weight",
+                    "DHL eCommerce Chargeable Shipping Weight",
 
 
 
-&#x20;               sourceUrl:
+                sourceUrl:
 
-&#x20;                   "https://www.dhl.com/us-en/home/ecommerce/business-help-center/chargeable-weight.html",
+                    "https://www.dhl.com/us-en/home/ecommerce/business-help-center/chargeable-weight.html",
 
 
 
-&#x20;               notes:
+                notes:
 
-&#x20;                   "DHL eCommerce documents 166 in³/lb or 6000 cm³/kg."
+                    "DHL eCommerce documents 166 in³/lb or 6000 cm³/kg."
 
 
 
-&#x20;           }
+            }
 
 
 
-&#x20;       }
+        }
 
 
 
-&#x20;   }
+    }
 
 
 
 };
+
 
