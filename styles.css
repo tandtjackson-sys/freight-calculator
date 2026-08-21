@@ -553,7 +553,11 @@ select:focus {
 &#x20;   gap:13px;
 
 }
-
+.package-grid {
+    display:grid;
+    grid-template-columns:repeat(5, minmax(0, 1fr));
+    gap:14px;
+}
 
 
 .package-row {
