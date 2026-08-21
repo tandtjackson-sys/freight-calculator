@@ -628,80 +628,32 @@ select:focus {
 
 
 
-.primary-button,
-
-.secondary-button {
-
-&#x20;   border:0;
-
-&#x20;   border-radius:10px;
-
-&#x20;   cursor:pointer;
-
-&#x20;   font-weight:900;
-
-&#x20;   transition:
-
-&#x20;       transform .12s ease,
-
-&#x20;       background .15s ease,
-
-&#x20;       box-shadow .15s ease;
-
-}
-
-
-
-.primary-button:hover,
-
-.secondary-button:hover {
-
-&#x20;   transform:translateY(-1px);
-
-}
-
-
-
 .primary-button {
-
-&#x20;   display:flex;
-
-&#x20;   justify-content:center;
-
-&#x20;   align-items:center;
-
-&#x20;   gap:10px;
-
-&#x20;   width:100%;
-
-&#x20;   margin-top:15px;
-
-&#x20;   padding:16px;
-
-&#x20;   background:linear-gradient(
-
-&#x20;       135deg,
-
-&#x20;       var(--blue),
-
-&#x20;       #3b82f6
-
-&#x20;   );
-
-&#x20;   color:#fff;
-
-&#x20;   font-size:1.02rem;
-
-&#x20;   box-shadow:0 8px 22px rgba(37,99,235,.22);
-
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    width:100%;
+    margin-top:15px;
+    padding:16px;
+    border:0;
+    border-radius:10px;
+    background:#2563eb !important;
+    color:#ffffff !important;
+    cursor:pointer;
+    font-size:1.02rem;
+    font-weight:900;
+    box-shadow:0 8px 22px rgba(37,99,235,.22);
+    transition:
+        transform .12s ease,
+        background .15s ease,
+        box-shadow .15s ease;
 }
-
-
 
 .primary-button:hover {
-
-&#x20;   background:var(--blue-dark);
-
+    background:#1d4ed8 !important;
+    color:#ffffff !important;
+    transform:translateY(-1px);
 }
 
 
