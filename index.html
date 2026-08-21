@@ -1,1450 +1,1320 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Freight DIM Weight & Density Calculator</title>
+&#x20;   <meta charset="UTF-8">
 
-<meta name="description"
-content="Calculate dimensional weight, billable weight, freight density and estimated LTL freight class using current carrier calculation rules.">
+&#x20;   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-:root {
-    --navy:#0f172a;
-    --blue:#2563eb;
-    --blue-dark:#1d4ed8;
-    --blue-soft:#eff6ff;
-    --green:#059669;
-    --green-soft:#ecfdf5;
-    --amber:#d97706;
-    --bg:#f4f7fb;
-    --surface:#ffffff;
-    --text:#1e293b;
-    --muted:#64748b;
-    --border:#dbe3ee;
-    --radius:14px;
-    --shadow:0 10px 35px rgba(15,23,42,.07);
-}
 
-* { box-sizing:border-box; }
 
-body {
-    margin:0;
-    background:var(--bg);
-    color:var(--text);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-    font-size:16px;
-    line-height:1.5;
-}
+&#x20;   <title>Freight DIM Weight \& Density Calculator</title>
 
-.container {
-    max-width:1180px;
-    margin:0 auto;
-    padding:28px 18px 60px;
-}
 
-.main-card {
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    box-shadow:var(--shadow);
-    padding:38px;
-}
 
-.ad-placeholder {
-    height:90px;
-    background:#f8fafc;
-    border:1px dashed #b6c2d2;
-    border-radius:10px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:#94a3b8;
-    font-size:12px;
-    font-weight:700;
-    letter-spacing:.08em;
-    text-transform:uppercase;
-    margin-bottom:30px;
-}
+&#x20;   <meta
 
-h1 {
-    margin:0;
-    color:var(--navy);
-    font-size:clamp(2rem,4vw,2.75rem);
-    line-height:1.1;
-    letter-spacing:-.045em;
-}
+&#x20;       name="description"
 
-.subtitle {
-    margin:12px 0 18px;
-    color:var(--muted);
-    font-size:1.08rem;
-    max-width:760px;
-}
+&#x20;       content="Calculate dimensional weight, billable weight, shipment volume and estimated LTL freight class using carrier-specific rules."
 
-.trust-bar {
-    display:flex;
-    flex-wrap:wrap;
-    gap:10px;
-    margin:0 0 30px;
-}
+&#x20;   >
 
-.trust-item {
-    background:var(--green-soft);
-    color:#047857;
-    border:1px solid #a7f3d0;
-    border-radius:999px;
-    padding:6px 12px;
-    font-size:.82rem;
-    font-weight:700;
-}
 
-.section {
-    margin-top:28px;
-}
 
-.section-title {
-    font-size:1.15rem;
-    font-weight:800;
-    color:var(--navy);
-    margin-bottom:14px;
-}
+&#x20;   <link rel="stylesheet" href="styles.css">
 
-.form-grid {
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:16px;
-}
-
-.input-group {
-    display:flex;
-    flex-direction:column;
-}
-
-label {
-    font-size:.88rem;
-    font-weight:800;
-    color:var(--navy);
-    margin-bottom:7px;
-}
-
-input, select {
-    width:100%;
-    min-height:48px;
-    padding:11px 13px;
-    border:2px solid var(--border);
-    border-radius:9px;
-    background:white;
-    color:var(--text);
-    font-size:1rem;
-    transition:.15s;
-}
-
-input:focus, select:focus {
-    outline:none;
-    border-color:var(--blue);
-    box-shadow:0 0 0 3px rgba(37,99,235,.1);
-}
-
-.rule-summary {
-    display:flex;
-    align-items:flex-start;
-    gap:12px;
-    background:var(--blue-soft);
-    border:1px solid #bfdbfe;
-    border-radius:10px;
-    padding:14px 16px;
-    margin-top:18px;
-}
-
-.rule-icon {
-    color:var(--blue);
-    font-weight:900;
-    font-size:1.2rem;
-}
-
-.rule-summary strong {
-    color:var(--navy);
-}
-
-.rule-meta {
-    color:var(--muted);
-    font-size:.86rem;
-    margin-top:3px;
-}
-
-.package-list {
-    display:flex;
-    flex-direction:column;
-    gap:14px;
-}
-
-.package-row {
-    border:1px solid var(--border);
-    border-radius:12px;
-    padding:18px;
-    background:#fbfdff;
-}
-
-.package-header {
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:14px;
-}
-
-.package-title {
-    font-weight:800;
-    color:var(--navy);
-}
-
-.remove-btn {
-    border:0;
-    background:#fee2e2;
-    color:#b91c1c;
-    border-radius:7px;
-    padding:6px 10px;
-    cursor:pointer;
-    font-weight:700;
-}
-
-.package-grid {
-    display:grid;
-    grid-template-columns:110px repeat(4,1fr);
-    gap:12px;
-}
-
-.add-btn,
-.calc-btn {
-    border:0;
-    border-radius:9px;
-    cursor:pointer;
-    font-weight:800;
-}
-
-.add-btn {
-    margin-top:14px;
-    background:#eef2ff;
-    color:#3730a3;
-    padding:11px 15px;
-}
-
-.calc-btn {
-    width:100%;
-    margin-top:22px;
-    padding:16px;
-    color:white;
-    background:linear-gradient(135deg,var(--blue),#3b82f6);
-    font-size:1.08rem;
-    box-shadow:0 6px 18px rgba(37,99,235,.2);
-}
-
-.calc-btn:hover { background:var(--blue-dark); }
-
-.results-section {
-    display:none;
-    margin-top:38px;
-    padding-top:30px;
-    border-top:2px solid #edf1f6;
-}
-
-.results-header {
-    display:flex;
-    justify-content:space-between;
-    align-items:end;
-    gap:20px;
-    margin-bottom:18px;
-}
-
-.results-title {
-    margin:0;
-    font-size:1.55rem;
-    color:var(--navy);
-}
-
-.results-subtitle {
-    color:var(--muted);
-    margin-top:3px;
-}
-
-.table-wrapper {
-    overflow-x:auto;
-    border:1px solid var(--border);
-    border-radius:10px;
-}
-
-table {
-    width:100%;
-    border-collapse:collapse;
-    min-width:650px;
-}
-
-th {
-    background:#f8fafc;
-    color:var(--navy);
-    padding:13px 14px;
-    text-align:left;
-    font-size:.82rem;
-    text-transform:uppercase;
-    letter-spacing:.04em;
-}
-
-td {
-    padding:15px 14px;
-    border-top:1px solid var(--border);
-}
-
-.highlight {
-    color:var(--blue);
-    font-weight:900;
-    font-size:1.08rem;
-}
-
-.summary-grid {
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:14px;
-    margin-top:18px;
-}
-
-.summary-card {
-    background:#f8fafc;
-    border:1px solid var(--border);
-    border-radius:11px;
-    padding:17px;
-}
-
-.summary-label {
-    color:var(--muted);
-    font-size:.78rem;
-    font-weight:800;
-    text-transform:uppercase;
-}
-
-.summary-value {
-    margin-top:4px;
-    font-size:1.35rem;
-    font-weight:900;
-    color:var(--navy);
-}
-
-.density-card {
-    margin-top:18px;
-    background:linear-gradient(135deg,#eff6ff,#f8fbff);
-    border:1px solid #bfdbfe;
-    border-radius:12px;
-    padding:20px;
-}
-
-.density-title {
-    color:var(--navy);
-    font-size:1.15rem;
-    font-weight:900;
-}
-
-.density-number {
-    color:var(--blue);
-    font-size:1.6rem;
-    font-weight:900;
-}
-
-.disclaimer {
-    margin-top:10px;
-    color:var(--muted);
-    font-size:.84rem;
-}
-
-.rule-details {
-    margin-top:18px;
-    border:1px solid var(--border);
-    border-radius:11px;
-    padding:17px;
-    background:white;
-}
-
-.rule-details-title {
-    font-weight:900;
-    color:var(--navy);
-    margin-bottom:8px;
-}
-
-.rule-details-grid {
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:10px;
-}
-
-.detail {
-    background:#f8fafc;
-    border-radius:8px;
-    padding:10px;
-}
-
-.detail-label {
-    display:block;
-    color:var(--muted);
-    font-size:.75rem;
-    font-weight:700;
-}
-
-.detail-value {
-    display:block;
-    color:var(--navy);
-    font-weight:800;
-    margin-top:2px;
-}
-
-.status-box {
-    margin-top:30px;
-    border:1px solid var(--border);
-    border-radius:11px;
-    padding:18px;
-}
-
-.status-title {
-    font-weight:900;
-    color:var(--navy);
-    margin-bottom:12px;
-}
-
-.status-list {
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:10px;
-}
-
-.status-item {
-    padding:11px;
-    background:#f8fafc;
-    border-radius:8px;
-}
-
-.status-green {
-    color:#047857;
-    font-weight:800;
-}
-
-.sidebar-ad {
-    height:600px;
-    margin-top:20px;
-}
-
-@media(max-width:900px) {
-    .form-grid { grid-template-columns:repeat(2,1fr); }
-    .package-grid { grid-template-columns:1fr 1fr; }
-    .summary-grid { grid-template-columns:repeat(2,1fr); }
-    .status-list { grid-template-columns:1fr 1fr; }
-}
-
-@media(max-width:650px) {
-    .main-card { padding:22px; }
-    .form-grid,
-    .package-grid,
-    .summary-grid,
-    .rule-details-grid,
-    .status-list {
-        grid-template-columns:1fr;
-    }
-
-    .results-header {
-        display:block;
-    }
-
-    .ad-placeholder { height:70px; }
-}
-</style>
 </head>
+
+
 
 <body>
 
-<div class="container">
 
-<main class="main-card">
 
-<div class="ad-placeholder">
-    AdSpace: Leaderboard (728x90)
+<div class="site-shell">
+
+
+
+&#x20;   <main class="calculator-card">
+
+
+
+&#x20;       <div class="ad-placeholder">
+
+&#x20;           AdSpace: Leaderboard (728x90)
+
+&#x20;       </div>
+
+
+
+&#x20;       <header class="hero">
+
+
+
+&#x20;           <div class="eyebrow">
+
+&#x20;               FREIGHT CALCULATION TOOL
+
+&#x20;           </div>
+
+
+
+&#x20;           <h1>
+
+&#x20;               Freight DIM Weight \& Density Calculator
+
+&#x20;           </h1>
+
+
+
+&#x20;           <p class="subtitle">
+
+&#x20;               Calculate dimensional weight, billable weight, shipment volume,
+
+&#x20;               density and estimated LTL freight class using carrier-specific
+
+&#x20;               calculation rules.
+
+&#x20;           </p>
+
+
+
+&#x20;           <div class="trust-bar">
+
+
+
+&#x20;               <span class="trust-pill">
+
+&#x20;                   <span class="status-dot"></span>
+
+&#x20;                   Major-carrier rules monitored
+
+&#x20;               </span>
+
+
+
+&#x20;               <span class="trust-pill">
+
+&#x20;                   ✓ Transparent calculations
+
+&#x20;               </span>
+
+
+
+&#x20;               <span class="trust-pill">
+
+&#x20;                   ✓ Effective dates tracked
+
+&#x20;               </span>
+
+
+
+&#x20;               <span class="trust-pill">
+
+&#x20;                   ✓ No signup required
+
+&#x20;               </span>
+
+
+
+&#x20;           </div>
+
+
+
+&#x20;       </header>
+
+
+
+
+
+&#x20;       <!-- =========================================
+
+&#x20;            CALCULATION STANDARD
+
+&#x20;       ========================================== -->
+
+
+
+&#x20;       <section class="section">
+
+
+
+&#x20;           <div class="section-heading">
+
+&#x20;               <div>
+
+&#x20;                   <div class="section-kicker">
+
+&#x20;                       STEP 1
+
+&#x20;                   </div>
+
+
+
+&#x20;                   <h2>
+
+&#x20;                       Choose a carrier or calculation standard
+
+&#x20;                   </h2>
+
+&#x20;               </div>
+
+&#x20;           </div>
+
+
+
+
+
+&#x20;           <div class="form-grid">
+
+
+
+&#x20;               <div class="input-group">
+
+
+
+&#x20;                   <label for="carrier">
+
+&#x20;                       Carrier
+
+&#x20;                   </label>
+
+
+
+&#x20;                   <select id="carrier">
+
+&#x20;                   </select>
+
+
+
+&#x20;               </div>
+
+
+
+
+
+&#x20;               <div class="input-group">
+
+
+
+&#x20;                   <label for="service">
+
+&#x20;                       Service
+
+&#x20;                   </label>
+
+
+
+&#x20;                   <select id="service">
+
+&#x20;                   </select>
+
+
+
+&#x20;               </div>
+
+
+
+
+
+&#x20;               <div class="input-group">
+
+
+
+&#x20;                   <label for="unit">
+
+&#x20;                       Unit system
+
+&#x20;                   </label>
+
+
+
+&#x20;                   <select id="unit">
+
+
+
+&#x20;                       <option value="imp">
+
+&#x20;                           Inches / lbs
+
+&#x20;                       </option>
+
+
+
+&#x20;                       <option value="met">
+
+&#x20;                           CM / kg
+
+&#x20;                       </option>
+
+
+
+&#x20;                   </select>
+
+
+
+&#x20;               </div>
+
+
+
+
+
+&#x20;               <div class="input-group">
+
+
+
+&#x20;                   <label for="rounding">
+
+&#x20;                       Dimension rounding
+
+&#x20;                   </label>
+
+
+
+&#x20;                   <select id="rounding">
+
+
+
+&#x20;                       <option value="rule">
+
+&#x20;                           Use carrier rule
+
+&#x20;                       </option>
+
+
+
+&#x20;                       <option value="up">
+
+&#x20;                           Round dimensions up
+
+&#x20;                       </option>
+
+
+
+&#x20;                       <option value="nearest">
+
+&#x20;                           Nearest whole unit
+
+&#x20;                       </option>
+
+
+
+&#x20;                   </select>
+
+
+
+&#x20;               </div>
+
+
+
+&#x20;           </div>
+
+
+
+
+
+&#x20;           <div class="rule-card">
+
+
+
+&#x20;               <div class="rule-check">
+
+&#x20;                   ✓
+
+&#x20;               </div>
+
+
+
+&#x20;               <div class="rule-content">
+
+
+
+&#x20;                   <div
+
+&#x20;                       class="rule-title"
+
+&#x20;                       id="rule-name"
+
+&#x20;                   >
+
+&#x20;                       Loading carrier rule...
+
+&#x20;                   </div>
+
+
+
+&#x20;                   <div
+
+&#x20;                       class="rule-description"
+
+&#x20;                       id="rule-description"
+
+&#x20;                   >
+
+&#x20;                   </div>
+
+
+
+&#x20;                   <div class="rule-meta">
+
+
+
+&#x20;                       <span id="rule-factor">
+
+&#x20;                       </span>
+
+
+
+&#x20;                       <span class="separator">•</span>
+
+
+
+&#x20;                       <span id="rule-effective">
+
+&#x20;                       </span>
+
+
+
+&#x20;                       <span class="separator">•</span>
+
+
+
+&#x20;                       <span id="rule-verified">
+
+&#x20;                       </span>
+
+
+
+&#x20;                   </div>
+
+
+
+&#x20;               </div>
+
+
+
+&#x20;           </div>
+
+
+
+&#x20;       </section>
+
+
+
+
+
+&#x20;       <!-- =========================================
+
+&#x20;            PACKAGES
+
+&#x20;       ========================================== -->
+
+
+
+&#x20;       <section class="section">
+
+
+
+&#x20;           <div class="section-heading package-heading">
+
+
+
+&#x20;               <div>
+
+
+
+&#x20;                   <div class="section-kicker">
+
+&#x20;                       STEP 2
+
+&#x20;                   </div>
+
+
+
+&#x20;                   <h2>
+
+&#x20;                       Enter shipment details
+
+&#x20;                   </h2>
+
+
+
+&#x20;               </div>
+
+
+
+&#x20;               <div class="package-count" id="package-count">
+
+&#x20;                   1 package
+
+&#x20;               </div>
+
+
+
+&#x20;           </div>
+
+
+
+
+
+&#x20;           <div
+
+&#x20;               id="package-list"
+
+&#x20;               class="package-list"
+
+&#x20;           >
+
+&#x20;           </div>
+
+
+
+
+
+&#x20;           <button
+
+&#x20;               type="button"
+
+&#x20;               id="add-package"
+
+&#x20;               class="secondary-button"
+
+&#x20;           >
+
+&#x20;               + Add package
+
+&#x20;           </button>
+
+
+
+
+
+&#x20;           <button
+
+&#x20;               type="button"
+
+&#x20;               id="calculate-button"
+
+&#x20;               class="primary-button"
+
+&#x20;           >
+
+&#x20;               Calculate billable weight
+
+&#x20;               <span>→</span>
+
+&#x20;           </button>
+
+
+
+&#x20;       </section>
+
+
+
+
+
+&#x20;       <!-- =========================================
+
+&#x20;            RESULTS
+
+&#x20;       ========================================== -->
+
+
+
+&#x20;       <section
+
+&#x20;           id="results-container"
+
+&#x20;           class="results-section"
+
+&#x20;           hidden
+
+&#x20;       >
+
+
+
+&#x20;           <div class="results-heading">
+
+
+
+&#x20;               <div>
+
+
+
+&#x20;                   <div class="section-kicker">
+
+&#x20;                       RESULTS
+
+&#x20;                   </div>
+
+
+
+&#x20;                   <h2>
+
+&#x20;                       Calculation results
+
+&#x20;                   </h2>
+
+
+
+&#x20;                   <p id="results-subtitle">
+
+&#x20;                   </p>
+
+
+
+&#x20;               </div>
+
+
+
+&#x20;           </div>
+
+
+
+
+
+&#x20;           <div class="table-container">
+
+
+
+&#x20;               <table>
+
+
+
+&#x20;                   <thead>
+
+
+
+&#x20;                       <tr>
+
+
+
+&#x20;                           <th>
+
+&#x20;                               Package
+
+&#x20;                           </th>
+
+
+
+&#x20;                           <th>
+
+&#x20;                               Actual
+
+&#x20;                           </th>
+
+
+
+&#x20;                           <th>
+
+&#x20;                               DIM
+
+&#x20;                           </th>
+
+
+
+&#x20;                           <th>
+
+&#x20;                               Billable
+
+&#x20;                           </th>
+
+
+
+&#x20;                           <th>
+
+&#x20;                               Volume
+
+&#x20;                           </th>
+
+
+
+&#x20;                       </tr>
+
+
+
+&#x20;                   </thead>
+
+
+
+&#x20;                   <tbody id="results-body">
+
+&#x20;                   </tbody>
+
+
+
+&#x20;               </table>
+
+
+
+&#x20;           </div>
+
+
+
+
+
+&#x20;           <div class="summary-grid">
+
+
+
+&#x20;               <div class="summary-card">
+
+
+
+&#x20;                   <div class="summary-label">
+
+&#x20;                       Actual weight
+
+&#x20;                   </div>
+
+
+
+&#x20;                   <div
+
+&#x20;                       class="summary-value"
+
+&#x20;                       id="total-actual"
+
+&#x20;                   >
+
+&#x20;                       —
+
+&#x20;                   </div>
+
+
+
+&#x20;               </div>
+
+
+
+
+
+&#x20;               <div class="summary-card">
+
+
+
+&#x20;                   <div class="summary-label">
+
+&#x20;                       DIM weight
+
+&#x20;                   </div>
+
+
+
+&#x20;                   <div
+
+&#x20;                       class="summary-value"
+
+&#x20;                       id="total-dim"
+
+&#x20;                   >
+
+&#x20;                       —
+
+&#x20;                   </div>
+
+
+
+&#x20;               </div>
+
+
+
+
+
+&#x20;               <div class="summary-card featured">
+
+
+
+&#x20;                   <div class="summary-label">
+
+&#x20;                       Billable weight
+
+&#x20;                   </div>
+
+
+
+&#x20;                   <div
+
+&#x20;                       class="summary-value"
+
+&#x20;                       id="total-billable"
+
+&#x20;                   >
+
+&#x20;                       —
+
+&#x20;                   </div>
+
+
+
+&#x20;               </div>
+
+
+
+
+
+&#x20;               <div class="summary-card">
+
+
+
+&#x20;                   <div class="summary-label">
+
+&#x20;                       Total volume
+
+&#x20;                   </div>
+
+
+
+&#x20;                   <div
+
+&#x20;                       class="summary-value"
+
+&#x20;                       id="total-volume"
+
+&#x20;                   >
+
+&#x20;                       —
+
+&#x20;                   </div>
+
+
+
+&#x20;               </div>
+
+
+
+&#x20;           </div>
+
+
+
+
+
+&#x20;           <!-- DENSITY -->
+
+
+
+&#x20;           <div class="density-card">
+
+
+
+&#x20;               <div class="density-main">
+
+
+
+&#x20;                   <div>
+
+
+
+&#x20;                       <div class="density-label">
+
+&#x20;                           Estimated LTL freight class
+
+&#x20;                       </div>
+
+
+
+&#x20;                       <div
+
+&#x20;                           id="freight-class-val"
+
+&#x20;                           class="freight-class"
+
+&#x20;                       >
+
+&#x20;                           —
+
+&#x20;                       </div>
+
+
+
+&#x20;                   </div>
+
+
+
+
+
+&#x20;                   <div class="density-stat">
+
+
+
+&#x20;                       <div class="density-label">
+
+&#x20;                           Calculated density
+
+&#x20;                       </div>
+
+
+
+&#x20;                       <div
+
+&#x20;                           id="density-num-val"
+
+&#x20;                           class="density-value"
+
+&#x20;                       >
+
+&#x20;                           —
+
+&#x20;                       </div>
+
+
+
+&#x20;                   </div>
+
+
+
+&#x20;               </div>
+
+
+
+
+
+&#x20;               <p class="density-disclaimer">
+
+
+
+&#x20;                   This is a density-based estimate for planning purposes.
+
+&#x20;                   Actual NMFC classification can depend on commodity,
+
+&#x20;                   handling, stowability, liability and other factors.
+
+
+
+&#x20;               </p>
+
+
+
+&#x20;           </div>
+
+
+
+
+
+&#x20;           <!-- RULE DETAILS -->
+
+
+
+&#x20;           <div class="rule-details">
+
+
+
+&#x20;               <div class="details-heading">
+
+
+
+&#x20;                   <div>
+
+&#x20;                       <div class="section-kicker">
+
+&#x20;                           CALCULATION AUDIT
+
+&#x20;                       </div>
+
+
+
+&#x20;                       <h3>
+
+&#x20;                           Rule used for this calculation
+
+&#x20;                       </h3>
+
+&#x20;                   </div>
+
+
+
+&#x20;               </div>
+
+
+
+
+
+&#x20;               <div class="details-grid">
+
+
+
+&#x20;                   <div class="detail">
+
+&#x20;                       <span>Carrier</span>
+
+&#x20;                       <strong id="detail-carrier">—</strong>
+
+&#x20;                   </div>
+
+
+
+&#x20;                   <div class="detail">
+
+&#x20;                       <span>Service</span>
+
+&#x20;                       <strong id="detail-service">—</strong>
+
+&#x20;                   </div>
+
+
+
+&#x20;                   <div class="detail">
+
+&#x20;                       <span>DIM factor</span>
+
+&#x20;                       <strong id="detail-divisor">—</strong>
+
+&#x20;                   </div>
+
+
+
+&#x20;                   <div class="detail">
+
+&#x20;                       <span>Effective</span>
+
+&#x20;                       <strong id="detail-effective">—</strong>
+
+&#x20;                   </div>
+
+
+
+&#x20;                   <div class="detail">
+
+&#x20;                       <span>Last verified</span>
+
+&#x20;                       <strong id="detail-verified">—</strong>
+
+&#x20;                   </div>
+
+
+
+&#x20;                   <div class="detail">
+
+&#x20;                       <span>Source</span>
+
+&#x20;                       <strong id="detail-source">—</strong>
+
+&#x20;                   </div>
+
+
+
+&#x20;               </div>
+
+
+
+&#x20;           </div>
+
+
+
+
+
+&#x20;           <!-- COMPARE -->
+
+
+
+&#x20;           <div class="comparison-section">
+
+
+
+&#x20;               <div class="details-heading">
+
+
+
+&#x20;                   <div>
+
+
+
+&#x20;                       <div class="section-kicker">
+
+&#x20;                           OPTIONAL
+
+&#x20;                       </div>
+
+
+
+&#x20;                       <h3>
+
+&#x20;                           Compare carrier rules
+
+&#x20;                       </h3>
+
+
+
+&#x20;                   </div>
+
+
+
+&#x20;               </div>
+
+
+
+&#x20;               <p class="comparison-description">
+
+&#x20;                   See how the same shipment calculates under the
+
+&#x20;                   currently available carrier rules.
+
+&#x20;               </p>
+
+
+
+&#x20;               <button
+
+&#x20;                   type="button"
+
+&#x20;                   id="compare-button"
+
+&#x20;                   class="secondary-button compare-button"
+
+&#x20;               >
+
+&#x20;                   Compare available services
+
+&#x20;               </button>
+
+
+
+&#x20;               <div
+
+&#x20;                   id="comparison-container"
+
+&#x20;                   hidden
+
+&#x20;               >
+
+
+
+&#x20;                   <div class="table-container comparison-table">
+
+
+
+&#x20;                       <table>
+
+
+
+&#x20;                           <thead>
+
+
+
+&#x20;                               <tr>
+
+
+
+&#x20;                                   <th>
+
+&#x20;                                       Carrier
+
+&#x20;                                   </th>
+
+
+
+&#x20;                                   <th>
+
+&#x20;                                       Service
+
+&#x20;                                   </th>
+
+
+
+&#x20;                                   <th>
+
+&#x20;                                       DIM factor
+
+&#x20;                                   </th>
+
+
+
+&#x20;                                   <th>
+
+&#x20;                                       DIM weight
+
+&#x20;                                   </th>
+
+
+
+&#x20;                                   <th>
+
+&#x20;                                       Billable
+
+&#x20;                                   </th>
+
+
+
+&#x20;                               </tr>
+
+
+
+&#x20;                           </thead>
+
+
+
+&#x20;                           <tbody
+
+&#x20;                               id="comparison-body"
+
+&#x20;                           >
+
+&#x20;                           </tbody>
+
+
+
+&#x20;                       </table>
+
+
+
+&#x20;                   </div>
+
+
+
+&#x20;               </div>
+
+
+
+&#x20;           </div>
+
+
+
+&#x20;       </section>
+
+
+
+
+
+&#x20;       <!-- =========================================
+
+&#x20;            RULE STATUS
+
+&#x20;       ========================================== -->
+
+
+
+&#x20;       <section class="verification-section">
+
+
+
+&#x20;           <div class="details-heading">
+
+
+
+&#x20;               <div>
+
+
+
+&#x20;                   <div class="section-kicker">
+
+&#x20;                       DATA QUALITY
+
+&#x20;                   </div>
+
+
+
+&#x20;                   <h3>
+
+&#x20;                       Carrier rule verification
+
+&#x20;                   </h3>
+
+
+
+&#x20;               </div>
+
+
+
+&#x20;           </div>
+
+
+
+
+
+&#x20;           <p class="verification-description">
+
+
+
+&#x20;               Calculation rules are maintained separately from the
+
+&#x20;               calculator engine so that carrier changes can be reviewed,
+
+&#x20;               approved and deployed without rebuilding the calculator.
+
+
+
+&#x20;           </p>
+
+
+
+
+
+&#x20;           <div
+
+&#x20;               id="status-list"
+
+&#x20;               class="status-grid"
+
+&#x20;           >
+
+&#x20;           </div>
+
+
+
+&#x20;       </section>
+
+
+
+
+
+&#x20;       <div class="ad-placeholder secondary-ad">
+
+&#x20;           AdSpace: Secondary Advertisement
+
+&#x20;       </div>
+
+
+
+
+
+&#x20;       <footer class="site-footer">
+
+
+
+&#x20;           <p>
+
+&#x20;               Freight DIM Weight \& Density Calculator
+
+&#x20;           </p>
+
+
+
+&#x20;           <p>
+
+&#x20;               Calculations are provided for planning purposes.
+
+&#x20;               Always confirm final charges and classification with
+
+&#x20;               the applicable carrier and shipping agreement.
+
+&#x20;           </p>
+
+
+
+&#x20;       </footer>
+
+
+
+&#x20;   </main>
+
+
+
 </div>
 
-<h1>Freight DIM Weight & Density Calculator</h1>
 
-<p class="subtitle">
-Calculate dimensional weight, billable weight, shipment volume, density,
-and estimated LTL freight class using carrier-specific calculation rules.
-</p>
 
-<div class="trust-bar">
-    <span class="trust-item">✓ Carrier Rules Verified</span>
-    <span class="trust-item">✓ Transparent Calculations</span>
-    <span class="trust-item">✓ Effective Dates Tracked</span>
-    <span class="trust-item">✓ No Signup Required</span>
-</div>
 
-<div class="section">
 
-<div class="section-title">Calculation Standard</div>
+<script src="carrier-rules.js"></script>
 
-<div class="form-grid">
+<script src="calculator.js"></script>
 
-<div class="input-group">
-<label for="carrier">Carrier / Standard</label>
-<select id="carrier" onchange="updateServices(); runCalculation();">
-    <option value="general">General DIM</option>
-    <option value="ups">UPS</option>
-    <option value="fedex">FedEx</option>
-    <option value="usps">USPS</option>
-    <option value="air">Air Freight</option>
-</select>
-</div>
 
-<div class="input-group">
-<label for="service">Service / Rate Type</label>
-<select id="service" onchange="runCalculation()"></select>
-</div>
-
-<div class="input-group">
-<label for="unit">Unit System</label>
-<select id="unit" onchange="runCalculation()">
-    <option value="imp">Inches / lbs</option>
-    <option value="met">CM / kg</option>
-</select>
-</div>
-
-<div class="input-group">
-<label for="rounding">Dimension Rounding</label>
-<select id="rounding" onchange="runCalculation()">
-    <option value="standard">Standard</option>
-    <option value="up">Round dimensions up</option>
-</select>
-</div>
-
-</div>
-
-<div class="rule-summary">
-<div class="rule-icon">✓</div>
-<div>
-<strong id="rule-name">General DIM Calculation</strong>
-<div class="rule-meta" id="rule-meta">
-    Standard divisor and rounding methodology.
-</div>
-</div>
-</div>
-
-</div>
-
-<div class="section">
-
-<div class="section-title">Shipment Packages</div>
-
-<div id="package-list" class="package-list"></div>
-
-<button type="button" class="add-btn" onclick="addPackage()">
-    + Add Package / Handling Unit
-</button>
-
-<button type="button" class="calc-btn" onclick="runCalculation()">
-    Calculate Billable Weight
-</button>
-
-</div>
-
-<div id="results-container" class="results-section">
-
-<div class="results-header">
-<div>
-<h2 class="results-title">Calculation Results</h2>
-<div class="results-subtitle" id="results-subtitle"></div>
-</div>
-</div>
-
-<div class="table-wrapper">
-<table>
-<thead>
-<tr>
-<th>Package</th>
-<th>Actual Weight</th>
-<th>DIM Weight</th>
-<th>Billable Weight</th>
-<th>Volume</th>
-</tr>
-</thead>
-<tbody id="results-body"></tbody>
-</table>
-</div>
-
-<div class="summary-grid">
-
-<div class="summary-card">
-<div class="summary-label">Actual Weight</div>
-<div class="summary-value" id="total-actual">--</div>
-</div>
-
-<div class="summary-card">
-<div class="summary-label">Total DIM Weight</div>
-<div class="summary-value" id="total-dim">--</div>
-</div>
-
-<div class="summary-card">
-<div class="summary-label">Billable Weight</div>
-<div class="summary-value" id="total-billable">--</div>
-</div>
-
-<div class="summary-card">
-<div class="summary-label">Total Volume</div>
-<div class="summary-value" id="total-volume">--</div>
-</div>
-
-</div>
-
-<div class="density-card">
-
-<div class="density-title">
-Estimated LTL Freight Class
-</div>
-
-<div class="density-number" id="freight-class-val">
---
-</div>
-
-<div>
-Calculated Density:
-<strong id="density-num-val">--</strong>
-</div>
-
-<div class="disclaimer">
-This is a density-based estimate for planning purposes.
-Actual NMFC classification can depend on commodity, handling,
-stowability, liability and other factors.
-</div>
-
-</div>
-
-<div class="rule-details">
-
-<div class="rule-details-title">
-Calculation Rule Used
-</div>
-
-<div class="rule-details-grid">
-
-<div class="detail">
-<span class="detail-label">Carrier</span>
-<span class="detail-value" id="detail-carrier">--</span>
-</div>
-
-<div class="detail">
-<span class="detail-label">Service</span>
-<span class="detail-value" id="detail-service">--</span>
-</div>
-
-<div class="detail">
-<span class="detail-label">DIM Divisor</span>
-<span class="detail-value" id="detail-divisor">--</span>
-</div>
-
-<div class="detail">
-<span class="detail-label">Effective Date</span>
-<span class="detail-value" id="detail-effective">--</span>
-</div>
-
-<div class="detail">
-<span class="detail-label">Last Verified</span>
-<span class="detail-value" id="detail-verified">--</span>
-</div>
-
-<div class="detail">
-<span class="detail-label">Rounding</span>
-<span class="detail-value" id="detail-rounding">--</span>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div class="status-box">
-
-<div class="status-title">
-Carrier Rule Verification Status
-</div>
-
-<div class="status-list" id="status-list"></div>
-
-</div>
-
-<div class="ad-placeholder sidebar-ad">
-    AdSpace: Secondary Advertisement
-</div>
-
-</main>
-</div>
-
-<script>
-
-/*
-=========================================================
-FREIGHT RULES ENGINE
-=========================================================
-
-IMPORTANT:
-Rules are centralized here so they can eventually be moved
-to a database/API without rewriting the calculator.
-
-Dates use YYYY-MM-DD.
-
-The current verified dates below reflect the sources checked
-when this version was prepared.
-
-=========================================================
-*/
-
-const CARRIER_RULES = {
-
-    general: {
-        name: "General DIM",
-        services: {
-            standard: {
-                name: "Standard DIM",
-                divisorImp: 139,
-                divisorMetric: 5000,
-                thresholdCubicInches: 0,
-                rounding: "standard",
-                effective: "General",
-                verified: "2026-08-21",
-                source: "General industry calculation"
-            }
-        }
-    },
-
-    ups: {
-        name: "UPS",
-        services: {
-
-            daily: {
-                name: "Daily Rates",
-                divisorImp: 139,
-                divisorMetric: 5000,
-                thresholdCubicInches: 0,
-                rounding: "standard",
-                effective: "2026-01-01",
-                verified: "2026-08-21",
-                source: "UPS Shipping Dimensions & Weight"
-            },
-
-            retail: {
-                name: "Retail Rates",
-                divisorImp: 166,
-                divisorMetric: 5000,
-                thresholdCubicInches: 0,
-                rounding: "standard",
-                effective: "2026-01-01",
-                verified: "2026-08-21",
-                source: "UPS Shipping Dimensions & Weight"
-            }
-        }
-    },
-
-    fedex: {
-        name: "FedEx",
-        services: {
-
-            express: {
-                name: "Express / Ground",
-                divisorImp: 139,
-                divisorMetric: 5000,
-                thresholdCubicInches: 0,
-                rounding: "standard",
-                effective: "2026-01-01",
-                verified: "2026-08-21",
-                source: "FedEx Dimensional Weight guidance"
-            }
-        }
-    },
-
-    usps: {
-        name: "USPS",
-        services: {
-
-            ground: {
-                name: "Ground Advantage",
-                divisorImp: 139,
-                divisorMetric: 5000,
-                thresholdCubicInches: 1728,
-                rounding: "up",
-                effective: "2026-07-12",
-                verified: "2026-08-21",
-                source: "USPS Postal Bulletin"
-            },
-
-            priority: {
-                name: "Priority Mail",
-                divisorImp: 139,
-                divisorMetric: 5000,
-                thresholdCubicInches: 1728,
-                rounding: "up",
-                effective: "2026-07-12",
-                verified: "2026-08-21",
-                source: "USPS Postal Bulletin"
-            },
-
-            express: {
-                name: "Priority Mail Express",
-                divisorImp: 139,
-                divisorMetric: 5000,
-                thresholdCubicInches: 1728,
-                rounding: "up",
-                effective: "2026-07-12",
-                verified: "2026-08-21",
-                source: "USPS Postal Bulletin"
-            }
-        }
-    },
-
-    air: {
-        name: "Air Freight",
-        services: {
-
-            standard: {
-                name: "Standard Air Freight",
-                divisorImp: 166,
-                divisorMetric: 6000,
-                thresholdCubicInches: 0,
-                rounding: "standard",
-                effective: "Industry standard",
-                verified: "2026-08-21",
-                source: "Air freight volumetric-weight standard"
-            }
-        }
-    }
-};
-
-
-/*
-=========================================================
-PACKAGE MANAGEMENT
-=========================================================
-*/
-
-let packageCount = 0;
-
-function addPackage(values = {}) {
-
-    packageCount++;
-
-    const row = document.createElement("div");
-    row.className = "package-row";
-    row.dataset.id = packageCount;
-
-    row.innerHTML = `
-        <div class="package-header">
-            <div class="package-title">
-                Package / Handling Unit ${packageCount}
-            </div>
-
-            ${
-                packageCount > 1
-                ? `<button type="button"
-                    class="remove-btn"
-                    onclick="removePackage(${packageCount})">
-                    Remove
-                   </button>`
-                : ""
-            }
-        </div>
-
-        <div class="package-grid">
-
-            <div class="input-group">
-                <label>Qty</label>
-                <input type="number"
-                    class="qty"
-                    min="1"
-                    step="1"
-                    value="${values.qty || 1}"
-                    oninput="runCalculation()">
-            </div>
-
-            <div class="input-group">
-                <label>Length</label>
-                <input type="number"
-                    class="length"
-                    min="0"
-                    step="any"
-                    placeholder="18"
-                    value="${values.length || ""}"
-                    oninput="runCalculation()">
-            </div>
-
-            <div class="input-group">
-                <label>Width</label>
-                <input type="number"
-                    class="width"
-                    min="0"
-                    step="any"
-                    placeholder="14"
-                    value="${values.width || ""}"
-                    oninput="runCalculation()">
-            </div>
-
-            <div class="input-group">
-                <label>Height</label>
-                <input type="number"
-                    class="height"
-                    min="0"
-                    step="any"
-                    placeholder="12"
-                    value="${values.height || ""}"
-                    oninput="runCalculation()">
-            </div>
-
-            <div class="input-group">
-                <label>Actual Weight</label>
-                <input type="number"
-                    class="weight"
-                    min="0"
-                    step="any"
-                    placeholder="15"
-                    value="${values.weight || ""}"
-                    oninput="runCalculation()">
-            </div>
-
-        </div>
-    `;
-
-    document.getElementById("package-list").appendChild(row);
-
-    runCalculation();
-}
-
-
-function removePackage(id) {
-
-    const row = document.querySelector(
-        `.package-row[data-id="${id}"]`
-    );
-
-    if (row) row.remove();
-
-    renumberPackages();
-
-    runCalculation();
-}
-
-
-function renumberPackages() {
-
-    document.querySelectorAll(".package-row")
-        .forEach((row, index) => {
-
-            row.querySelector(".package-title")
-                .textContent =
-                `Package / Handling Unit ${index + 1}`;
-        });
-}
-
-
-/*
-=========================================================
-SERVICE SELECTOR
-=========================================================
-*/
-
-function updateServices() {
-
-    const carrier =
-        document.getElementById("carrier").value;
-
-    const serviceSelect =
-        document.getElementById("service");
-
-    serviceSelect.innerHTML = "";
-
-    const services =
-        CARRIER_RULES[carrier].services;
-
-    Object.keys(services).forEach(key => {
-
-        const option =
-            document.createElement("option");
-
-        option.value = key;
-        option.textContent =
-            services[key].name;
-
-        serviceSelect.appendChild(option);
-    });
-
-    updateRuleDisplay();
-}
-
-
-function getCurrentRule() {
-
-    const carrier =
-        document.getElementById("carrier").value;
-
-    const service =
-        document.getElementById("service").value;
-
-    return {
-        carrier,
-        service,
-        data: CARRIER_RULES[carrier].services[service]
-    };
-}
-
-
-function updateRuleDisplay() {
-
-    const rule = getCurrentRule();
-
-    if (!rule.data) return;
-
-    const unit =
-        document.getElementById("unit").value;
-
-    const divisor =
-        unit === "imp"
-        ? rule.data.divisorImp
-        : rule.data.divisorMetric;
-
-    document.getElementById("rule-name")
-        .textContent =
-        `${CARRIER_RULES[rule.carrier].name} — ${rule.data.name}`;
-
-    document.getElementById("rule-meta")
-        .textContent =
-        `DIM divisor: ${divisor} ${
-            unit === "imp" ? "in³/lb" : "cm³/kg"
-        } • Effective: ${rule.data.effective} • Verified: ${rule.data.verified}`;
-}
-
-
-/*
-=========================================================
-CALCULATION
-=========================================================
-*/
-
-function runCalculation() {
-
-    updateRuleDisplay();
-
-    const rule = getCurrentRule();
-
-    if (!rule.data) return;
-
-    const unit =
-        document.getElementById("unit").value;
-
-    const userRounding =
-        document.getElementById("rounding").value;
-
-    const rounding =
-        rule.data.rounding === "up"
-        ? "up"
-        : userRounding;
-
-    const divisor =
-        unit === "imp"
-        ? rule.data.divisorImp
-        : rule.data.divisorMetric;
-
-    let totalActual = 0;
-    let totalDim = 0;
-    let totalBillable = 0;
-    let totalVolumeImp = 0;
-
-    let rows = [];
-
-    let valid = true;
-
-    document.querySelectorAll(".package-row")
-        .forEach((row, index) => {
-
-            const qty =
-                parseFloat(row.querySelector(".qty").value) || 0;
-
-            let length =
-                parseFloat(row.querySelector(".length").value) || 0;
-
-            let width =
-                parseFloat(row.querySelector(".width").value) || 0;
-
-            let height =
-                parseFloat(row.querySelector(".height").value) || 0;
-
-            const weight =
-                parseFloat(row.querySelector(".weight").value) || 0;
-
-            if (
-                qty <= 0 ||
-                length <= 0 ||
-                width <= 0 ||
-                height <= 0 ||
-                weight <= 0
-            ) {
-                valid = false;
-                return;
-            }
-
-            /*
-            USPS and other rules may require dimensions
-            to be rounded before calculating cubic volume.
-            */
-
-            if (rounding === "up") {
-
-                length = Math.ceil(length);
-                width = Math.ceil(width);
-                height = Math.ceil(height);
-            }
-
-            const volume =
-                length * width * height;
-
-            let dimWeight;
-
-            /*
-            USPS threshold:
-            DIM treatment applies only when package volume
-            exceeds the applicable threshold.
-            */
-
-            if (
-                rule.data.thresholdCubicInches > 0 &&
-                unit === "imp" &&
-                volume <= rule.data.thresholdCubicInches
-            ) {
-
-                dimWeight = weight;
-
-            } else {
-
-                dimWeight =
-                    Math.ceil(volume / divisor);
-            }
-
-            const billable =
-                Math.max(weight, dimWeight);
-
-            /*
-            Convert metric volume to cubic feet for density.
-            */
-
-            let volumeCubicFeet;
-
-            if (unit === "imp") {
-
-                volumeCubicFeet =
-                    volume / 1728;
-
-            } else {
-
-                volumeCubicFeet =
-                    (volume / 1000000) * 35.3147;
-            }
-
-            let actualLbs =
-                unit === "imp"
-                ? weight
-                : weight * 2.20462;
-
-            totalActual += actualLbs * qty;
-
-            totalDim +=
-                (unit === "imp"
-                ? dimWeight
-                : dimWeight) * qty;
-
-            totalBillable +=
-                (unit === "imp"
-                ? billable
-                : billable) * qty;
-
-            totalVolumeImp +=
-                volumeCubicFeet * qty;
-
-            rows.push({
-                number:index + 1,
-                qty,
-                weight,
-                dimWeight,
-                billable,
-                volumeCubicFeet
-            });
-        });
-
-    const results =
-        document.getElementById("results-container");
-
-    if (!valid || rows.length === 0) {
-
-        results.style.display = "none";
-        return;
-    }
-
-    /*
-    =====================================================
-    RESULTS TABLE
-    =====================================================
-    */
-
-    let html = "";
-
-    rows.forEach(r => {
-
-        const weightUnit =
-            unit === "imp" ? "lb" : "kg";
-
-        html += `
-            <tr>
-                <td>
-                    <strong>
-                        ${r.qty} × Package ${r.number}
-                    </strong>
-                </td>
-
-                <td>
-                    ${formatNumber(r.weight)}
-                    ${weightUnit}
-                </td>
-
-                <td>
-                    ${formatNumber(r.dimWeight)}
-                    ${weightUnit}
-                </td>
-
-                <td>
-                    <span class="highlight">
-                        ${formatNumber(r.billable)}
-                        ${weightUnit}
-                    </span>
-                </td>
-
-                <td>
-                    ${r.volumeCubicFeet.toFixed(2)}
-                    ft³
-                </td>
-            </tr>
-        `;
-    });
-
-    document.getElementById("results-body")
-        .innerHTML = html;
-
-
-    /*
-    =====================================================
-    SUMMARY
-    =====================================================
-    */
-
-    const displayWeightUnit =
-        unit === "imp" ? "lb" : "kg";
-
-    let actualDisplay =
-        unit === "imp"
-        ? totalActual
-        : totalActual / 2.20462;
-
-    let dimDisplay =
-        unit === "imp"
-        ? totalDim
-        : totalDim;
-
-    let billableDisplay =
-        unit === "imp"
-        ? totalBillable
-        : totalBillable;
-
-    document.getElementById("total-actual")
-        .textContent =
-        `${formatNumber(actualDisplay)} ${displayWeightUnit}`;
-
-    document.getElementById("total-dim")
-        .textContent =
-        `${formatNumber(dimDisplay)} ${displayWeightUnit}`;
-
-    document.getElementById("total-billable")
-        .textContent =
-        `${formatNumber(billableDisplay)} ${displayWeightUnit}`;
-
-    document.getElementById("total-volume")
-        .textContent =
-        `${totalVolumeImp.toFixed(2)} ft³`;
-
-
-    /*
-    =====================================================
-    DENSITY
-    =====================================================
-    */
-
-    const density =
-        totalActual / totalVolumeImp;
-
-    const freightClass =
-        calculateClass(density);
-
-    document.getElementById("density-num-val")
-        .textContent =
-        `${density.toFixed(2)} lb/ft³`;
-
-    document.getElementById("freight-class-val")
-        .textContent =
-        `Class ${freightClass}`;
-
-
-    /*
-    =====================================================
-    RULE DETAILS
-    =====================================================
-    */
-
-    document.getElementById("detail-carrier")
-        .textContent =
-        CARRIER_RULES[rule.carrier].name;
-
-    document.getElementById("detail-service")
-        .textContent =
-        rule.data.name;
-
-    document.getElementById("detail-divisor")
-        .textContent =
-        `${divisor} ${
-            unit === "imp"
-            ? "in³/lb"
-            : "cm³/kg"
-        }`;
-
-    document.getElementById("detail-effective")
-        .textContent =
-        rule.data.effective;
-
-    document.getElementById("detail-verified")
-        .textContent =
-        rule.data.verified;
-
-    document.getElementById("detail-rounding")
-        .textContent =
-        rounding === "up"
-        ? "Dimensions rounded up"
-        : "Standard";
-
-    document.getElementById("results-subtitle")
-        .textContent =
-        `${CARRIER_RULES[rule.carrier].name} • ${rule.data.name}`;
-
-
-    results.style.display = "block";
-}
-
-
-/*
-=========================================================
-NUMBER FORMATTING
-=========================================================
-*/
-
-function formatNumber(value) {
-
-    return Number.isInteger(value)
-        ? value.toString()
-        : value.toFixed(2);
-}
-
-
-/*
-=========================================================
-DENSITY-BASED CLASS ESTIMATE
-=========================================================
-
-This remains an ESTIMATE.
-Actual NMFC class may depend on additional factors.
-=========================================================
-*/
-
-function calculateClass(density) {
-
-    if (density < 1) return "500";
-    if (density < 2) return "400";
-    if (density < 4) return "250";
-    if (density < 6) return "175";
-    if (density < 8) return "125";
-    if (density < 10) return "100";
-    if (density < 12) return "92.5";
-    if (density < 15) return "85";
-    if (density < 22.5) return "70";
-    if (density < 30) return "60";
-
-    return "50";
-}
-
-
-/*
-=========================================================
-RULE STATUS
-=========================================================
-*/
-
-function buildRuleStatus() {
-
-    const container =
-        document.getElementById("status-list");
-
-    container.innerHTML = "";
-
-    Object.keys(CARRIER_RULES)
-        .filter(key => key !== "general")
-        .forEach(key => {
-
-            const carrier =
-                CARRIER_RULES[key];
-
-            const latest =
-                Object.values(carrier.services)
-                    .map(r => r.verified)
-                    .sort()
-                    .reverse()[0];
-
-            const div =
-                document.createElement("div");
-
-            div.className = "status-item";
-
-            div.innerHTML = `
-                <div>
-                    <span class="status-green">● Verified</span>
-                </div>
-                <strong>${carrier.name}</strong>
-                <div style="font-size:.78rem;color:#64748b">
-                    Last verified: ${latest}
-                </div>
-            `;
-
-            container.appendChild(div);
-        });
-}
-
-
-/*
-=========================================================
-INITIALIZATION
-=========================================================
-*/
-
-document.addEventListener("DOMContentLoaded", () => {
-
-    updateServices();
-
-    buildRuleStatus();
-
-    addPackage();
-});
-
-</script>
 
 </body>
+
 </html>
+
