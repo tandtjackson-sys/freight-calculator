@@ -623,7 +623,11 @@ select:focus {
 }
 
 
-
+.package-grid {
+    display:grid;
+    grid-template-columns:90px repeat(4, 1fr);
+    gap:12px;
+}
 
 
 
