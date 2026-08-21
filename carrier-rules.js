@@ -50,11 +50,11 @@ Never activate an unverified rule.
 
 =========================================================
 
-\*/
+*\
 
 
 
-const CARRIER\_RULES = {
+const CARRIER_RULES = {
 
 
 
