@@ -624,15 +624,7 @@ select:focus {
 
 
 
-.package-grid {
 
-&#x20;   display:grid;
-
-&#x20;   grid-template-columns:100px repeat(4,1fr);
-
-&#x20;   gap:12px;
-
-}
 
 
 
