@@ -555,9 +555,21 @@ select:focus {
 }
 .package-grid {
     display:grid;
-    grid-template-columns:110px 180px 180px 180px 190px;
-    gap:14px;
+    grid-template-columns:repeat(5, 1fr);
+    gap:28px;
+    width:100%;
+    max-width:1000px;
+    margin:0 auto;
     align-items:start;
+}
+
+.package-grid .input-group label {
+    text-align:center;
+    margin-bottom:8px;
+}
+
+.package-grid .input-group input {
+    width:100%;
 }
 
 
