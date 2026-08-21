@@ -18,7 +18,7 @@ Carrier-specific rules live in carrier-rules.js.
 
 =========================================================
 
-\*/
+*/
 
 
 
@@ -30,9 +30,9 @@ let packageCounter = 0;
 
 
 
-\* ======================================================
+/* ======================================================
 
-&#x20;  DOM HELPERS
+   DOM HELPERS
 
 ====================================================== */
 
@@ -40,17 +40,17 @@ let packageCounter = 0;
 
 const $ = id =>
 
-&#x20;   document.getElementById(id);
+    document.getElementById(id);
 
 
 
 
 
-/\* ======================================================
+/* ======================================================
 
-&#x20;  INITIALIZATION
+   INITIALIZATION
 
-====================================================== \*/
+====================================================== */
 
 
 
@@ -58,27 +58,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-&#x20;   populateCarriers();
+    populateCarriers();
 
 
 
-&#x20;   addPackage();
+    addPackage();
 
 
 
-&#x20;   updateServices();
+    updateServices();
 
 
 
-&#x20;   buildVerificationStatus();
+    buildVerificationStatus();
 
 
 
-&#x20;   bindEvents();
+    bindEvents();
 
 
 
-&#x20;   updateRuleDisplay();
+    updateRuleDisplay();
 
 
 
@@ -88,11 +88,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-/\* ======================================================
+/* ======================================================
 
-&#x20;  EVENT BINDING
+   EVENT BINDING
 
-====================================================== \*/
+====================================================== */
 
 
 
@@ -100,77 +100,77 @@ function bindEvents() {
 
 
 
-&#x20;   $("carrier")
+    $("carrier")
 
-&#x20;       .addEventListener("change", () => {
-
-
-
-&#x20;           updateServices();
+        .addEventListener("change", () => {
 
 
 
-&#x20;           updateRuleDisplay();
+            updateServices();
 
 
 
-&#x20;       });
+            updateRuleDisplay();
 
 
 
-
-
-&#x20;   $("service")
-
-&#x20;       .addEventListener("change", updateRuleDisplay);
+        });
 
 
 
 
 
-&#x20;   $("unit")
+    $("service")
 
-&#x20;       .addEventListener("change", updateRuleDisplay);
-
-
-
-
-
-&#x20;   $("rounding")
-
-&#x20;       .addEventListener("change", updateRuleDisplay);
+        .addEventListener("change", updateRuleDisplay);
 
 
 
 
 
-&#x20;   $("add-package")
+    $("unit")
 
-&#x20;       .addEventListener("click", () => {
-
-
-
-&#x20;           addPackage();
-
-
-
-&#x20;       });
+        .addEventListener("change", updateRuleDisplay);
 
 
 
 
 
-&#x20;   $("calculate-button")
+    $("rounding")
 
-&#x20;       .addEventListener("click", calculate);
-
-
+        .addEventListener("change", updateRuleDisplay);
 
 
 
-&#x20;   $("compare-button")
 
-&#x20;       .addEventListener("click", compareServices);
+
+    $("add-package")
+
+        .addEventListener("click", () => {
+
+
+
+            addPackage();
+
+
+
+        });
+
+
+
+
+
+    $("calculate-button")
+
+        .addEventListener("click", calculate);
+
+
+
+
+
+    $("compare-button")
+
+        .addEventListener("click", compareServices);
 
 
 
@@ -180,11 +180,11 @@ function bindEvents() {
 
 
 
-/\* ======================================================
+/* ======================================================
 
-&#x20;  CARRIER SELECTOR
+   CARRIER SELECTOR
 
-====================================================== \*/
+====================================================== */
 
 
 
@@ -192,41 +192,41 @@ function populateCarriers() {
 
 
 
-&#x20;   const select = $("carrier");
+    const select = $("carrier");
 
 
 
-&#x20;   select.innerHTML = "";
+    select.innerHTML = "";
 
 
 
-&#x20;   Object.keys(CARRIER\_RULES)
+    Object.keys(CARRIER_RULES)
 
-&#x20;       .forEach(key => {
-
-
-
-&#x20;           const option =
-
-&#x20;               document.createElement("option");
+        .forEach(key => {
 
 
 
-&#x20;           option.value = key;
+            const option =
+
+                document.createElement("option");
 
 
 
-&#x20;           option.textContent =
-
-&#x20;               CARRIER\_RULES\[key].name;
+            option.value = key;
 
 
 
-&#x20;           select.appendChild(option);
+            option.textContent =
+
+                CARRIER_RULES[key].name;
 
 
 
-&#x20;       });
+            select.appendChild(option);
+
+
+
+        });
 
 
 
@@ -236,11 +236,11 @@ function populateCarriers() {
 
 
 
-/\* ======================================================
+/* ======================================================
 
-&#x20;  SERVICE SELECTOR
+   SERVICE SELECTOR
 
-====================================================== \*/
+====================================================== */
 
 
 
@@ -248,61 +248,61 @@ function updateServices() {
 
 
 
-&#x20;   const carrier =
+    const carrier =
 
-&#x20;       $("carrier").value;
-
-
-
-&#x20;   const select =
-
-&#x20;       $("service");
+        $("carrier").value;
 
 
 
-&#x20;   select.innerHTML = "";
+    const select =
+
+        $("service");
 
 
 
-&#x20;   const services =
-
-&#x20;       CARRIER\_RULES\[carrier].services;
+    select.innerHTML = "";
 
 
 
-&#x20;   Object.entries(services)
+    const services =
 
-&#x20;       .forEach((\[key, rule]) => {
-
-
-
-&#x20;           if (rule.status !== "active")
-
-&#x20;               return;
+        CARRIER_RULES[carrier].services;
 
 
 
-&#x20;           const option =
+    Object.entries(services)
 
-&#x20;               document.createElement("option");
-
-
-
-&#x20;           option.value = key;
+        .forEach(([key, rule]) => {
 
 
 
-&#x20;           option.textContent =
+            if (rule.status !== "active")
 
-&#x20;               rule.name;
-
-
-
-&#x20;           select.appendChild(option);
+                return;
 
 
 
-&#x20;       });
+            const option =
+
+                document.createElement("option");
+
+
+
+            option.value = key;
+
+
+
+            option.textContent =
+
+                rule.name;
+
+
+
+            select.appendChild(option);
+
+
+
+        });
 
 
 
@@ -312,11 +312,11 @@ function updateServices() {
 
 
 
-/\* ======================================================
+/* ======================================================
 
-&#x20;  CURRENT RULE
+   CURRENT RULE
 
-====================================================== \*/
+====================================================== */
 
 
 
@@ -324,35 +324,35 @@ function getCurrentRule() {
 
 
 
-&#x20;   const carrier =
+    const carrier =
 
-&#x20;       $("carrier").value;
-
-
-
-&#x20;   const service =
-
-&#x20;       $("service").value;
+        $("carrier").value;
 
 
 
-&#x20;   const rule =
+    const service =
 
-&#x20;       CARRIER\_RULES\[carrier]
-
-&#x20;           ?.services\[service];
+        $("service").value;
 
 
 
-&#x20;   return {
+    const rule =
 
-&#x20;       carrier,
+        CARRIER_RULES[carrier]
 
-&#x20;       service,
+            ?.services[service];
 
-&#x20;       rule
 
-&#x20;   };
+
+    return {
+
+        carrier,
+
+        service,
+
+        rule
+
+    };
 
 
 
@@ -362,11 +362,11 @@ function getCurrentRule() {
 
 
 
-/\* ======================================================
+/* ======================================================
 
-&#x20;  RULE DISPLAY
+   RULE DISPLAY
 
-====================================================== \*/
+====================================================== */
 
 
 
@@ -374,67 +374,67 @@ function updateRuleDisplay() {
 
 
 
-&#x20;   const current =
+    const current =
 
-&#x20;       getCurrentRule();
-
-
-
-&#x20;   if (!current.rule)
-
-&#x20;       return;
+        getCurrentRule();
 
 
 
-&#x20;   const rule =
+    if (!current.rule)
 
-&#x20;       current.rule;
-
-
-
-&#x20;   const unit =
-
-&#x20;       $("unit").value;
+        return;
 
 
 
-&#x20;   const divisor =
+    const rule =
 
-&#x20;       unit === "imp"
-
-&#x20;           ? rule.imperialDivisor
-
-&#x20;           : rule.metricDivisor;
+        current.rule;
 
 
 
-&#x20;   $("rule-name").textContent =
+    const unit =
 
-&#x20;       `${CARRIER\_RULES\[current.carrier].name} — ${rule.name}`;
-
-
-
-&#x20;   $("rule-description").textContent =
-
-&#x20;       rule.notes || "";
+        $("unit").value;
 
 
 
-&#x20;   $("rule-factor").textContent =
+    const divisor =
 
-&#x20;       `DIM factor: ${divisor}`;
+        unit === "imp"
 
+            ? rule.imperialDivisor
 
-
-&#x20;   $("rule-effective").textContent =
-
-&#x20;       `Effective: ${rule.effectiveFrom}`;
+            : rule.metricDivisor;
 
 
 
-&#x20;   $("rule-verified").textContent =
+    $("rule-name").textContent =
 
-&#x20;       `Verified: ${rule.lastVerified}`;
+        `${CARRIER_RULES[current.carrier].name} — ${rule.name}`;
+
+
+
+    $("rule-description").textContent =
+
+        rule.notes || "";
+
+
+
+    $("rule-factor").textContent =
+
+        `DIM factor: ${divisor}`;
+
+
+
+    $("rule-effective").textContent =
+
+        `Effective: ${rule.effectiveFrom}`;
+
+
+
+    $("rule-verified").textContent =
+
+        `Verified: ${rule.lastVerified}`;
 
 
 
@@ -444,11 +444,11 @@ function updateRuleDisplay() {
 
 
 
-/\* ======================================================
+/* ======================================================
 
-&#x20;  PACKAGE MANAGEMENT
+   PACKAGE MANAGEMENT
 
-====================================================== \*/
+====================================================== */
 
 
 
@@ -456,311 +456,311 @@ function addPackage() {
 
 
 
-&#x20;   packageCounter++;
+    packageCounter++;
 
 
 
-&#x20;   const row =
+    const row =
 
-&#x20;       document.createElement("div");
+        document.createElement("div");
 
 
 
-&#x20;   row.className =
+    row.className =
 
-&#x20;       "package-row";
+        "package-row";
 
 
 
-&#x20;   row.dataset.packageId =
+    row.dataset.packageId =
 
-&#x20;       packageCounter;
+        packageCounter;
 
 
 
-&#x20;   row.innerHTML = `
+    row.innerHTML = `
 
 
 
-&#x20;       <div class="package-row-header">
+        <div class="package-row-header">
 
 
 
-&#x20;           <div class="package-title">
+            <div class="package-title">
 
-&#x20;               Package ${packageCounter}
+                Package ${packageCounter}
 
-&#x20;           </div>
+            </div>
 
 
 
-&#x20;           ${
+            ${
 
-&#x20;               packageCounter > 1
+                packageCounter > 1
 
-&#x20;                   ? `
+                    ? `
 
-&#x20;                   <button
+                    <button
 
-&#x20;                       type="button"
+                        type="button"
 
-&#x20;                       class="remove-package"
+                        class="remove-package"
 
-&#x20;                       data-remove-package="${packageCounter}"
+                        data-remove-package="${packageCounter}"
 
-&#x20;                   >
+                    >
 
-&#x20;                       Remove
+                        Remove
 
-&#x20;                   </button>
+                    </button>
 
-&#x20;                   `
+                    `
 
-&#x20;                   : ""
+                    : ""
 
-&#x20;           }
+            }
 
 
 
-&#x20;       </div>
+        </div>
 
 
 
 
 
-&#x20;       <div class="package-grid">
+        <div class="package-grid">
 
 
 
-&#x20;           <div class="input-group">
+            <div class="input-group">
 
 
 
-&#x20;               <label>
+                <label>
 
-&#x20;                   Qty
+                    Qty
 
-&#x20;               </label>
+                </label>
 
 
 
-&#x20;               <input
+                <input
 
-&#x20;                   type="number"
+                    type="number"
 
-&#x20;                   class="package-qty"
+                    class="package-qty"
 
-&#x20;                   value="1"
+                    value="1"
 
-&#x20;                   min="1"
+                    min="1"
 
-&#x20;                   step="1"
+                    step="1"
 
-&#x20;               >
+                >
 
 
 
-&#x20;           </div>
+            </div>
 
 
 
 
 
-&#x20;           <div class="input-group">
+            <div class="input-group">
 
 
 
-&#x20;               <label>
+                <label>
 
-&#x20;                   Length
+                    Length
 
-&#x20;               </label>
+                </label>
 
 
 
-&#x20;               <input
+                <input
 
-&#x20;                   type="number"
+                    type="number"
 
-&#x20;                   class="package-length"
+                    class="package-length"
 
-&#x20;                   min="0"
+                    min="0"
 
-&#x20;                   step="any"
+                    step="any"
 
-&#x20;                   placeholder="18"
+                    placeholder="18"
 
-&#x20;               >
+                >
 
 
 
-&#x20;           </div>
+            </div>
 
 
 
 
 
-&#x20;           <div class="input-group">
+            <div class="input-group">
 
 
 
-&#x20;               <label>
+                <label>
 
-&#x20;                   Width
+                    Width
 
-&#x20;               </label>
+                </label>
 
 
 
-&#x20;               <input
+                <input
 
-&#x20;                   type="number"
+                    type="number"
 
-&#x20;                   class="package-width"
+                    class="package-width"
 
-&#x20;                   min="0"
+                    min="0"
 
-&#x20;                   step="any"
+                    step="any"
 
-&#x20;                   placeholder="14"
+                    placeholder="14"
 
-&#x20;               >
+                >
 
 
 
-&#x20;           </div>
+            </div>
 
 
 
 
 
-&#x20;           <div class="input-group">
+            <div class="input-group">
 
 
 
-&#x20;               <label>
+                <label>
 
-&#x20;                   Height
+                    Height
 
-&#x20;               </label>
+                </label>
 
 
 
-&#x20;               <input
+                <input
 
-&#x20;                   type="number"
+                    type="number"
 
-&#x20;                   class="package-height"
+                    class="package-height"
 
-&#x20;                   min="0"
+                    min="0"
 
-&#x20;                   step="any"
+                    step="any"
 
-&#x20;                   placeholder="12"
+                    placeholder="12"
 
-&#x20;               >
+                >
 
 
 
-&#x20;           </div>
+            </div>
 
 
 
 
 
-&#x20;           <div class="input-group">
+            <div class="input-group">
 
 
 
-&#x20;               <label>
+                <label>
 
-&#x20;                   Actual weight
+                    Actual weight
 
-&#x20;               </label>
+                </label>
 
 
 
-&#x20;               <input
+                <input
 
-&#x20;                   type="number"
+                    type="number"
 
-&#x20;                   class="package-weight"
+                    class="package-weight"
 
-&#x20;                   min="0"
+                    min="0"
 
-&#x20;                   step="any"
+                    step="any"
 
-&#x20;                   placeholder="15"
+                    placeholder="15"
 
-&#x20;               >
+                >
 
 
 
-&#x20;           </div>
+            </div>
 
 
 
-&#x20;       </div>
+        </div>
 
 
 
-&#x20;   `;
+    `;
 
 
 
-&#x20;   $("package-list")
+    $("package-list")
 
-&#x20;       .appendChild(row);
+        .appendChild(row);
 
 
 
 
 
-&#x20;   const removeButton =
+    const removeButton =
 
-&#x20;       row.querySelector(
+        row.querySelector(
 
-&#x20;           "\[data-remove-package]"
+            "[data-remove-package]"
 
-&#x20;       );
+        );
 
 
 
-&#x20;   if (removeButton) {
+    if (removeButton) {
 
 
 
-&#x20;       removeButton.addEventListener(
+        removeButton.addEventListener(
 
-&#x20;           "click",
+            "click",
 
-&#x20;           () => {
+            () => {
 
 
 
-&#x20;               row.remove();
+                row.remove();
 
 
 
-&#x20;               renumberPackages();
+                renumberPackages();
 
 
 
-&#x20;               updatePackageCount();
+                updatePackageCount();
 
 
 
-&#x20;           }
+            }
 
-&#x20;       );
+        );
 
 
 
-&#x20;   }
+    }
 
 
 
-&#x20;   updatePackageCount();
+    updatePackageCount();
 
 
 
@@ -774,23 +774,23 @@ function renumberPackages() {
 
 
 
-&#x20;   document
+    document
 
-&#x20;       .querySelectorAll(".package-row")
+        .querySelectorAll(".package-row")
 
-&#x20;       .forEach((row, index) => {
-
-
-
-&#x20;           row.querySelector(".package-title")
-
-&#x20;               .textContent =
-
-&#x20;               `Package ${index + 1}`;
+        .forEach((row, index) => {
 
 
 
-&#x20;       });
+            row.querySelector(".package-title")
+
+                .textContent =
+
+                `Package ${index + 1}`;
+
+
+
+        });
 
 
 
@@ -804,21 +804,21 @@ function updatePackageCount() {
 
 
 
-&#x20;   const count =
+    const count =
 
-&#x20;       document.querySelectorAll(
+        document.querySelectorAll(
 
-&#x20;           ".package-row"
+            ".package-row"
 
-&#x20;       ).length;
+        ).length;
 
 
 
-&#x20;   $("package-count")
+    $("package-count")
 
-&#x20;       .textContent =
+        .textContent =
 
-&#x20;       `${count} ${count === 1 ? "package" : "packages"}`;
+        `${count} ${count === 1 ? "package" : "packages"}`;
 
 
 
@@ -828,11 +828,11 @@ function updatePackageCount() {
 
 
 
-/\* ======================================================
+/* ======================================================
 
-&#x20;  READ PACKAGES
+   READ PACKAGES
 
-====================================================== \*/
+====================================================== */
 
 
 
@@ -840,111 +840,111 @@ function readPackages() {
 
 
 
-&#x20;   const packages = \[];
+    const packages = [];
 
 
 
-&#x20;   document
+    document
 
-&#x20;       .querySelectorAll(".package-row")
+        .querySelectorAll(".package-row")
 
-&#x20;       .forEach((row, index) => {
-
-
-
-&#x20;           const qty =
-
-&#x20;               numberFrom(
-
-&#x20;                   row.querySelector(
-
-&#x20;                       ".package-qty"
-
-&#x20;                   )
-
-&#x20;               );
+        .forEach((row, index) => {
 
 
 
-&#x20;           const length =
+            const qty =
 
-&#x20;               numberFrom(
+                numberFrom(
 
-&#x20;                   row.querySelector(
+                    row.querySelector(
 
-&#x20;                       ".package-length"
+                        ".package-qty"
 
-&#x20;                   )
+                    )
 
-&#x20;               );
-
-
-
-&#x20;           const width =
-
-&#x20;               numberFrom(
-
-&#x20;                   row.querySelector(
-
-&#x20;                       ".package-width"
-
-&#x20;                   )
-
-&#x20;               );
+                );
 
 
 
-&#x20;           const height =
+            const length =
 
-&#x20;               numberFrom(
+                numberFrom(
 
-&#x20;                   row.querySelector(
+                    row.querySelector(
 
-&#x20;                       ".package-height"
+                        ".package-length"
 
-&#x20;                   )
+                    )
 
-&#x20;               );
-
-
-
-&#x20;           const weight =
-
-&#x20;               numberFrom(
-
-&#x20;                   row.querySelector(
-
-&#x20;                       ".package-weight"
-
-&#x20;                   )
-
-&#x20;               );
+                );
 
 
 
-&#x20;           packages.push({
+            const width =
 
-&#x20;               number:index + 1,
+                numberFrom(
 
-&#x20;               qty,
+                    row.querySelector(
 
-&#x20;               length,
+                        ".package-width"
 
-&#x20;               width,
+                    )
 
-&#x20;               height,
-
-&#x20;               weight
-
-&#x20;           });
+                );
 
 
 
-&#x20;       });
+            const height =
+
+                numberFrom(
+
+                    row.querySelector(
+
+                        ".package-height"
+
+                    )
+
+                );
 
 
 
-&#x20;   return packages;
+            const weight =
+
+                numberFrom(
+
+                    row.querySelector(
+
+                        ".package-weight"
+
+                    )
+
+                );
+
+
+
+            packages.push({
+
+                number:index + 1,
+
+                qty,
+
+                length,
+
+                width,
+
+                height,
+
+                weight
+
+            });
+
+
+
+        });
+
+
+
+    return packages;
 
 
 
@@ -958,7 +958,7 @@ function numberFrom(element) {
 
 
 
-&#x20;   return parseFloat(element.value) || 0;
+    return parseFloat(element.value) || 0;
 
 
 
@@ -968,81 +968,81 @@ function numberFrom(element) {
 
 
 
-/\* ======================================================
+/* ======================================================
 
-&#x20;  ROUNDING
+   ROUNDING
 
-====================================================== \*/
+====================================================== */
 
 
 
 function applyDimensionRounding(
 
-&#x20;   value,
+    value,
 
-&#x20;   requested,
+    requested,
 
-&#x20;   carrierRule
+    carrierRule
 
 ) {
 
 
 
-&#x20;   let mode = requested;
+    let mode = requested;
 
 
 
-&#x20;   if (requested === "rule") {
+    if (requested === "rule") {
 
 
 
-&#x20;       mode =
+        mode =
 
-&#x20;           carrierRule.dimensionRounding;
-
-
-
-&#x20;   }
+            carrierRule.dimensionRounding;
 
 
 
-&#x20;   if (
-
-&#x20;       mode === "up"
-
-&#x20;   ) {
-
-&#x20;       return Math.ceil(value);
-
-&#x20;   }
+    }
 
 
 
-&#x20;   if (
+    if (
 
-&#x20;       mode === "nearest"
+        mode === "up"
 
-&#x20;   ) {
+    ) {
 
-&#x20;       return Math.round(value);
+        return Math.ceil(value);
 
-&#x20;   }
-
-
-
-&#x20;   /\*
-
-&#x20;   "carrier" means retain the entered dimension.
-
-&#x20;   The actual carrier-specific rule may be more
-
-&#x20;   nuanced and can be added later.
-
-&#x20;   \*/
+    }
 
 
 
-&#x20;   return value;
+    if (
+
+        mode === "nearest"
+
+    ) {
+
+        return Math.round(value);
+
+    }
+
+
+
+    /*
+
+    "carrier" means retain the entered dimension.
+
+    The actual carrier-specific rule may be more
+
+    nuanced and can be added later.
+
+    */
+
+
+
+    return value;
 
 
 
@@ -1052,193 +1052,193 @@ function applyDimensionRounding(
 
 
 
-/\* ======================================================
+/* ======================================================
 
-&#x20;  CALCULATE ONE PACKAGE
+   CALCULATE ONE PACKAGE
 
-====================================================== \*/
+====================================================== */
 
 
 
 function calculatePackage(
 
-&#x20;   pkg,
+    pkg,
 
-&#x20;   rule,
+    rule,
 
-&#x20;   unit,
+    unit,
 
-&#x20;   rounding
+    rounding
 
 ) {
 
 
 
-&#x20;   let length =
+    let length =
 
-&#x20;       applyDimensionRounding(
+        applyDimensionRounding(
 
-&#x20;           pkg.length,
+            pkg.length,
 
-&#x20;           rounding,
+            rounding,
 
-&#x20;           rule
+            rule
 
-&#x20;       );
+        );
 
 
 
-&#x20;   let width =
+    let width =
 
-&#x20;       applyDimensionRounding(
+        applyDimensionRounding(
 
-&#x20;           pkg.width,
+            pkg.width,
 
-&#x20;           rounding,
+            rounding,
 
-&#x20;           rule
+            rule
 
-&#x20;       );
+        );
 
 
 
-&#x20;   let height =
+    let height =
 
-&#x20;       applyDimensionRounding(
+        applyDimensionRounding(
 
-&#x20;           pkg.height,
+            pkg.height,
 
-&#x20;           rounding,
+            rounding,
 
-&#x20;           rule
+            rule
 
-&#x20;       );
+        );
 
 
 
 
 
-&#x20;   const volume =
+    const volume =
 
-&#x20;       length \*
+        length *
 
-&#x20;       width \*
+        width *
 
-&#x20;       height;
+        height;
 
 
 
 
 
-&#x20;   const divisor =
+    const divisor =
 
-&#x20;       unit === "imp"
+        unit === "imp"
 
-&#x20;           ? rule.imperialDivisor
+            ? rule.imperialDivisor
 
-&#x20;           : rule.metricDivisor;
+            : rule.metricDivisor;
 
 
 
 
 
-&#x20;   let dimWeight =
+    let dimWeight =
 
-&#x20;       volume / divisor;
+        volume / divisor;
 
 
 
 
 
-&#x20;   /\*
+    /*
 
-&#x20;   DIM weight fractions are rounded up
+    DIM weight fractions are rounded up
 
-&#x20;   for this calculator's planning output.
+    for this calculator's planning output.
 
-&#x20;   \*/
+    */
 
 
 
-&#x20;   dimWeight =
+    dimWeight =
 
-&#x20;       Math.ceil(dimWeight);
+        Math.ceil(dimWeight);
 
 
 
 
 
-&#x20;   const billable =
+    const billable =
 
-&#x20;       Math.max(
+        Math.max(
 
-&#x20;           pkg.weight,
+            pkg.weight,
 
-&#x20;           dimWeight
+            dimWeight
 
-&#x20;       );
+        );
 
 
 
 
 
-&#x20;   let cubicFeet;
+    let cubicFeet;
 
 
 
-&#x20;   if (unit === "imp") {
+    if (unit === "imp") {
 
 
 
-&#x20;       cubicFeet =
+        cubicFeet =
 
-&#x20;           volume / 1728;
+            volume / 1728;
 
 
 
-&#x20;   } else {
+    } else {
 
 
 
-&#x20;       cubicFeet =
+        cubicFeet =
 
-&#x20;           volume \*
+            volume *
 
-&#x20;           0.0000353147;
+            0.0000353147;
 
 
 
-&#x20;   }
+    }
 
 
 
 
 
-&#x20;   return {
+    return {
 
 
 
-&#x20;       ...pkg,
+        ...pkg,
 
 
 
-&#x20;       length,
+        length,
 
-&#x20;       width,
+        width,
 
-&#x20;       height,
+        height,
 
-&#x20;       volume,
+        volume,
 
-&#x20;       dimWeight,
+        dimWeight,
 
-&#x20;       billable,
+        billable,
 
-&#x20;       cubicFeet
+        cubicFeet
 
 
 
-&#x20;   };
+    };
 
 
 
@@ -1248,11 +1248,11 @@ function calculatePackage(
 
 
 
-/\* ======================================================
+/* ======================================================
 
-&#x20;  MAIN CALCULATION
+   MAIN CALCULATION
 
-====================================================== \*/
+====================================================== */
 
 
 
@@ -1260,115 +1260,115 @@ function calculate() {
 
 
 
-&#x20;   const current =
+    const current =
 
-&#x20;       getCurrentRule();
+        getCurrentRule();
 
 
 
-&#x20;   if (!current.rule)
+    if (!current.rule)
 
-&#x20;       return;
+        return;
 
 
 
 
 
-&#x20;   const packages =
+    const packages =
 
-&#x20;       readPackages();
+        readPackages();
 
 
 
 
 
-&#x20;   const unit =
+    const unit =
 
-&#x20;       $("unit").value;
+        $("unit").value;
 
 
 
-&#x20;   const rounding =
+    const rounding =
 
-&#x20;       $("rounding").value;
+        $("rounding").value;
 
 
 
 
 
-&#x20;   const invalid =
+    const invalid =
 
-&#x20;       packages.some(pkg =>
+        packages.some(pkg =>
 
-&#x20;           pkg.qty <= 0 ||
+            pkg.qty <= 0 ||
 
-&#x20;           pkg.length <= 0 ||
+            pkg.length <= 0 ||
 
-&#x20;           pkg.width <= 0 ||
+            pkg.width <= 0 ||
 
-&#x20;           pkg.height <= 0 ||
+            pkg.height <= 0 ||
 
-&#x20;           pkg.weight <= 0
+            pkg.weight <= 0
 
-&#x20;       );
+        );
 
 
 
 
 
-&#x20;   if (invalid) {
+    if (invalid) {
 
 
 
-&#x20;       alert(
+        alert(
 
-&#x20;           "Please enter valid dimensions and actual weight for every package."
+            "Please enter valid dimensions and actual weight for every package."
 
-&#x20;       );
+        );
 
 
 
-&#x20;       return;
+        return;
 
 
 
-&#x20;   }
+    }
 
 
 
 
 
-&#x20;   const results =
+    const results =
 
-&#x20;       packages.map(pkg =>
+        packages.map(pkg =>
 
-&#x20;           calculatePackage(
+            calculatePackage(
 
-&#x20;               pkg,
+                pkg,
 
-&#x20;               current.rule,
+                current.rule,
 
-&#x20;               unit,
+                unit,
 
-&#x20;               rounding
+                rounding
 
-&#x20;           )
+            )
 
-&#x20;       );
+        );
 
 
 
 
 
-&#x20;   renderResults(
+    renderResults(
 
-&#x20;       results,
+        results,
 
-&#x20;       current,
+        current,
 
-&#x20;       unit
+        unit
 
-&#x20;   );
+    );
 
 
 
@@ -1378,337 +1378,337 @@ function calculate() {
 
 
 
-/\* ======================================================
+/* ======================================================
 
-&#x20;  RENDER RESULTS
+   RENDER RESULTS
 
-====================================================== \*/
+====================================================== */
 
 
 
 function renderResults(
 
-&#x20;   results,
+    results,
 
-&#x20;   current,
+    current,
 
-&#x20;   unit
+    unit
 
 ) {
 
 
 
-&#x20;   let totalActual = 0;
+    let totalActual = 0;
 
-&#x20;   let totalDim = 0;
+    let totalDim = 0;
 
-&#x20;   let totalBillable = 0;
+    let totalBillable = 0;
 
-&#x20;   let totalVolume = 0;
+    let totalVolume = 0;
 
 
 
 
 
-&#x20;   let html = "";
+    let html = "";
 
 
 
 
 
-&#x20;   results.forEach(result => {
+    results.forEach(result => {
 
 
 
-&#x20;       const quantity =
+        const quantity =
 
-&#x20;           result.qty;
+            result.qty;
 
 
 
 
 
-&#x20;       totalActual +=
+        totalActual +=
 
-&#x20;           result.weight \*
+            result.weight *
 
-&#x20;           quantity;
+            quantity;
 
 
 
 
 
-&#x20;       totalDim +=
+        totalDim +=
 
-&#x20;           result.dimWeight \*
+            result.dimWeight *
 
-&#x20;           quantity;
+            quantity;
 
 
 
 
 
-&#x20;       totalBillable +=
+        totalBillable +=
 
-&#x20;           result.billable \*
+            result.billable *
 
-&#x20;           quantity;
+            quantity;
 
 
 
 
 
-&#x20;       totalVolume +=
+        totalVolume +=
 
-&#x20;           result.cubicFeet \*
+            result.cubicFeet *
 
-&#x20;           quantity;
+            quantity;
 
 
 
 
 
-&#x20;       const weightUnit =
+        const weightUnit =
 
-&#x20;           unit === "imp"
+            unit === "imp"
 
-&#x20;               ? "lb"
+                ? "lb"
 
-&#x20;               : "kg";
+                : "kg";
 
 
 
 
 
-&#x20;       html += `
+        html += `
 
 
 
-&#x20;           <tr>
+            <tr>
 
 
 
-&#x20;               <td>
+                <td>
 
-&#x20;                   <strong>
+                    <strong>
 
-&#x20;                       ${quantity} × Package ${result.number}
+                        ${quantity} × Package ${result.number}
 
-&#x20;                   </strong>
+                    </strong>
 
-&#x20;               </td>
+                </td>
 
 
 
-&#x20;               <td>
+                <td>
 
-&#x20;                   ${formatNumber(result.weight)}
+                    ${formatNumber(result.weight)}
 
-&#x20;                   ${weightUnit}
+                    ${weightUnit}
 
-&#x20;               </td>
+                </td>
 
 
 
-&#x20;               <td>
+                <td>
 
-&#x20;                   ${formatNumber(result.dimWeight)}
+                    ${formatNumber(result.dimWeight)}
 
-&#x20;                   ${weightUnit}
+                    ${weightUnit}
 
-&#x20;               </td>
+                </td>
 
 
 
-&#x20;               <td>
+                <td>
 
-&#x20;                   <span class="billable">
+                    <span class="billable">
 
-&#x20;                       ${formatNumber(result.billable)}
+                        ${formatNumber(result.billable)}
 
-&#x20;                       ${weightUnit}
+                        ${weightUnit}
 
-&#x20;                   </span>
+                    </span>
 
-&#x20;               </td>
+                </td>
 
 
 
-&#x20;               <td>
+                <td>
 
-&#x20;                   ${result.cubicFeet.toFixed(2)}
+                    ${result.cubicFeet.toFixed(2)}
 
-&#x20;                   ft³
+                    ft³
 
-&#x20;               </td>
+                </td>
 
 
 
-&#x20;           </tr>
+            </tr>
 
 
 
-&#x20;       `;
+        `;
 
 
 
-&#x20;   });
+    });
 
 
 
 
 
-&#x20;   $("results-body")
+    $("results-body")
 
-&#x20;       .innerHTML = html;
+        .innerHTML = html;
 
 
 
 
 
-&#x20;   $("total-actual")
+    $("total-actual")
 
-&#x20;       .textContent =
+        .textContent =
 
-&#x20;       `${formatNumber(totalActual)} ${
+        `${formatNumber(totalActual)} ${
 
-&#x20;           unit === "imp" ? "lb" : "kg"
+            unit === "imp" ? "lb" : "kg"
 
-&#x20;       }`;
+        }`;
 
 
 
 
 
-&#x20;   $("total-dim")
+    $("total-dim")
 
-&#x20;       .textContent =
+        .textContent =
 
-&#x20;       `${formatNumber(totalDim)} ${
+        `${formatNumber(totalDim)} ${
 
-&#x20;           unit === "imp" ? "lb" : "kg"
+            unit === "imp" ? "lb" : "kg"
 
-&#x20;       }`;
+        }`;
 
 
 
 
 
-&#x20;   $("total-billable")
+    $("total-billable")
 
-&#x20;       .textContent =
+        .textContent =
 
-&#x20;       `${formatNumber(totalBillable)} ${
+        `${formatNumber(totalBillable)} ${
 
-&#x20;           unit === "imp" ? "lb" : "kg"
+            unit === "imp" ? "lb" : "kg"
 
-&#x20;       }`;
+        }`;
 
 
 
 
 
-&#x20;   $("total-volume")
+    $("total-volume")
 
-&#x20;       .textContent =
+        .textContent =
 
-&#x20;       `${totalVolume.toFixed(2)} ft³`;
+        `${totalVolume.toFixed(2)} ft³`;
 
 
 
 
 
-&#x20;   /\*
+    /*
 
-&#x20;   Density is always calculated in lb/ft³.
+    Density is always calculated in lb/ft³.
 
-&#x20;   \*/
+    */
 
 
 
-&#x20;   const actualPounds =
+    const actualPounds =
 
-&#x20;       unit === "imp"
+        unit === "imp"
 
-&#x20;           ? totalActual
+            ? totalActual
 
-&#x20;           : totalActual \* 2.20462;
+            : totalActual * 2.20462;
 
 
 
 
 
-&#x20;   const density =
+    const density =
 
-&#x20;       totalVolume > 0
+        totalVolume > 0
 
-&#x20;           ? actualPounds / totalVolume
+            ? actualPounds / totalVolume
 
-&#x20;           : 0;
+            : 0;
 
 
 
 
 
-&#x20;   $("density-num-val")
+    $("density-num-val")
 
-&#x20;       .textContent =
+        .textContent =
 
-&#x20;       `${density.toFixed(2)} lb/ft³`;
+        `${density.toFixed(2)} lb/ft³`;
 
 
 
 
 
-&#x20;   $("freight-class-val")
+    $("freight-class-val")
 
-&#x20;       .textContent =
+        .textContent =
 
-&#x20;       `Class ${calculateFreightClass(density)}`;
+        `Class ${calculateFreightClass(density)}`;
 
 
 
 
 
-&#x20;   $("results-subtitle")
+    $("results-subtitle")
 
-&#x20;       .textContent =
+        .textContent =
 
-&#x20;       `${CARRIER\_RULES\[current.carrier].name} • ${current.rule.name}`;
+        `${CARRIER_RULES[current.carrier].name} • ${current.rule.name}`;
 
 
 
 
 
-&#x20;   renderRuleAudit(
+    renderRuleAudit(
 
-&#x20;       current,
+        current,
 
-&#x20;       unit
+        unit
 
-&#x20;   );
+    );
 
 
 
 
 
-&#x20;   $("results-container")
+    $("results-container")
 
-&#x20;       .hidden = false;
+        .hidden = false;
 
 
 
 
 
-&#x20;   $("results-container")
+    $("results-container")
 
-&#x20;       .scrollIntoView({
+        .scrollIntoView({
 
-&#x20;           behavior:"smooth",
+            behavior:"smooth",
 
-&#x20;           block:"start"
+            block:"start"
 
-&#x20;       });
+        });
 
 
 
@@ -1718,107 +1718,107 @@ function renderResults(
 
 
 
-/\* ======================================================
+/* ======================================================
 
-&#x20;  RULE AUDIT
+   RULE AUDIT
 
-====================================================== \*/
+====================================================== */
 
 
 
 function renderRuleAudit(
 
-&#x20;   current,
+    current,
 
-&#x20;   unit
+    unit
 
 ) {
 
 
 
-&#x20;   const rule =
+    const rule =
 
-&#x20;       current.rule;
-
-
-
-
-
-&#x20;   const divisor =
-
-&#x20;       unit === "imp"
-
-&#x20;           ? rule.imperialDivisor
-
-&#x20;           : rule.metricDivisor;
+        current.rule;
 
 
 
 
 
-&#x20;   $("detail-carrier")
+    const divisor =
 
-&#x20;       .textContent =
+        unit === "imp"
 
-&#x20;       CARRIER\_RULES\[current.carrier].name;
+            ? rule.imperialDivisor
 
-
-
-
-
-&#x20;   $("detail-service")
-
-&#x20;       .textContent =
-
-&#x20;       rule.name;
+            : rule.metricDivisor;
 
 
 
 
 
-&#x20;   $("detail-divisor")
+    $("detail-carrier")
 
-&#x20;       .textContent =
+        .textContent =
 
-&#x20;       `${divisor} ${
-
-&#x20;           unit === "imp"
-
-&#x20;               ? "in³/lb"
-
-&#x20;               : "cm³/kg"
-
-&#x20;       }`;
+        CARRIER_RULES[current.carrier].name;
 
 
 
 
 
-&#x20;   $("detail-effective")
+    $("detail-service")
 
-&#x20;       .textContent =
+        .textContent =
 
-&#x20;       rule.effectiveFrom;
-
-
-
-
-
-&#x20;   $("detail-verified")
-
-&#x20;       .textContent =
-
-&#x20;       rule.lastVerified;
+        rule.name;
 
 
 
 
 
-&#x20;   $("detail-source")
+    $("detail-divisor")
 
-&#x20;       .textContent =
+        .textContent =
 
-&#x20;       rule.sourceName;
+        `${divisor} ${
+
+            unit === "imp"
+
+                ? "in³/lb"
+
+                : "cm³/kg"
+
+        }`;
+
+
+
+
+
+    $("detail-effective")
+
+        .textContent =
+
+        rule.effectiveFrom;
+
+
+
+
+
+    $("detail-verified")
+
+        .textContent =
+
+        rule.lastVerified;
+
+
+
+
+
+    $("detail-source")
+
+        .textContent =
+
+        rule.sourceName;
 
 
 
@@ -1828,11 +1828,11 @@ function renderRuleAudit(
 
 
 
-/\* ======================================================
+/* ======================================================
 
-&#x20;  COMPARE SERVICES
+   COMPARE SERVICES
 
-====================================================== \*/
+====================================================== */
 
 
 
@@ -1840,323 +1840,323 @@ function compareServices() {
 
 
 
-&#x20;   const packages =
+    const packages =
 
-&#x20;       readPackages();
+        readPackages();
 
 
 
 
 
-&#x20;   const invalid =
+    const invalid =
 
-&#x20;       packages.some(pkg =>
+        packages.some(pkg =>
 
-&#x20;           pkg.qty <= 0 ||
+            pkg.qty <= 0 ||
 
-&#x20;           pkg.length <= 0 ||
+            pkg.length <= 0 ||
 
-&#x20;           pkg.width <= 0 ||
+            pkg.width <= 0 ||
 
-&#x20;           pkg.height <= 0 ||
+            pkg.height <= 0 ||
 
-&#x20;           pkg.weight <= 0
+            pkg.weight <= 0
 
-&#x20;       );
+        );
 
 
 
 
 
-&#x20;   if (invalid) {
+    if (invalid) {
 
 
 
-&#x20;       alert(
+        alert(
 
-&#x20;           "Enter valid shipment dimensions and weight before comparing services."
+            "Enter valid shipment dimensions and weight before comparing services."
 
-&#x20;       );
+        );
 
 
 
-&#x20;       return;
+        return;
 
 
 
-&#x20;   }
+    }
 
 
 
 
 
-&#x20;   const unit =
+    const unit =
 
-&#x20;       $("unit").value;
+        $("unit").value;
 
 
 
 
 
-&#x20;   const comparisonRows = \[];
+    const comparisonRows = [];
 
 
 
 
 
-&#x20;   Object.entries(CARRIER\_RULES)
+    Object.entries(CARRIER_RULES)
 
-&#x20;       .forEach((\[carrierKey, carrier]) => {
+        .forEach(([carrierKey, carrier]) => {
 
 
 
-&#x20;           Object.entries(carrier.services)
+            Object.entries(carrier.services)
 
-&#x20;               .forEach((\[serviceKey, rule]) => {
+                .forEach(([serviceKey, rule]) => {
 
 
 
-&#x20;                   if (rule.status !== "active")
+                    if (rule.status !== "active")
 
-&#x20;                       return;
+                        return;
 
 
 
 
 
-&#x20;                   let totalDim = 0;
+                    let totalDim = 0;
 
-&#x20;                   let totalBillable = 0;
+                    let totalBillable = 0;
 
 
 
 
 
-&#x20;                   packages.forEach(pkg => {
+                    packages.forEach(pkg => {
 
 
 
-&#x20;                       const result =
+                        const result =
 
-&#x20;                           calculatePackage(
+                            calculatePackage(
 
-&#x20;                               pkg,
+                                pkg,
 
-&#x20;                               rule,
+                                rule,
 
-&#x20;                               unit,
+                                unit,
 
-&#x20;                               "rule"
+                                "rule"
 
-&#x20;                           );
+                            );
 
 
 
 
 
-&#x20;                       totalDim +=
+                        totalDim +=
 
-&#x20;                           result.dimWeight \*
+                            result.dimWeight *
 
-&#x20;                           pkg.qty;
+                            pkg.qty;
 
 
 
 
 
-&#x20;                       totalBillable +=
+                        totalBillable +=
 
-&#x20;                           result.billable \*
+                            result.billable *
 
-&#x20;                           pkg.qty;
+                            pkg.qty;
 
 
 
-&#x20;                   });
+                    });
 
 
 
 
 
-&#x20;                   const divisor =
+                    const divisor =
 
-&#x20;                       unit === "imp"
+                        unit === "imp"
 
-&#x20;                           ? rule.imperialDivisor
+                            ? rule.imperialDivisor
 
-&#x20;                           : rule.metricDivisor;
+                            : rule.metricDivisor;
 
 
 
 
 
-&#x20;                   comparisonRows.push({
+                    comparisonRows.push({
 
 
 
-&#x20;                       carrier:
+                        carrier:
 
-&#x20;                           carrier.name,
+                            carrier.name,
 
 
 
-&#x20;                       service:
+                        service:
 
-&#x20;                           rule.name,
+                            rule.name,
 
 
 
-&#x20;                       divisor,
+                        divisor,
 
 
 
-&#x20;                       dim:
+                        dim:
 
-&#x20;                           totalDim,
+                            totalDim,
 
 
 
-&#x20;                       billable:
+                        billable:
 
-&#x20;                           totalBillable
+                            totalBillable
 
 
 
-&#x20;                   });
+                    });
 
 
 
-&#x20;               });
+                });
 
 
 
-&#x20;       });
+        });
 
 
 
 
 
-&#x20;   comparisonRows.sort(
+    comparisonRows.sort(
 
-&#x20;       (a,b) =>
+        (a,b) =>
 
-&#x20;           a.billable -
+            a.billable -
 
-&#x20;           b.billable
+            b.billable
 
-&#x20;   );
+    );
 
 
 
 
 
-&#x20;   let html = "";
+    let html = "";
 
 
 
 
 
-&#x20;   comparisonRows.forEach(row => {
+    comparisonRows.forEach(row => {
 
 
 
-&#x20;       const unitLabel =
+        const unitLabel =
 
-&#x20;           unit === "imp"
+            unit === "imp"
 
-&#x20;               ? "lb"
+                ? "lb"
 
-&#x20;               : "kg";
+                : "kg";
 
 
 
 
 
-&#x20;       html += `
+        html += `
 
 
 
-&#x20;           <tr>
+            <tr>
 
 
 
-&#x20;               <td>
+                <td>
 
-&#x20;                   <strong>
+                    <strong>
 
-&#x20;                       ${row.carrier}
+                        ${row.carrier}
 
-&#x20;                   </strong>
+                    </strong>
 
-&#x20;               </td>
+                </td>
 
 
 
-&#x20;               <td>
+                <td>
 
-&#x20;                   ${row.service}
+                    ${row.service}
 
-&#x20;               </td>
+                </td>
 
 
 
-&#x20;               <td>
+                <td>
 
-&#x20;                   ${row.divisor}
+                    ${row.divisor}
 
-&#x20;               </td>
+                </td>
 
 
 
-&#x20;               <td>
+                <td>
 
-&#x20;                   ${formatNumber(row.dim)}
+                    ${formatNumber(row.dim)}
 
-&#x20;                   ${unitLabel}
+                    ${unitLabel}
 
-&#x20;               </td>
+                </td>
 
 
 
-&#x20;               <td>
+                <td>
 
-&#x20;                   <span class="billable">
+                    <span class="billable">
 
-&#x20;                       ${formatNumber(row.billable)}
+                        ${formatNumber(row.billable)}
 
-&#x20;                       ${unitLabel}
+                        ${unitLabel}
 
-&#x20;                   </span>
+                    </span>
 
-&#x20;               </td>
+                </td>
 
 
 
-&#x20;           </tr>
+            </tr>
 
 
 
-&#x20;       `;
+        `;
 
 
 
-&#x20;   });
+    });
 
 
 
 
 
-&#x20;   $("comparison-body")
+    $("comparison-body")
 
-&#x20;       .innerHTML = html;
+        .innerHTML = html;
 
 
 
 
 
-&#x20;   $("comparison-container")
+    $("comparison-container")
 
-&#x20;       .hidden = false;
+        .hidden = false;
 
 
 
@@ -2166,11 +2166,11 @@ function compareServices() {
 
 
 
-/\* ======================================================
+/* ======================================================
 
-&#x20;  VERIFICATION STATUS
+   VERIFICATION STATUS
 
-====================================================== \*/
+====================================================== */
 
 
 
@@ -2178,145 +2178,145 @@ function buildVerificationStatus() {
 
 
 
-&#x20;   const container =
+    const container =
 
-&#x20;       $("status-list");
+        $("status-list");
 
 
 
-&#x20;   container.innerHTML = "";
+    container.innerHTML = "";
 
 
 
 
 
-&#x20;   Object.entries(CARRIER\_RULES)
+    Object.entries(CARRIER_RULES)
 
-&#x20;       .filter((\[key]) =>
+        .filter(([key]) =>
 
-&#x20;           key !== "general"
+            key !== "general"
 
-&#x20;       )
+        )
 
-&#x20;       .forEach((\[key, carrier]) => {
+        .forEach(([key, carrier]) => {
 
 
 
-&#x20;           const rules =
+            const rules =
 
-&#x20;               Object.values(
+                Object.values(
 
-&#x20;                   carrier.services
+                    carrier.services
 
-&#x20;               );
+                );
 
 
 
 
 
-&#x20;           const dates =
+            const dates =
 
-&#x20;               rules
+                rules
 
-&#x20;                   .map(rule =>
+                    .map(rule =>
 
-&#x20;                       rule.lastVerified
+                        rule.lastVerified
 
-&#x20;                   )
+                    )
 
-&#x20;                   .sort()
+                    .sort()
 
-&#x20;                   .reverse();
+                    .reverse();
 
 
 
 
 
-&#x20;           const latest =
+            const latest =
 
-&#x20;               dates\[0] || "—";
+                dates[0] || "—";
 
 
 
 
 
-&#x20;           const activeCount =
+            const activeCount =
 
-&#x20;               rules.filter(
+                rules.filter(
 
-&#x20;                   rule =>
+                    rule =>
 
-&#x20;                       rule.status === "active"
+                        rule.status === "active"
 
-&#x20;               ).length;
+                ).length;
 
 
 
 
 
-&#x20;           const div =
+            const div =
 
-&#x20;               document.createElement("div");
+                document.createElement("div");
 
 
 
 
 
-&#x20;           div.className =
+            div.className =
 
-&#x20;               "status-item";
+                "status-item";
 
 
 
 
 
-&#x20;           div.innerHTML = `
+            div.innerHTML = `
 
 
 
-&#x20;               <div class="status-name">
+                <div class="status-name">
 
-&#x20;                   ${carrier.name}
+                    ${carrier.name}
 
-&#x20;               </div>
+                </div>
 
 
 
-&#x20;               <div class="status-state">
+                <div class="status-state">
 
-&#x20;                   ● ${activeCount} active rule${
+                    ● ${activeCount} active rule${
 
-&#x20;                       activeCount === 1
+                        activeCount === 1
 
-&#x20;                           ? ""
+                            ? ""
 
-&#x20;                           : "s"
+                            : "s"
 
-&#x20;                   }
+                    }
 
-&#x20;               </div>
+                </div>
 
 
 
-&#x20;               <div class="status-date">
+                <div class="status-date">
 
-&#x20;                   Last verified: ${latest}
+                    Last verified: ${latest}
 
-&#x20;               </div>
+                </div>
 
 
 
-&#x20;           `;
+            `;
 
 
 
 
 
-&#x20;           container.appendChild(div);
+            container.appendChild(div);
 
 
 
-&#x20;       });
+        });
 
 
 
@@ -2326,83 +2326,83 @@ function buildVerificationStatus() {
 
 
 
-/\* ======================================================
+/* ======================================================
 
-&#x20;  FREIGHT CLASS ESTIMATE
+   FREIGHT CLASS ESTIMATE
 
-====================================================== \*/
+====================================================== */
 
 
 
 function calculateFreightClass(
 
-&#x20;   density
+    density
 
 ) {
 
 
 
-&#x20;   if (density < 1)
+    if (density < 1)
 
-&#x20;       return "500";
-
-
-
-&#x20;   if (density < 2)
-
-&#x20;       return "400";
+        return "500";
 
 
 
-&#x20;   if (density < 4)
+    if (density < 2)
 
-&#x20;       return "250";
-
-
-
-&#x20;   if (density < 6)
-
-&#x20;       return "175";
+        return "400";
 
 
 
-&#x20;   if (density < 8)
+    if (density < 4)
 
-&#x20;       return "125";
-
-
-
-&#x20;   if (density < 10)
-
-&#x20;       return "100";
+        return "250";
 
 
 
-&#x20;   if (density < 12)
+    if (density < 6)
 
-&#x20;       return "92.5";
-
-
-
-&#x20;   if (density < 15)
-
-&#x20;       return "85";
+        return "175";
 
 
 
-&#x20;   if (density < 22.5)
+    if (density < 8)
 
-&#x20;       return "70";
-
-
-
-&#x20;   if (density < 30)
-
-&#x20;       return "60";
+        return "125";
 
 
 
-&#x20;   return "50";
+    if (density < 10)
+
+        return "100";
+
+
+
+    if (density < 12)
+
+        return "92.5";
+
+
+
+    if (density < 15)
+
+        return "85";
+
+
+
+    if (density < 22.5)
+
+        return "70";
+
+
+
+    if (density < 30)
+
+        return "60";
+
+
+
+    return "50";
 
 
 
@@ -2412,11 +2412,11 @@ function calculateFreightClass(
 
 
 
-/\* ======================================================
+/* ======================================================
 
-&#x20;  FORMATTING
+   FORMATTING
 
-====================================================== \*/
+====================================================== */
 
 
 
@@ -2424,23 +2424,24 @@ function formatNumber(value) {
 
 
 
-&#x20;   if (
+    if (
 
-&#x20;       Number.isInteger(value)
+        Number.isInteger(value)
 
-&#x20;   ) {
+    ) {
 
-&#x20;       return value.toString();
+        return value.toString();
 
-&#x20;   }
-
-
+    }
 
 
 
-&#x20;   return value.toFixed(2);
+
+
+    return value.toFixed(2);
 
 
 
 }
+
 
