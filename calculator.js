@@ -765,7 +765,10 @@ clearResults();
 
 
 }
-
+function clearResults() {
+    $("results-container").hidden = true;
+    $("results-body").innerHTML = "";
+}
 
 
 
