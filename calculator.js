@@ -748,7 +748,7 @@ function addPackage() {
 
                 updatePackageCount();
 
-
+clearResults();
 
             }
 
