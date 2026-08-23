@@ -588,7 +588,7 @@ function addPackage() {
 
                     step="any"
 
-                    placeholder="18"
+                    value="0"
 
                 >
 
@@ -622,7 +622,7 @@ function addPackage() {
 
                     step="any"
 
-                    placeholder="14"
+                    value="0"
 
                 >
 
@@ -656,7 +656,7 @@ function addPackage() {
 
                     step="any"
 
-                    placeholder="12"
+                    value="0"
 
                 >
 
@@ -690,7 +690,7 @@ function addPackage() {
 
                     step="any"
 
-                    placeholder="15"
+                    value="0"
 
                 >
 
