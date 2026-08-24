@@ -361,7 +361,7 @@ tfoot td {
 
 /*
 =========================================================
-PDF & PRINT STYLES
+PDF & PRINT STYLES - FULL PAGE CAPTURE
 =========================================================
 */
 @media print {
@@ -370,25 +370,37 @@ PDF & PRINT STYLES
         padding: 0;
     }
 
-    header, 
-    #carrier-selection-card, 
-    #package-entry-card, 
-    .preset-controls, 
-    .button-group, 
-    .export-controls, 
-    .status-grid {
-        display: none !important;
+    /* Keep all cards visible and expand container */
+    .container {
+        max-width: 100% !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
 
     .card {
-        border: none;
-        box-shadow: none;
-        padding: 0;
-        margin: 0;
+        border: 1px solid #cbd5e0;
+        box-shadow: none !important;
+        break-inside: avoid; /* Prevents awkward page breaks in middle of cards */
+        margin-bottom: 16px;
     }
 
-    #results-container {
-        display: block !important;
+    /* Hide only navigation/action buttons on the printed PDF */
+    .preset-controls, 
+    .button-group, 
+    .export-controls, 
+    .remove-package {
+        display: none !important;
+    }
+
+    /* Force interactive inputs to display clearly as plain text in print */
+    input, select {
+        border: none !important;
+        background: transparent !important;
+        appearance: none !important;
+        -webkit-appearance: none !important;
+        padding: 0 !important;
+        font-weight: 600;
     }
 
     table {
