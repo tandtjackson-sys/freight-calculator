@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USPS DIM Weight Calculator | Priority Mail & Ground Advantage</title>
+    <meta name="description" content="Calculate billable dimensional weight for USPS Priority Mail, Priority Mail Express, and Ground Advantage using official 166 DIM factors.">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4218227228599951" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>USPS Dimensional Weight Calculator</h1>
+            <p>Determine billable weight for USPS Priority Mail, Ground Advantage, and International packages.</p>
+        </header>
+
+        <!-- Navigation Bar -->
+        <nav class="top-nav">
+            <a href="index.html" class="nav-link">Main Calculator</a>
+            <a href="freight-class-guide.html" class="nav-link">Freight Class Guide</a>
+            <a href="dim-weight-explainer.html" class="nav-link">DIM Weight Explainer</a>
+            <a href="ups-vs-fedex-dim.html" class="nav-link">UPS vs. FedEx Rules</a>
+        </nav>
+
+        <!-- Calculator Tool Section -->
+        <div class="card">
+            <h2>1. Select Carrier & Rules</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="carrier-select">Carrier</label>
+                    <select id="carrier-select"></select>
+                </div>
+                <div class="form-group">
+                    <label for="service-select">Service / Rate</label>
+                    <select id="service-select"></select>
+                </div>
+                <div class="form-group">
+                    <label for="unit-select">Units</label>
+                    <select id="unit-select">
+                        <option value="imperial">Imperial (in, lb)</option>
+                        <option value="metric">Metric (cm, kg)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="rounding-select">Dimension Rounding</label>
+                    <select id="rounding-select">
+                        <option value="carrier">Use Carrier Standard</option>
+                        <option value="up">Round Up Always</option>
+                        <option value="exact">Exact (No Rounding)</option>
+                    </select>
+                </div>
+            </div>
+            <div id="rule-info" class="info-box">Loading rule info...</div>
+        </div>
+
+        <div class="card">
+            <div class="card-header-actions">
+                <h2>2. Package Dimensions</h2>
+                <div class="preset-controls">
+                    <button type="button" class="btn-secondary" onclick="savePreset()">Save Preset</button>
+                    <button type="button" class="btn-secondary" onclick="loadPreset()">Load Preset</button>
+                </div>
+            </div>
+
+            <div id="package-rows"></div>
+
+            <div class="button-group">
+                <button type="button" class="btn-secondary" onclick="addPackageRow()">+ Add package</button>
+                <button type="button" class="btn-primary" onclick="calculate()">Calculate billable weight &rarr;</button>
+                <button type="button" class="btn-dark" onclick="compareServices()">Compare Services</button>
+            </div>
+        </div>
+
+        <!-- Calculation Results -->
+        <div id="results-card" class="card results-card" style="display: none;">
+            <div class="card-header-actions">
+                <h2>3. Calculation Summary</h2>
+                <div class="export-controls">
+                    <button type="button" class="btn-secondary" onclick="exportCSV()">Export CSV</button>
+                    <button type="button" class="btn-secondary" onclick="exportPDF()">Print / Save PDF</button>
+                </div>
+            </div>
+            <div class="summary-banner" id="summary-banner"></div>
+            <div id="comparison-section" style="display: none;">
+                <h3>Carrier Comparison Summary</h3>
+                <div class="table-container">
+                    <table class="data-table" id="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Carrier / Rule</th>
+                                <th>DIM Factor</th>
+                                <th>Actual Wt</th>
+                                <th>DIM Wt</th>
+                                <th>Billable Wt</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <h3>Package Details</h3>
+            <div class="table-container">
+                <table class="data-table" id="results-table">
+                    <thead>
+                        <tr>
+                            <th>Pkg #</th>
+                            <th>Qty</th>
+                            <th>Dimensions</th>
+                            <th>Volume</th>
+                            <th>Actual Wt</th>
+                            <th>DIM Wt</th>
+                            <th>Density</th>
+                            <th>Est. Freight Class</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- SEO Content Section -->
+        <div class="card guide-content">
+            <h2>Understanding USPS Dimensional Weight Rules</h2>
+            <p>The United States Postal Service applies dimensional (DIM) weight rules to domestic and international packages that exceed specific size thresholds. Unlike commercial parcel carriers like UPS or FedEx that use a 139 divisor, USPS uses a **166 DIM factor**, making dimensional weight charges slightly more favorable for shippers.</p>
+            
+            <h3>The 1 Cubic Foot Threshold Rule</h3>
+            <p>USPS only calculates dimensional weight for packages that exceed **1 cubic foot (1,728 cubic inches)**. If your total cubic volume is 1,728 cubic inches or less, USPS bills strictly by actual physical weight regardless of the box size.</p>
+
+            <h3>USPS Imperial DIM Formula</h3>
+            <p>For packages greater than 1,728 cubic inches, multiply <strong>Length × Width × Height</strong> and divide by <strong>166</strong>:</p>
+            <p><code>(Length × Width × Height) ÷ 166 = Dimensional Weight (lbs)</code></p>
+
+            <h3>Non-Standard Length & Dimension Surcharges</h3>
+            <p>In addition to DIM weight, USPS charges non-standard length fees for large boxes: packages exceeding 22 inches in length incur a length surcharge, and packages exceeding 30 inches or 2 cubic feet (3,456 cu in) are subject to additional handling fees.</p>
+        </div>
+
+        <div class="card">
+            <h2>Active Carrier Rules & Verification</h2>
+            <div class="status-grid" id="status-list"></div>
+        </div>
+    </div>
+
+    <script src="carrier-rules.js"></script>
+    <script src="calculator.js"></script>
+    <script>
+        // Pre-select USPS automatically when the page loads
+        document.addEventListener("DOMContentLoaded", () => {
+            const carrierSelect = document.getElementById("carrier-select");
+            if (carrierSelect) {
+                carrierSelect.value = "usps";
+                onCarrierChange();
+            }
+        });
+    </script>
+</body>
+</html>
