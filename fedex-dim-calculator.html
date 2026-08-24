@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FedEx DIM Weight Calculator | Dimensional Weight & Surcharges</title>
+    <meta name="description" content="Calculate billable dimensional weight for FedEx Express, Ground, and International shipments using official 139 DIM factors and rounding rules.">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4218227228599951" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>FedEx Dimensional Weight Calculator</h1>
+            <p>Determine exact billable weight, volumetric mass, and density for FedEx Ground, Express, and Freight.</p>
+        </header>
+
+        <!-- Navigation Bar -->
+        <nav class="top-nav">
+            <a href="index.html" class="nav-link">Main Calculator</a>
+            <a href="freight-class-guide.html" class="nav-link">Freight Class Guide</a>
+            <a href="dim-weight-explainer.html" class="nav-link">DIM Weight Explainer</a>
+            <a href="ups-vs-fedex-dim.html" class="nav-link">UPS vs. FedEx Rules</a>
+        </nav>
+
+        <!-- Calculator Tool Section -->
+        <div class="card">
+            <h2>1. Select Carrier & Rules</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="carrier-select">Carrier</label>
+                    <select id="carrier-select"></select>
+                </div>
+                <div class="form-group">
+                    <label for="service-select">Service / Rate</label>
+                    <select id="service-select"></select>
+                </div>
+                <div class="form-group">
+                    <label for="unit-select">Units</label>
+                    <select id="unit-select">
+                        <option value="imperial">Imperial (in, lb)</option>
+                        <option value="metric">Metric (cm, kg)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="rounding-select">Dimension Rounding</label>
+                    <select id="rounding-select">
+                        <option value="carrier">Use Carrier Standard</option>
+                        <option value="up">Round Up Always</option>
+                        <option value="exact">Exact (No Rounding)</option>
+                    </select>
+                </div>
+            </div>
+            <div id="rule-info" class="info-box">Loading rule info...</div>
+        </div>
+
+        <div class="card">
+            <div class="card-header-actions">
+                <h2>2. Package Dimensions</h2>
+                <div class="preset-controls">
+                    <button type="button" class="btn-secondary" onclick="savePreset()">Save Preset</button>
+                    <button type="button" class="btn-secondary" onclick="loadPreset()">Load Preset</button>
+                </div>
+            </div>
+
+            <div id="package-rows"></div>
+
+            <div class="button-group">
+                <button type="button" class="btn-secondary" onclick="addPackageRow()">+ Add package</button>
+                <button type="button" class="btn-primary" onclick="calculate()">Calculate billable weight &rarr;</button>
+                <button type="button" class="btn-dark" onclick="compareServices()">Compare Services</button>
+            </div>
+        </div>
+
+        <!-- Calculation Results -->
+        <div id="results-card" class="card results-card" style="display: none;">
+            <div class="card-header-actions">
+                <h2>3. Calculation Summary</h2>
+                <div class="export-controls">
+                    <button type="button" class="btn-secondary" onclick="exportCSV()">Export CSV</button>
+                    <button type="button" class="btn-secondary" onclick="exportPDF()">Print / Save PDF</button>
+                </div>
+            </div>
+            <div class="summary-banner" id="summary-banner"></div>
+            <div id="comparison-section" style="display: none;">
+                <h3>Carrier Comparison Summary</h3>
+                <div class="table-container">
+                    <table class="data-table" id="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Carrier / Rule</th>
+                                <th>DIM Factor</th>
+                                <th>Actual Wt</th>
+                                <th>DIM Wt</th>
+                                <th>Billable Wt</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <h3>Package Details</h3>
+            <div class="table-container">
+                <table class="data-table" id="results-table">
+                    <thead>
+                        <tr>
+                            <th>Pkg #</th>
+                            <th>Qty</th>
+                            <th>Dimensions</th>
+                            <th>Volume</th>
+                            <th>Actual Wt</th>
+                            <th>DIM Wt</th>
+                            <th>Density</th>
+                            <th>Est. Freight Class</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- SEO Content Section -->
+        <div class="card guide-content">
+            <h2>Understanding FedEx Dimensional Weight Calculations</h2>
+            <p>FedEx assesses dimensional (DIM) weight on all Express, Ground, and International packages. DIM weight reflects package density—the amount of space a package occupies relative to its actual physical weight.</p>
+            
+            <h3>FedEx Imperial & Metric DIM Formulas</h3>
+            <p>For standard imperial measurements (inches and pounds), calculate volume and divide by the standard <strong>139</strong> factor:</p>
+            <p><code>(Length × Width × Height) ÷ 139 = Dimensional Weight (lbs)</code></p>
+            <p>For metric measurements (centimeters and kilograms), use the metric divisor of <strong>5000</strong>:</p>
+            <p><code>(Length × Width × Height in cm) ÷ 5000 = Dimensional Weight (kg)</code></p>
+
+            <h3>FedEx Rounding & Surcharge Rules</h3>
+            <p>FedEx rounds fractions of an inch to the next whole number (e.g., 10.1 inches becomes 11 inches). Always check package girth (Length + 2xWidth + 2xHeight) to avoid additional handling or oversize surcharges when shipping large, lightweight cartons.</p>
+        </div>
+
+        <div class="card">
+            <h2>Active Carrier Rules & Verification</h2>
+            <div class="status-grid" id="status-list"></div>
+        </div>
+    </div>
+
+    <script src="carrier-rules.js"></script>
+    <script src="calculator.js"></script>
+    <script>
+        // Pre-select FedEx automatically when the page loads
+        document.addEventListener("DOMContentLoaded", () => {
+            const carrierSelect = document.getElementById("carrier-select");
+            if (carrierSelect) {
+                carrierSelect.value = "fedex";
+                onCarrierChange();
+            }
+        });
+    </script>
+</body>
+</html>
