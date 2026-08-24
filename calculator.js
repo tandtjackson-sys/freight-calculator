@@ -1,6 +1,6 @@
 /*
 =========================================================
-CALCULATOR ENGINE
+CALCULATOR ENGINE (UPDATED FOR CARRIER RULES & NMFC CLASSES)
 =========================================================
 */
 
@@ -16,7 +16,6 @@ function initApp() {
     addPackageRow();
     renderCarrierStatus();
     
-    // Add event listeners for dynamic rule changes
     const carrierSelect = document.getElementById("carrier-select");
     const serviceSelect = document.getElementById("service-select");
     const unitSelect = document.getElementById("unit-select");
@@ -146,21 +145,38 @@ function calculate() {
         let h = parseFloat(document.getElementById(`h-${id}`).value) || 0;
         const wt = parseFloat(document.getElementById(`wt-${id}`).value) || 0;
 
+        // 1. CARRIER ROUNDING LOGIC
         if (roundingRule === "up" || (roundingRule === "carrier" && rule.dimensionRounding === "up")) {
             l = Math.ceil(l);
             w = Math.ceil(w);
             h = Math.ceil(h);
+        } else if (roundingRule === "carrier" && rule.dimensionRounding === "nearest") {
+            l = Math.round(l);
+            w = Math.round(w);
+            h = Math.round(h);
         }
 
         const volume = l * w * h;
-        const singleDimWeight = volume / divisor;
+        let singleDimWeight = 0;
+
+        // 2. CONDITIONAL CARRIER RULES (USPS 1 CU. FT. THRESHOLD)
+        if (carrierKey === "usps" && unit === "imperial") {
+            if (volume > 1728) {
+                singleDimWeight = volume / divisor;
+            } else {
+                singleDimWeight = 0; // Exemption: volume <= 1 cu ft ignores DIM weight
+            }
+        } else {
+            singleDimWeight = volume / divisor;
+        }
+
         const lineActualWt = wt * qty;
         const lineDimWt = singleDimWeight * qty;
 
         totalActualWeight += lineActualWt;
         totalDimWeight += lineDimWt;
 
-        // Density & Freight Class calculation (lbs / cu ft)
+        // 3. NMFC FREIGHT CLASS MAPPING
         let density = 0;
         let freightClass = "N/A";
         if (volume > 0) {
@@ -192,19 +208,14 @@ function getFreightClass(density) {
     if (density < 2) return "400";
     if (density < 3) return "300";
     if (density < 4) return "250";
-    if (density < 5) return "200";
     if (density < 6) return "175";
-    if (density < 7) return "150";
     if (density < 8) return "125";
-    if (density < 9) return "110";
-    if (density < 10.5) return "100";
+    if (density < 10) return "100";
     if (density < 12) return "92.5";
-    if (density < 13.5) return "85";
-    if (density < 15) return "77.5";
+    if (density < 15) return "85";
     if (density < 22.5) return "70";
     if (density < 30) return "65";
     if (density < 35) return "60";
-    if (density < 50) return "55";
     return "50";
 }
 
@@ -259,10 +270,14 @@ function compareServices() {
     rows.forEach(row => {
         const id = row.id.split("-")[2];
         const qty = parseFloat(document.getElementById(`qty-${id}`).value) || 0;
-        const l = parseFloat(document.getElementById(`l-${id}`).value) || 0;
-        const w = parseFloat(document.getElementById(`w-${id}`).value) || 0;
-        const h = parseFloat(document.getElementById(`h-${id}`).value) || 0;
+        let l = parseFloat(document.getElementById(`l-${id}`).value) || 0;
+        let w = parseFloat(document.getElementById(`w-${id}`).value) || 0;
+        let h = parseFloat(document.getElementById(`h-${id}`).value) || 0;
         const wt = parseFloat(document.getElementById(`wt-${id}`).value) || 0;
+
+        l = Math.ceil(l);
+        w = Math.ceil(w);
+        h = Math.ceil(h);
 
         totalVol += (l * w * h) * qty;
         totalActual += wt * qty;
@@ -273,7 +288,12 @@ function compareServices() {
         Object.keys(carrier.services).forEach(sKey => {
             const service = carrier.services[sKey];
             const divisor = unit === "imperial" ? service.imperialDivisor : service.metricDivisor;
-            const dimWt = totalVol / divisor;
+            
+            let dimWt = totalVol / divisor;
+            if (cKey === "usps" && unit === "imperial" && totalVol <= 1728) {
+                dimWt = 0;
+            }
+
             const billable = Math.max(totalActual, dimWt);
 
             const tr = document.createElement("tr");
