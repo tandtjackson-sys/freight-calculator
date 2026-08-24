@@ -130,5 +130,4 @@ const CARRIER_RULES = {
             }
         }
     }
-    }
 };
