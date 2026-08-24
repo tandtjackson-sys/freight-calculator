@@ -450,46 +450,25 @@ function updateRuleDisplay() {
 
 ====================================================== */
 
-
-
 function addPackage() {
-
-
-
     packageCounter++;
 
-
+    const packageNumber =
+        document.querySelectorAll(".package-row").length + 1;
 
     const row =
-
         document.createElement("div");
 
-
-
     row.className =
-
         "package-row";
 
-
-
     row.dataset.packageId =
-
         packageCounter;
 
-
-
     row.innerHTML = `
-
-
-
         <div class="package-row-header">
-
-
-
             <div class="package-title">
-
-                Package ${packageCounter}
-
+                Package ${packageNumber}
             </div>
 
 
