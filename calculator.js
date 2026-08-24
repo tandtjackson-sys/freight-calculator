@@ -405,17 +405,45 @@ function exportCSV() {
 
 function savePreset() {
     const packages = readPackages();
-    if (packages.length === 0) return;
+    
+    // Check if at least one package has data
+    const hasData = packages.some(p => p.length > 0 || p.width > 0 || p.height > 0 || p.weight > 0);
+    if (!hasData) {
+        alert("Please enter dimensions or weights before saving a preset.");
+        return;
+    }
+
+    // Save package data array directly to browser local storage
     localStorage.setItem("freight_calculator_preset", JSON.stringify(packages));
-    alert("Package setup saved to local storage!");
+    alert("Preset saved! Your current package setup has been saved to your browser.");
 }
 
 function loadPreset() {
-    const saved = localStorage.getItem("freight_calculator_preset");
-    if (!saved) {
-        alert("No saved preset found.");
+    const savedData = localStorage.getItem("freight_calculator_preset");
+    
+    if (!savedData) {
+        alert("No saved preset found in your browser memory.");
         return;
     }
+
+    const packages = JSON.parse(savedData);
+    const packageList = $("package-list");
+    
+    if (!packageList) return;
+
+    // Clear current package inputs completely
+    packageList.innerHTML = "";
+    packageCounter = 0;
+
+    // Rebuild package rows with loaded preset values
+    packages.forEach(pkg => {
+        addPackage(pkg);
+    });
+
+    renumberPackages();
+    updatePackageCount();
+    clearResults();
+}
 
     const packages = JSON.parse(saved);
     if ($("package-list")) $("package-list").innerHTML = "";
