@@ -1,57 +1,30 @@
 /*
 =========================================================
-CARRIER RULES DATABASE
+CARRIER RULES DEFINITIONS
 =========================================================
 */
 
 const CARRIER_RULES = {
-    general: {
-        name: "General & Industry Standards",
-        services: {
-            standard: {
-                name: "Standard Parcel DIM (139)",
-                imperialDivisor: 139,
-                metricDivisor: 5000,
-                dimensionRounding: "nearest",
-                effectiveFrom: "General",
-                lastVerified: "2026-08-24",
-                status: "active",
-                notes: "Standard parcel dimensional factor across US domestic and international air freight."
-            },
-            ltl: {
-                name: "Standard Freight / LTL (139)",
-                imperialDivisor: 139,
-                metricDivisor: 5000,
-                dimensionRounding: "nearest",
-                effectiveFrom: "General",
-                lastVerified: "2026-08-24",
-                status: "active",
-                notes: "Standard motor freight / palletized shipping dimensional factor."
-            }
-        }
-    },
     ups: {
         name: "UPS",
         services: {
-            ground: {
-                name: "UPS Ground / Daily Rates (139)",
+            standard: {
+                name: "Daily / Standard Rates",
                 imperialDivisor: 139,
                 metricDivisor: 5000,
                 dimensionRounding: "up",
+                notes: "Applies 139 divisor for packages exceeding 1,728 cubic inches or daily rates.",
                 effectiveFrom: "2026-01-01",
-                lastVerified: "2026-08-24",
-                status: "active",
-                notes: "Applies to standard UPS Ground daily rate packages over 1 cubic foot."
+                lastVerified: "2026-08-24"
             },
-            air_int: {
-                name: "UPS Worldwide Express / Saver / Expedited (139)",
-                imperialDivisor: 139,
-                metricDivisor: 5000,
+            retail: {
+                name: "Retail / Counter Rates",
+                imperialDivisor: 166,
+                metricDivisor: 6000,
                 dimensionRounding: "up",
+                notes: "Applies 166 divisor for retail counter shipments.",
                 effectiveFrom: "2026-01-01",
-                lastVerified: "2026-08-24",
-                status: "active",
-                notes: "Applies to all UPS International express and expedited air shipments."
+                lastVerified: "2026-08-24"
             }
         }
     },
@@ -59,39 +32,13 @@ const CARRIER_RULES = {
         name: "FedEx",
         services: {
             express: {
-                name: "FedEx Express / Ground (139)",
+                name: "Express & Ground",
                 imperialDivisor: 139,
                 metricDivisor: 5000,
                 dimensionRounding: "up",
+                notes: "Applies standard 139 divisor across all domestic FedEx services.",
                 effectiveFrom: "2026-01-01",
-                lastVerified: "2026-08-24",
-                status: "active",
-                notes: "Standard FedEx daily rate dimensional factor."
-            },
-            international: {
-                name: "FedEx International Priority / Economy (139)",
-                imperialDivisor: 139,
-                metricDivisor: 5000,
-                dimensionRounding: "up",
-                effectiveFrom: "2026-01-01",
-                lastVerified: "2026-08-24",
-                status: "active",
-                notes: "Applies to international export and import shipments."
-            }
-        }
-    },
-    dhl: {
-        name: "DHL Express",
-        services: {
-            express_int: {
-                name: "DHL Express Worldwide (139 / 5000 Metric)",
-                imperialDivisor: 139,
-                metricDivisor: 5000,
-                dimensionRounding: "up",
-                effectiveFrom: "2026-01-01",
-                lastVerified: "2026-08-24",
-                status: "active",
-                notes: "DHL international express standard dimensional rule."
+                lastVerified: "2026-08-24"
             }
         }
     },
@@ -99,34 +46,27 @@ const CARRIER_RULES = {
         name: "USPS",
         services: {
             priority: {
-                name: "Priority Mail / Express Domestic (166)",
+                name: "Priority Mail / Ground Advantage",
                 imperialDivisor: 166,
                 metricDivisor: 6000,
                 dimensionRounding: "nearest",
+                notes: "Applies 166 divisor ONLY to packages exceeding 1 cubic foot (1,728 cu in).",
                 effectiveFrom: "2026-01-01",
-                lastVerified: "2026-08-24",
-                status: "active",
-                notes: "Applies to Priority Mail packages exceeding 1 cubic foot (1,728 cu in)."
-            },
-            ground_advantage: {
-                name: "USPS Ground Advantage (166)",
-                imperialDivisor: 166,
-                metricDivisor: 6000,
-                dimensionRounding: "nearest",
+                lastVerified: "2026-08-24"
+            }
+        }
+    },
+    dhl: {
+        name: "DHL Express",
+        services: {
+            express: {
+                name: "Express Worldwide",
+                imperialDivisor: 139,
+                metricDivisor: 5000,
+                dimensionRounding: "up",
+                notes: "Standard global IATA 5000 metric / 139 imperial divisor.",
                 effectiveFrom: "2026-01-01",
-                lastVerified: "2026-08-24",
-                status: "active",
-                notes: "Applies to Ground Advantage packages exceeding 1 cubic foot (1,728 cu in)."
-            },
-            international: {
-                name: "USPS Priority Mail Express / International (166)",
-                imperialDivisor: 166,
-                metricDivisor: 6000,
-                dimensionRounding: "nearest",
-                effectiveFrom: "2026-01-01",
-                lastVerified: "2026-08-24",
-                status: "active",
-                notes: "Applies to international export packages exceeding 1 cubic foot."
+                lastVerified: "2026-08-24"
             }
         }
     }
