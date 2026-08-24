@@ -358,3 +358,44 @@ tfoot td {
     font-size: 0.75rem;
     color: var(--text-muted);
 }
+
+/*
+=========================================================
+PDF & PRINT STYLES
+=========================================================
+*/
+@media print {
+    body {
+        background-color: #fff;
+        padding: 0;
+    }
+
+    header, 
+    #carrier-selection-card, 
+    #package-entry-card, 
+    .preset-controls, 
+    .button-group, 
+    .export-controls, 
+    .status-grid {
+        display: none !important;
+    }
+
+    .card {
+        border: none;
+        box-shadow: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    #results-container {
+        display: block !important;
+    }
+
+    table {
+        border: 1px solid #cbd5e0;
+    }
+
+    th, td {
+        padding: 8px 10px;
+    }
+}
