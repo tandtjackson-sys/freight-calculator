@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://freightdimcalc.com/</loc>
+    <priority>1.00</priority>
+  </url>
+  <url>
+    <loc>https://freightdimcalc.com/ups-dim-calculator.html</loc>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://freightdimcalc.com/fedex-dim-calculator.html</loc>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://freightdimcalc.com/usps-dim-calculator.html</loc>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://freightdimcalc.com/dhl-dim-calculator.html</loc>
+    <priority>0.80</priority>
+  </url>
+</urlset>
