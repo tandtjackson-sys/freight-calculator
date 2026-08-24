@@ -401,6 +401,10 @@ tfoot td {
 =========================================================
 PDF & PRINT STYLES - FULL PAGE CAPTURE
 =========================================================
+/*
+=========================================================
+PDF & PRINT STYLES - FULL PAGE CAPTURE
+=========================================================
 */
 @media print {
     body {
@@ -408,7 +412,6 @@ PDF & PRINT STYLES - FULL PAGE CAPTURE
         padding: 0;
     }
 
-    /* Keep all cards visible and expand container */
     .container {
         max-width: 100% !important;
         width: 100% !important;
@@ -419,19 +422,18 @@ PDF & PRINT STYLES - FULL PAGE CAPTURE
     .card {
         border: 1px solid #cbd5e0;
         box-shadow: none !important;
-        break-inside: avoid; /* Prevents awkward page breaks in middle of cards */
+        break-inside: avoid;
         margin-bottom: 16px;
     }
 
-    /* Hide only navigation/action buttons on the printed PDF */
     .preset-controls, 
     .button-group, 
     .export-controls, 
-    .remove-package {
+    .remove-package,
+    .top-nav {
         display: none !important;
     }
 
-    /* Force interactive inputs to display clearly as plain text in print */
     input, select {
         border: none !important;
         background: transparent !important;
