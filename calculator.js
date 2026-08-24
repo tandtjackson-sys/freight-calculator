@@ -1,6 +1,6 @@
 /*
 =========================================================
-FREIGHT CALCULATOR ENGINE
+FREIGHT CALCULATOR ENGINE (FIXED LAYOUT & INITIALIZATION)
 =========================================================
 */
 
@@ -10,29 +10,30 @@ let lastCalculatedResults = null;
 const $ = id => document.getElementById(id);
 
 document.addEventListener("DOMContentLoaded", () => {
-    populateCarriers();
-    addPackage();
-    updateServices();
-    buildVerificationStatus();
+    if ($("carrier")) populateCarriers();
+    if ($("package-list") && document.querySelectorAll(".package-row").length === 0) {
+        addPackage();
+    }
+    if ($("status-list")) buildVerificationStatus();
     bindEvents();
-    updateRuleDisplay();
 });
 
 function bindEvents() {
-    $("carrier").addEventListener("change", () => {
-        updateServices();
-        updateRuleDisplay();
-    });
+    if ($("carrier")) {
+        $("carrier").addEventListener("change", () => {
+            updateServices();
+            updateRuleDisplay();
+        });
+    }
 
-    $("service").addEventListener("change", updateRuleDisplay);
-    $("unit").addEventListener("change", updateRuleDisplay);
-    $("rounding").addEventListener("change", updateRuleDisplay);
+    if ($("service")) $("service").addEventListener("change", updateRuleDisplay);
+    if ($("unit")) $("unit").addEventListener("change", updateRuleDisplay);
+    if ($("rounding")) $("rounding").addEventListener("change", updateRuleDisplay);
 
-    $("add-package").addEventListener("click", () => addPackage());
-    $("calculate-button").addEventListener("click", calculate);
-    $("compare-button").addEventListener("click", compareServices);
+    if ($("add-package")) $("add-package").addEventListener("click", () => addPackage());
+    if ($("calculate-button")) $("calculate-button").addEventListener("click", calculate);
+    if ($("compare-button")) $("compare-button").addEventListener("click", compareServices);
 
-    // New Feature Bindings
     if ($("export-csv-btn")) $("export-csv-btn").addEventListener("click", exportCSV);
     if ($("print-summary-btn")) $("print-summary-btn").addEventListener("click", () => window.print());
     if ($("save-preset-btn")) $("save-preset-btn").addEventListener("click", savePreset);
@@ -41,6 +42,7 @@ function bindEvents() {
 
 function populateCarriers() {
     const select = $("carrier");
+    if (!select) return;
     select.innerHTML = "";
     Object.keys(CARRIER_RULES).forEach(key => {
         const option = document.createElement("option");
@@ -48,13 +50,20 @@ function populateCarriers() {
         option.textContent = CARRIER_RULES[key].name;
         select.appendChild(option);
     });
+
+    // Populate services and rule display immediately on load
+    updateServices();
+    updateRuleDisplay();
 }
 
 function updateServices() {
-    const carrier = $("carrier").value;
+    const carrierSelect = $("carrier");
     const select = $("service");
+    if (!carrierSelect || !select) return;
+    
     select.innerHTML = "";
-    const services = CARRIER_RULES[carrier].services;
+    const carrier = carrierSelect.value;
+    const services = CARRIER_RULES[carrier]?.services || {};
 
     Object.entries(services).forEach(([key, rule]) => {
         if (rule.status !== "active") return;
@@ -66,9 +75,9 @@ function updateServices() {
 }
 
 function getCurrentRule() {
-    const carrier = $("carrier").value;
-    const service = $("service").value;
-    const rule = CARRIER_RULES[carrier]?.services[service];
+    const carrier = $("carrier")?.value || "general";
+    const service = $("service")?.value || Object.keys(CARRIER_RULES[carrier]?.services || {})[0];
+    const rule = CARRIER_RULES[carrier]?.services[service] || CARRIER_RULES.general.services.standard;
     return { carrier, service, rule };
 }
 
@@ -76,29 +85,33 @@ function updateRuleDisplay() {
     const current = getCurrentRule();
     if (!current.rule) return;
     const rule = current.rule;
-    const unit = $("unit").value;
+    const unit = $("unit")?.value || "imp";
     const divisor = unit === "imp" ? rule.imperialDivisor : rule.metricDivisor;
 
-    $("rule-name").textContent = `${CARRIER_RULES[current.carrier].name} — ${rule.name}`;
-    $("rule-description").textContent = rule.notes || "";
-    $("rule-factor").textContent = `DIM factor: ${divisor}`;
-    $("rule-effective").textContent = `Effective: ${rule.effectiveFrom}`;
-    $("rule-verified").textContent = `Verified: ${rule.lastVerified}`;
+    if ($("rule-name")) $("rule-name").textContent = `${CARRIER_RULES[current.carrier].name} — ${rule.name}`;
+    if ($("rule-description")) $("rule-description").textContent = rule.notes || "";
+    if ($("rule-factor")) $("rule-factor").textContent = `DIM factor: ${divisor}`;
+    if ($("rule-effective")) $("rule-effective").textContent = `Effective: ${rule.effectiveFrom}`;
+    if ($("rule-verified")) $("rule-verified").textContent = `Verified: ${rule.lastVerified}`;
 }
 
 function addPackage(data = null) {
     packageCounter++;
+    const packageList = $("package-list");
+    if (!packageList) return;
+
     const packageNumber = document.querySelectorAll(".package-row").length + 1;
     const row = document.createElement("div");
     row.className = "package-row";
     row.dataset.packageId = packageCounter;
 
+    // Fixed inline CSS grid layout to ensure 5 columns side-by-side
     row.innerHTML = `
         <div class="package-row-header">
             <div class="package-title">Package ${packageNumber}</div>
             ${packageCounter > 1 ? `<button type="button" class="remove-package" data-remove-package="${packageCounter}">Remove</button>` : ""}
         </div>
-        <div class="package-grid">
+        <div class="package-grid" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; align-items: end;">
             <div class="input-group">
                 <label>Qty</label>
                 <input type="number" class="package-qty" value="${data ? data.qty : 1}" min="1" step="1">
@@ -122,7 +135,7 @@ function addPackage(data = null) {
         </div>
     `;
 
-    $("package-list").appendChild(row);
+    packageList.appendChild(row);
 
     const removeButton = row.querySelector("[data-remove-package]");
     if (removeButton) {
@@ -137,20 +150,21 @@ function addPackage(data = null) {
 }
 
 function clearResults() {
-    $("results-container").hidden = true;
-    $("results-body").innerHTML = "";
+    if ($("results-container")) $("results-container").hidden = true;
+    if ($("results-body")) $("results-body").innerHTML = "";
     lastCalculatedResults = null;
 }
 
 function renumberPackages() {
     document.querySelectorAll(".package-row").forEach((row, index) => {
-        row.querySelector(".package-title").textContent = `Package ${index + 1}`;
+        const title = row.querySelector(".package-title");
+        if (title) title.textContent = `Package ${index + 1}`;
     });
 }
 
 function updatePackageCount() {
     const count = document.querySelectorAll(".package-row").length;
-    $("package-count").textContent = `${count} ${count === 1 ? "package" : "packages"}`;
+    if ($("package-count")) $("package-count").textContent = `${count} ${count === 1 ? "package" : "packages"}`;
 }
 
 function readPackages() {
@@ -169,7 +183,7 @@ function readPackages() {
 }
 
 function numberFrom(element) {
-    return parseFloat(element.value) || 0;
+    return element ? (parseFloat(element.value) || 0) : 0;
 }
 
 function applyDimensionRounding(value, requested, carrierRule) {
@@ -195,11 +209,9 @@ function calculatePackage(pkg, rule, unit, rounding) {
 
 function calculate() {
     const current = getCurrentRule();
-    if (!current.rule) return;
-
     const packages = readPackages();
-    const unit = $("unit").value;
-    const rounding = $("rounding").value;
+    const unit = $("unit")?.value || "imp";
+    const rounding = $("rounding")?.value || "rule";
 
     const invalid = packages.some(pkg => pkg.qty <= 0 || pkg.length <= 0 || pkg.width <= 0 || pkg.height <= 0 || pkg.weight <= 0);
 
@@ -237,54 +249,41 @@ function renderResults(results, current, unit) {
         `;
     });
 
-    $("results-body").innerHTML = html;
-    $("total-actual").textContent = `${formatNumber(totalActual)} ${weightUnit}`;
-    $("total-dim").textContent = `${formatNumber(totalDim)} ${weightUnit}`;
-    $("total-billable").textContent = `${formatNumber(totalBillable)} ${weightUnit}`;
-    $("total-volume").textContent = `${totalVolume.toFixed(2)} ft³`;
+    if ($("results-body")) $("results-body").innerHTML = html;
+    if ($("total-actual")) $("total-actual").textContent = `${formatNumber(totalActual)} ${weightUnit}`;
+    if ($("total-dim")) $("total-dim").textContent = `${formatNumber(totalDim)} ${weightUnit}`;
+    if ($("total-billable")) $("total-billable").textContent = `${formatNumber(totalBillable)} ${weightUnit}`;
+    if ($("total-volume")) $("total-volume").textContent = `${totalVolume.toFixed(2)} ft³`;
 
     const actualPounds = unit === "imp" ? totalActual : totalActual * 2.20462;
     const density = totalVolume > 0 ? actualPounds / totalVolume : 0;
 
-    $("density-num-val").textContent = `${density.toFixed(2)} lb/ft³`;
-    $("freight-class-val").textContent = `Class ${calculateFreightClass(density)}`;
-    $("results-subtitle").textContent = `${CARRIER_RULES[current.carrier].name} • ${current.rule.name}`;
+    if ($("density-num-val")) $("density-num-val").textContent = `${density.toFixed(2)} lb/ft³`;
+    if ($("freight-class-val")) $("freight-class-val").textContent = `Class ${calculateFreightClass(density)}`;
+    if ($("results-subtitle")) $("results-subtitle").textContent = `${CARRIER_RULES[current.carrier].name} • ${current.rule.name}`;
 
     updateDensityMeter(density);
-    renderRuleAudit(current, unit);
 
-    $("results-container").hidden = false;
-    $("results-container").scrollIntoView({ behavior: "smooth", block: "start" });
+    if ($("results-container")) {
+        $("results-container").hidden = false;
+        $("results-container").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
 }
 
-/* Visual Density Meter Update */
 function updateDensityMeter(density) {
     const bar = $("density-bar");
     if (!bar) return;
 
-    // Density range scaling from 0 to 50+ lb/ft³
     let percentage = Math.min((density / 50) * 100, 100);
     bar.style.width = `${Math.max(percentage, 2)}%`;
 
     if (density < 4) {
-        bar.style.backgroundColor = "#e74c3c"; // Low density / higher freight class
+        bar.style.backgroundColor = "#e74c3c";
     } else if (density < 12) {
-        bar.style.backgroundColor = "#f39c12"; // Moderate density
+        bar.style.backgroundColor = "#f39c12";
     } else {
-        bar.style.backgroundColor = "#2ecc71"; // High density / lower freight class
+        bar.style.backgroundColor = "#2ecc71";
     }
-}
-
-function renderRuleAudit(current, unit) {
-    const rule = current.rule;
-    const divisor = unit === "imp" ? rule.imperialDivisor : rule.metricDivisor;
-
-    $("detail-carrier").textContent = CARRIER_RULES[current.carrier].name;
-    $("detail-service").textContent = rule.name;
-    $("detail-divisor").textContent = `${divisor} ${unit === "imp" ? "in³/lb" : "cm³/kg"}`;
-    $("detail-effective").textContent = rule.effectiveFrom;
-    $("detail-verified").textContent = rule.lastVerified;
-    $("detail-source").textContent = rule.sourceName;
 }
 
 function compareServices() {
@@ -296,7 +295,7 @@ function compareServices() {
         return;
     }
 
-    const unit = $("unit").value;
+    const unit = $("unit")?.value || "imp";
     const comparisonRows = [];
 
     Object.entries(CARRIER_RULES).forEach(([carrierKey, carrier]) => {
@@ -338,12 +337,13 @@ function compareServices() {
         `;
     });
 
-    $("comparison-body").innerHTML = html;
-    $("comparison-container").hidden = false;
+    if ($("comparison-body")) $("comparison-body").innerHTML = html;
+    if ($("comparison-container")) $("comparison-container").hidden = false;
 }
 
 function buildVerificationStatus() {
     const container = $("status-list");
+    if (!container) return;
     container.innerHTML = "";
 
     Object.entries(CARRIER_RULES).filter(([key]) => key !== "general").forEach(([key, carrier]) => {
@@ -379,7 +379,6 @@ function calculateFreightClass(density) {
     return "50";
 }
 
-/* CSV Export */
 function exportCSV() {
     if (!lastCalculatedResults) {
         alert("Please calculate a shipment first before exporting.");
@@ -404,7 +403,6 @@ function exportCSV() {
     document.body.removeChild(link);
 }
 
-/* Save / Load Local Storage Presets */
 function savePreset() {
     const packages = readPackages();
     if (packages.length === 0) return;
@@ -420,7 +418,7 @@ function loadPreset() {
     }
 
     const packages = JSON.parse(saved);
-    $("package-list").innerHTML = "";
+    if ($("package-list")) $("package-list").innerHTML = "";
     packageCounter = 0;
 
     packages.forEach(pkg => addPackage(pkg));
