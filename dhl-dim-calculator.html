@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DHL Express DIM Weight Calculator | Volumetric Weight Tool</title>
+    <meta name="description" content="Calculate volumetric dimensional weight for DHL Express Worldwide and international air shipments using standard 5000 metric and 139 imperial divisors.">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4218227228599951" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>DHL Express Dimensional Weight Calculator</h1>
+            <p>Determine exact volumetric mass, dimensional weight, and billable mass for DHL Express international shipments.</p>
+        </header>
+
+        <!-- Navigation Bar -->
+        <nav class="top-nav">
+            <a href="index.html" class="nav-link">Main Calculator</a>
+            <a href="freight-class-guide.html" class="nav-link">Freight Class Guide</a>
+            <a href="dim-weight-explainer.html" class="nav-link">DIM Weight Explainer</a>
+            <a href="ups-vs-fedex-dim.html" class="nav-link">UPS vs. FedEx Rules</a>
+        </nav>
+
+        <!-- Calculator Tool Section -->
+        <div class="card">
+            <h2>1. Select Carrier & Rules</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="carrier-select">Carrier</label>
+                    <select id="carrier-select"></select>
+                </div>
+                <div class="form-group">
+                    <label for="service-select">Service / Rate</label>
+                    <select id="service-select"></select>
+                </div>
+                <div class="form-group">
+                    <label for="unit-select">Units</label>
+                    <select id="unit-select">
+                        <option value="imperial">Imperial (in, lb)</option>
+                        <option value="metric">Metric (cm, kg)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="rounding-select">Dimension Rounding</label>
+                    <select id="rounding-select">
+                        <option value="carrier">Use Carrier Standard</option>
+                        <option value="up">Round Up Always</option>
+                        <option value="exact">Exact (No Rounding)</option>
+                    </select>
+                </div>
+            </div>
+            <div id="rule-info" class="info-box">Loading rule info...</div>
+        </div>
+
+        <div class="card">
+            <div class="card-header-actions">
+                <h2>2. Package Dimensions</h2>
+                <div class="preset-controls">
+                    <button type="button" class="btn-secondary" onclick="savePreset()">Save Preset</button>
+                    <button type="button" class="btn-secondary" onclick="loadPreset()">Load Preset</button>
+                </div>
+            </div>
+
+            <div id="package-rows"></div>
+
+            <div class="button-group">
+                <button type="button" class="btn-secondary" onclick="addPackageRow()">+ Add package</button>
+                <button type="button" class="btn-primary" onclick="calculate()">Calculate billable weight &rarr;</button>
+                <button type="button" class="btn-dark" onclick="compareServices()">Compare Services</button>
+            </div>
+        </div>
+
+        <!-- Calculation Results -->
+        <div id="results-card" class="card results-card" style="display: none;">
+            <div class="card-header-actions">
+                <h2>3. Calculation Summary</h2>
+                <div class="export-controls">
+                    <button type="button" class="btn-secondary" onclick="exportCSV()">Export CSV</button>
+                    <button type="button" class="btn-secondary" onclick="exportPDF()">Print / Save PDF</button>
+                </div>
+            </div>
+            <div class="summary-banner" id="summary-banner"></div>
+            <div id="comparison-section" style="display: none;">
+                <h3>Carrier Comparison Summary</h3>
+                <div class="table-container">
+                    <table class="data-table" id="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Carrier / Rule</th>
+                                <th>DIM Factor</th>
+                                <th>Actual Wt</th>
+                                <th>DIM Wt</th>
+                                <th>Billable Wt</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <h3>Package Details</h3>
+            <div class="table-container">
+                <table class="data-table" id="results-table">
+                    <thead>
+                        <tr>
+                            <th>Pkg #</th>
+                            <th>Qty</th>
+                            <th>Dimensions</th>
+                            <th>Volume</th>
+                            <th>Actual Wt</th>
+                            <th>DIM Wt</th>
+                            <th>Density</th>
+                            <th>Est. Freight Class</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- SEO Content Section -->
+        <div class="card guide-content">
+            <h2>Understanding DHL Express Volumetric Weight Calculations</h2>
+            <p>DHL Express applies volumetric (dimensional) weight calculations to all international air express cargo. Volumetric weight reflects package density—calculating how much space a box occupies inside an aircraft cargo hold relative to its actual deadweight.</p>
+            
+            <h3>DHL Volumetric Weight Formulas (Metric & Imperial)</h3>
+            <p>For international shipments using metric measurements (centimeters and kilograms), DHL uses the standard IATA volumetric divisor of <strong>5000</strong>:</p>
+            <p><code>(Length × Width × Height in cm) ÷ 5000 = Volumetric Weight (kg)</code></p>
+            <p>For shipments measured in inches and pounds, DHL uses the imperial conversion divisor of <strong>139</strong>:</p>
+            <p><code>(Length × Width × Height in inches) ÷ 139 = Dimensional Weight (lbs)</code></p>
+
+            <h3>DHL Rounding & Oversize Surcharges</h3>
+            <p>DHL rounds measurements up to the next whole unit prior to volume calculation. Packages exceeding 120 cm (47 inches) on any single side or weighing more than 70 kg (154 lbs) incur individual Non-Stackable or Over-Piece / Oversize surcharges.</p>
+        </div>
+
+        <div class="card">
+            <h2>Active Carrier Rules & Verification</h2>
+            <div class="status-grid" id="status-list"></div>
+        </div>
+    </div>
+
+    <script src="carrier-rules.js"></script>
+    <script src="calculator.js"></script>
+    <script>
+        // Pre-select DHL automatically when the page loads
+        document.addEventListener("DOMContentLoaded", () => {
+            const carrierSelect = document.getElementById("carrier-select");
+            if (carrierSelect) {
+                carrierSelect.value = "dhl";
+                onCarrierChange();
+            }
+        });
+    </script>
+</body>
+</html>
