@@ -37,7 +37,7 @@ body {
 }
 
 .container {
-    max-width: 900px;
+    max-width: 1000px;
     margin: 0 auto;
 }
 
@@ -85,20 +85,23 @@ header p {
 .input-group {
     display: flex;
     flex-direction: column;
+    min-width: 0;
 }
 
 .input-group label {
-    font-size: 0.875rem;
+    font-size: 0.85rem;
     font-weight: 600;
     margin-bottom: 6px;
     color: var(--secondary-color);
+    white-space: nowrap;
 }
 
 input, select {
-    padding: 10px 12px;
+    width: 100%;
+    padding: 8px 10px;
     border: 1px solid var(--border-color);
     border-radius: 6px;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     background-color: #fff;
     transition: border-color 0.2s ease;
 }
@@ -113,8 +116,6 @@ input:focus, select:focus {
 .preset-controls {
     display: flex;
     gap: 12px;
-    margin-bottom: 20px;
-    justify-content: flex-end;
 }
 
 /* Package Rows */
@@ -154,13 +155,14 @@ input:focus, select:focus {
 
 .package-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 0.8fr 1fr 1fr 1fr 1.2fr;
     gap: 12px;
+    align-items: flex-end;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
     .package-grid {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
@@ -176,8 +178,8 @@ button {
     background-color: var(--primary-color);
     color: white;
     border: none;
-    padding: 12px 20px;
-    font-size: 1rem;
+    padding: 10px 18px;
+    font-size: 0.95rem;
 }
 
 .btn-primary:hover {
@@ -223,10 +225,6 @@ button {
     border-radius: 4px;
     margin-top: 12px;
     font-size: 0.875rem;
-}
-
-.rule-info-card strong {
-    color: #2b6cb0;
 }
 
 /* Results & Tables */
@@ -358,27 +356,4 @@ tfoot td {
 .status-date {
     font-size: 0.75rem;
     color: var(--text-muted);
-}
-
-/* Print Overrides */
-@media print {
-    body {
-        background: white;
-        color: black;
-        padding: 0;
-    }
-    
-    .card {
-        box-shadow: none;
-        border: none;
-        padding: 0;
-    }
-
-    button, .preset-controls, .export-controls, #carrier-selection-card, #package-entry-card {
-        display: none !important;
-    }
-
-    #results-container {
-        display: block !important;
-    }
 }
