@@ -1,21 +1,167 @@
-<div class="preset-controls">
-    <button type="button" id="save-preset-btn" class="btn-secondary">Save Package Preset</button>
-    <button type="button" id="load-preset-btn" class="btn-secondary">Load Saved Preset</button>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freight DIM & Density Calculator</title>
+    
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4218227228599951"
+         crossorigin="anonymous"></script>
 
-<div class="export-controls" style="margin-top: 15px;">
-    <button type="button" id="export-csv-btn" class="btn-action">Export CSV</button>
-    <button type="button" id="print-summary-btn" class="btn-action">Print Summary</button>
-</div>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
 
-<div class="density-meter-container" style="margin: 20px 0;">
-    <label><strong>Shipment Density Indicator</strong></label>
-    <div class="density-track" style="background: #e0e0e0; height: 18px; border-radius: 9px; position: relative; overflow: hidden; margin-top: 6px;">
-        <div id="density-bar" style="background: #0066cc; height: 100%; width: 0%; transition: width 0.4s ease, background-color 0.4s ease;"></div>
+    <div class="container">
+        <header>
+            <h1>Freight DIM & Density Calculator</h1>
+            <p>Calculate dimensional weight, freight class, and density across major carriers.</p>
+        </header>
+
+        <!-- Carrier & Rule Selection -->
+        <div class="card" id="carrier-selection-card">
+            <h2>1. Select Carrier & Rules</h2>
+            <div class="form-grid">
+                <div class="input-group">
+                    <label for="carrier">Carrier</label>
+                    <select id="carrier"></select>
+                </div>
+                <div class="input-group">
+                    <label for="service">Service / Rate</label>
+                    <select id="service"></select>
+                </div>
+                <div class="input-group">
+                    <label for="unit">Units</label>
+                    <select id="unit">
+                        <option value="imp">Imperial (in, lb)</option>
+                        <option value="met">Metric (cm, kg)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="rounding">Dimension Rounding</label>
+                    <select id="rounding">
+                        <option value="rule">Use Carrier Standard</option>
+                        <option value="nearest">Round to Nearest Whole</option>
+                        <option value="up">Round Up Always</option>
+                        <option value="none">Exact (No Rounding)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="rule-info-card">
+                <div id="rule-name" style="font-weight: 700; color: #0066cc;">Loading rule info...</div>
+                <div id="rule-description" style="margin-top: 4px; color: #4a5568;"></div>
+                <div style="display: flex; gap: 16px; margin-top: 8px; font-size: 0.8rem; color: #718096;">
+                    <span id="rule-factor"></span>
+                    <span id="rule-effective"></span>
+                    <span id="rule-verified"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Package Data Entry -->
+        <div class="card" id="package-entry-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h2>2. Package Dimensions</h2>
+                <div class="preset-controls">
+                    <button type="button" class="btn-secondary" id="save-preset-btn">Save Preset</button>
+                    <button type="button" class="btn-secondary" id="load-preset-btn">Load Preset</button>
+                </div>
+            </div>
+
+            <div id="package-list"></div>
+
+            <div class="button-group">
+                <button type="button" class="btn-secondary" id="add-package">+ Add package</button>
+                <button type="button" class="btn-primary" id="calculate-button">Calculate billable weight →</button>
+                <button type="button" class="btn-action" id="compare-button">Compare Services</button>
+            </div>
+        </div>
+
+        <!-- Output & Results Container -->
+        <div class="card" id="results-container" hidden>
+            <div class="results-header">
+                <h2>Calculation Results</h2>
+                <div class="results-subtitle" id="results-subtitle"></div>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>PACKAGE</th>
+                        <th>ACTUAL</th>
+                        <th>DIM</th>
+                        <th>BILLABLE</th>
+                        <th>VOLUME</th>
+                    </tr>
+                </thead>
+                <tbody id="results-body"></tbody>
+                <tfoot>
+                    <tr>
+                        <td>Total</td>
+                        <td id="total-actual">—</td>
+                        <td id="total-dim">—</td>
+                        <td id="total-billable" class="billable">—</td>
+                        <td id="total-volume">—</td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <!-- Density & Freight Class Display -->
+            <div class="density-summary-grid">
+                <div class="density-stat">
+                    <div class="density-stat-title">Estimated LTL Freight Class</div>
+                    <div class="density-stat-value" id="freight-class-val" style="color: #0066cc;">Class —</div>
+                </div>
+                <div class="density-stat">
+                    <div class="density-stat-title">Calculated Density</div>
+                    <div class="density-stat-value" id="density-num-val">—</div>
+                </div>
+            </div>
+
+            <div class="density-meter-container" style="margin-top: 16px;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #718096; margin-bottom: 4px;">
+                    <span>Low Density (Class 400)</span>
+                    <span>Medium Density</span>
+                    <span>High Density (Class 50)</span>
+                </div>
+                <div class="density-track">
+                    <div id="density-bar"></div>
+                </div>
+            </div>
+
+            <div class="export-controls">
+                <button type="button" class="btn-secondary" id="export-csv-btn">Export CSV</button>
+                <button type="button" class="btn-secondary" id="print-summary-btn">Print Summary</button>
+            </div>
+        </div>
+
+        <!-- Service Comparison Container -->
+        <div class="card" id="comparison-container" hidden>
+            <h2>Carrier Service Comparison</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Carrier</th>
+                        <th>Service</th>
+                        <th>DIM Factor</th>
+                        <th>DIM Weight</th>
+                        <th>Billable Weight</th>
+                    </tr>
+                </thead>
+                <tbody id="comparison-body"></tbody>
+            </table>
+        </div>
+
+        <!-- Carrier Verification Logs -->
+        <div class="card">
+            <h2>Active Carrier Rules & Verification</h2>
+            <div class="status-grid" id="status-list"></div>
+        </div>
     </div>
-    <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #666; margin-top: 4px;">
-        <span>Low Density (Class 400 - High Cost)</span>
-        <span>Medium Density</span>
-        <span>High Density (Class 50 - Low Cost)</span>
-    </div>
-</div>
+
+    <script src="carrier-rules.js"></script>
+    <script src="calculator.js"></script>
+</body>
+</html>
