@@ -99,7 +99,7 @@ const CARRIER_RULES = {
         name: "USPS",
         services: {
             priority: {
-                name: "Priority Mail / Priority Mail Express (166)",
+                name: "Priority Mail / Express Domestic (166)",
                 imperialDivisor: 166,
                 metricDivisor: 6000,
                 dimensionRounding: "nearest",
@@ -117,7 +117,18 @@ const CARRIER_RULES = {
                 lastVerified: "2026-08-24",
                 status: "active",
                 notes: "Applies to Ground Advantage packages exceeding 1 cubic foot (1,728 cu in)."
+            },
+            international: {
+                name: "USPS Priority Mail Express / International (166)",
+                imperialDivisor: 166,
+                metricDivisor: 6000,
+                dimensionRounding: "nearest",
+                effectiveFrom: "2026-01-01",
+                lastVerified: "2026-08-24",
+                status: "active",
+                notes: "Applies to international export packages exceeding 1 cubic foot."
             }
         }
+    }
     }
 };
