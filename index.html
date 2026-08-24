@@ -4,39 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Freight DIM & Density Calculator</title>
-    
-    <!-- Google AdSense -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4218227228599951"
-         crossorigin="anonymous"></script>
-
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4218227228599951" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-    <div class="container">
-        
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Freight DIM & Density Calculator</title>
-    
-    <!-- Google AdSense -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4218227228599951"
-         crossorigin="anonymous"></script>
-
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-
     <div class="container">
         <header>
             <h1>Freight DIM & Density Calculator</h1>
             <p>Calculate dimensional weight, freight class, and density across major carriers.</p>
         </header>
 
-        <!-- Top Navigation Links -->
+        <!-- Top Navigation Bar -->
         <nav class="top-nav">
             <a href="index.html" class="nav-link active">Calculator</a>
             <a href="freight-class-guide.html" class="nav-link">Freight Class Guide</a>
@@ -44,281 +22,110 @@
             <a href="ups-vs-fedex-dim.html" class="nav-link">UPS vs. FedEx Rules</a>
         </nav>
 
-        <!-- Carrier & Rule Selection -->
-        <div class="card" id="carrier-selection-card">
-            <h2>1. Select Carrier & Rules</h2>
-            <div class="form-grid">
-                <div class="input-group">
-                    <label for="carrier">Carrier</label>
-                    <select id="carrier"></select>
-                </div>
-                <div class="input-group">
-                    <label for="service">Service / Rate</label>
-                    <select id="service"></select>
-                </div>
-                <div class="input-group">
-                    <label for="unit">Units</label>
-                    <select id="unit">
-                        <option value="imp">Imperial (in, lb)</option>
-                        <option value="met">Metric (cm, kg)</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label for="rounding">Dimension Rounding</label>
-                    <select id="rounding">
-                        <option value="rule">Use Carrier Standard</option>
-                        <option value="nearest">Round to Nearest Whole</option>
-                        <option value="up">Round Up Always</option>
-                        <option value="none">Exact (No Rounding)</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="rule-info-card">
-                <div id="rule-name" style="font-weight: 700; color: #0066cc;">Loading rule info...</div>
-                <div id="rule-description" style="margin-top: 4px; color: #4a5568;"></div>
-                <div style="display: flex; gap: 16px; margin-top: 8px; font-size: 0.8rem; color: #718096;">
-                    <span id="rule-factor"></span>
-                    <span id="rule-effective"></span>
-                    <span id="rule-verified"></span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Package Data Entry -->
-        <div class="card" id="package-entry-card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                <h2>2. Package Dimensions</h2>
-                <div class="preset-controls">
-                    <button type="button" class="btn-secondary" id="save-preset-btn">Save Preset</button>
-                    <button type="button" class="btn-secondary" id="load-preset-btn">Load Preset</button>
-                </div>
-            </div>
-
-            <div id="package-list"></div>
-
-            <div class="button-group">
-                <button type="button" class="btn-secondary" id="add-package">+ Add package</button>
-                <button type="button" class="btn-primary" id="calculate-button">Calculate billable weight →</button>
-                <button type="button" class="btn-action" id="compare-button">Compare Services</button>
-            </div>
-        </div>
-
-        <!-- Output & Results Container -->
-        <div class="card" id="results-container" hidden>
-            <div class="results-header">
-                <h2>Calculation Results</h2>
-                <div class="results-subtitle" id="results-subtitle"></div>
-            </div>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>PACKAGE</th>
-                        <th>ACTUAL</th>
-                        <th>DIM</th>
-                        <th>BILLABLE</th>
-                        <th>VOLUME</th>
-                    </tr>
-                </thead>
-                <tbody id="results-body"></tbody>
-                <tfoot>
-                    <tr>
-                        <td>Total</td>
-                        <td id="total-actual">—</td>
-                        <td id="total-dim">—</td>
-                        <td id="total-billable" class="billable">—</td>
-                        <td id="total-volume">—</td>
-                    </tr>
-                </tfoot>
-            </table>
-
-            <!-- Density & Freight Class Display -->
-            <div class="density-summary-grid">
-                <div class="density-stat">
-                    <div class="density-stat-title">Estimated LTL Freight Class</div>
-                    <div class="density-stat-value" id="freight-class-val" style="color: #0066cc;">Class —</div>
-                </div>
-                <div class="density-stat">
-                    <div class="density-stat-title">Calculated Density</div>
-                    <div class="density-stat-value" id="density-num-val">—</div>
-                </div>
-            </div>
-
-            <div class="density-meter-container" style="margin-top: 16px;">
-                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #718096; margin-bottom: 4px;">
-                    <span>Low Density (Class 400)</span>
-                    <span>Medium Density</span>
-                    <span>High Density (Class 50)</span>
-                </div>
-                <div class="density-track">
-                    <div id="density-bar"></div>
-                </div>
-            </div>
-
-            <div class="export-controls">
-                <button type="button" class="btn-secondary" id="export-csv-btn">Export CSV</button>
-                <button type="button" class="btn-secondary" id="export-pdf-btn">Download PDF</button>
-                <button type="button" class="btn-secondary" id="print-summary-btn">Print Summary</button>
-            </div>
-        </div>
-
-        <!-- Service Comparison Container -->
-        <div class="card" id="comparison-container" hidden>
-            <h2>Carrier Service Comparison</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Carrier</th>
-                        <th>Service</th>
-                        <th>DIM Factor</th>
-                        <th>DIM Weight</th>
-                        <th>Billable Weight</th>
-                    </tr>
-                </thead>
-                <tbody id="comparison-body"></tbody>
-            </table>
-        </div>
-
-        <!-- Carrier Verification Logs -->
+        <!-- Step 1: Carrier & Rule Selection -->
         <div class="card">
-            <h2>Active Carrier Rules & Verification</h2>
-            
-</html>
-        <!-- Carrier & Rule Selection -->
-        <div class="card" id="carrier-selection-card">
             <h2>1. Select Carrier & Rules</h2>
             <div class="form-grid">
-                <div class="input-group">
-                    <label for="carrier">Carrier</label>
-                    <select id="carrier"></select>
+                <div class="form-group">
+                    <label for="carrier-select">Carrier</label>
+                    <select id="carrier-select"></select>
                 </div>
-                <div class="input-group">
-                    <label for="service">Service / Rate</label>
-                    <select id="service"></select>
+                <div class="form-group">
+                    <label for="service-select">Service / Rate</label>
+                    <select id="service-select"></select>
                 </div>
-                <div class="input-group">
-                    <label for="unit">Units</label>
-                    <select id="unit">
-                        <option value="imp">Imperial (in, lb)</option>
-                        <option value="met">Metric (cm, kg)</option>
+                <div class="form-group">
+                    <label for="unit-select">Units</label>
+                    <select id="unit-select">
+                        <option value="imperial">Imperial (in, lb)</option>
+                        <option value="metric">Metric (cm, kg)</option>
                     </select>
                 </div>
-                <div class="input-group">
-                    <label for="rounding">Dimension Rounding</label>
-                    <select id="rounding">
-                        <option value="rule">Use Carrier Standard</option>
-                        <option value="nearest">Round to Nearest Whole</option>
+                <div class="form-group">
+                    <label for="rounding-select">Dimension Rounding</label>
+                    <select id="rounding-select">
+                        <option value="carrier">Use Carrier Standard</option>
                         <option value="up">Round Up Always</option>
-                        <option value="none">Exact (No Rounding)</option>
+                        <option value="exact">Exact (No Rounding)</option>
                     </select>
                 </div>
             </div>
-
-            <div class="rule-info-card">
-                <div id="rule-name" style="font-weight: 700; color: #0066cc;">Loading rule info...</div>
-                <div id="rule-description" style="margin-top: 4px; color: #4a5568;"></div>
-                <div style="display: flex; gap: 16px; margin-top: 8px; font-size: 0.8rem; color: #718096;">
-                    <span id="rule-factor"></span>
-                    <span id="rule-effective"></span>
-                    <span id="rule-verified"></span>
-                </div>
+            <div id="rule-info" class="info-box">
+                Loading rule info...
             </div>
         </div>
 
-        <!-- Package Data Entry -->
-        <div class="card" id="package-entry-card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <!-- Step 2: Package Dimensions -->
+        <div class="card">
+            <div class="card-header-actions">
                 <h2>2. Package Dimensions</h2>
                 <div class="preset-controls">
-                    <button type="button" class="btn-secondary" id="save-preset-btn">Save Preset</button>
-                    <button type="button" class="btn-secondary" id="load-preset-btn">Load Preset</button>
+                    <button type="button" class="btn-secondary" onclick="savePreset()">Save Preset</button>
+                    <button type="button" class="btn-secondary" onclick="loadPreset()">Load Preset</button>
                 </div>
             </div>
 
-            <div id="package-list"></div>
+            <div id="package-rows">
+                <!-- Package rows injected dynamically via calculator.js -->
+            </div>
 
             <div class="button-group">
-                <button type="button" class="btn-secondary" id="add-package">+ Add package</button>
-                <button type="button" class="btn-primary" id="calculate-button">Calculate billable weight →</button>
-                <button type="button" class="btn-action" id="compare-button">Compare Services</button>
+                <button type="button" class="btn-secondary" onclick="addPackageRow()">+ Add package</button>
+                <button type="button" class="btn-primary" onclick="calculate()">Calculate billable weight &rarr;</button>
+                <button type="button" class="btn-dark" onclick="compareServices()">Compare Services</button>
             </div>
         </div>
 
-        <!-- Output & Results Container -->
-        <div class="card" id="results-container" hidden>
-            <div class="results-header">
-                <h2>Calculation Results</h2>
-                <div class="results-subtitle" id="results-subtitle"></div>
-            </div>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>PACKAGE</th>
-                        <th>ACTUAL</th>
-                        <th>DIM</th>
-                        <th>BILLABLE</th>
-                        <th>VOLUME</th>
-                    </tr>
-                </thead>
-                <tbody id="results-body"></tbody>
-                <tfoot>
-                    <tr>
-                        <td>Total</td>
-                        <td id="total-actual">—</td>
-                        <td id="total-dim">—</td>
-                        <td id="total-billable" class="billable">—</td>
-                        <td id="total-volume">—</td>
-                    </tr>
-                </tfoot>
-            </table>
-
-            <!-- Density & Freight Class Display -->
-            <div class="density-summary-grid">
-                <div class="density-stat">
-                    <div class="density-stat-title">Estimated LTL Freight Class</div>
-                    <div class="density-stat-value" id="freight-class-val" style="color: #0066cc;">Class —</div>
-                </div>
-                <div class="density-stat">
-                    <div class="density-stat-title">Calculated Density</div>
-                    <div class="density-stat-value" id="density-num-val">—</div>
+        <!-- Step 3: Calculation Results -->
+        <div id="results-card" class="card results-card" style="display: none;">
+            <div class="card-header-actions">
+                <h2>3. Calculation Summary</h2>
+                <div class="export-controls">
+                    <button type="button" class="btn-secondary" onclick="exportCSV()">Export CSV</button>
+                    <button type="button" class="btn-secondary" onclick="exportPDF()">Print / Save PDF</button>
                 </div>
             </div>
 
-            <div class="density-meter-container" style="margin-top: 16px;">
-                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #718096; margin-bottom: 4px;">
-                    <span>Low Density (Class 400)</span>
-                    <span>Medium Density</span>
-                    <span>High Density (Class 50)</span>
-                </div>
-                <div class="density-track">
-                    <div id="density-bar"></div>
+            <div class="summary-banner" id="summary-banner">
+                <!-- Main outcome highlighted here -->
+            </div>
+
+            <div id="comparison-section" style="display: none;">
+                <h3>Carrier Comparison Summary</h3>
+                <div class="table-container">
+                    <table class="data-table" id="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Carrier / Rule</th>
+                                <th>DIM Factor</th>
+                                <th>Actual Wt</th>
+                                <th>DIM Wt</th>
+                                <th>Billable Wt</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
                 </div>
             </div>
 
-            <div class="export-controls">
-                <button type="button" class="btn-secondary" id="export-csv-btn">Export CSV</button>
-                <button type="button" class="btn-secondary" id="export-pdf-btn">Download PDF</button>
-                <button type="button" class="btn-secondary" id="print-summary-btn">Print Summary</button>
+            <h3>Package Details</h3>
+            <div class="table-container">
+                <table class="data-table" id="results-table">
+                    <thead>
+                        <tr>
+                            <th>Pkg #</th>
+                            <th>Qty</th>
+                            <th>Dimensions</th>
+                            <th>Volume</th>
+                            <th>Actual Wt</th>
+                            <th>DIM Wt</th>
+                            <th>Density</th>
+                            <th>Est. Freight Class</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
             </div>
-        </div>
-
-        <!-- Service Comparison Container -->
-        <div class="card" id="comparison-container" hidden>
-            <h2>Carrier Service Comparison</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Carrier</th>
-                        <th>Service</th>
-                        <th>DIM Factor</th>
-                        <th>DIM Weight</th>
-                        <th>Billable Weight</th>
-                    </tr>
-                </thead>
-                <tbody id="comparison-body"></tbody>
-            </table>
         </div>
 
         <!-- Carrier Verification Logs -->
