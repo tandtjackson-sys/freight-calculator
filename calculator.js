@@ -1,6 +1,6 @@
 /*
 =========================================================
-FREIGHT CALCULATOR ENGINE (FIXED LAYOUT & INITIALIZATION)
+FREIGHT CALCULATOR ENGINE
 =========================================================
 */
 
@@ -35,6 +35,7 @@ function bindEvents() {
     if ($("compare-button")) $("compare-button").addEventListener("click", compareServices);
 
     if ($("export-csv-btn")) $("export-csv-btn").addEventListener("click", exportCSV);
+    if ($("export-pdf-btn")) $("export-pdf-btn").addEventListener("click", exportPDF);
     if ($("print-summary-btn")) $("print-summary-btn").addEventListener("click", () => window.print());
     if ($("save-preset-btn")) $("save-preset-btn").addEventListener("click", savePreset);
     if ($("load-preset-btn")) $("load-preset-btn").addEventListener("click", loadPreset);
@@ -51,7 +52,6 @@ function populateCarriers() {
         select.appendChild(option);
     });
 
-    // Populate services and rule display immediately on load
     updateServices();
     updateRuleDisplay();
 }
@@ -105,13 +105,12 @@ function addPackage(data = null) {
     row.className = "package-row";
     row.dataset.packageId = packageCounter;
 
-    // Fixed inline CSS grid layout to ensure 5 columns side-by-side
     row.innerHTML = `
         <div class="package-row-header">
             <div class="package-title">Package ${packageNumber}</div>
             ${packageCounter > 1 ? `<button type="button" class="remove-package" data-remove-package="${packageCounter}">Remove</button>` : ""}
         </div>
-        <div class="package-grid" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; align-items: end;">
+        <div class="package-grid">
             <div class="input-group">
                 <label>Qty</label>
                 <input type="number" class="package-qty" value="${data ? data.qty : 1}" min="1" step="1">
@@ -403,17 +402,23 @@ function exportCSV() {
     document.body.removeChild(link);
 }
 
+function exportPDF() {
+    if (!lastCalculatedResults) {
+        alert("Please calculate a shipment first before exporting to PDF.");
+        return;
+    }
+    window.print();
+}
+
 function savePreset() {
     const packages = readPackages();
-    
-    // Check if at least one package has data
     const hasData = packages.some(p => p.length > 0 || p.width > 0 || p.height > 0 || p.weight > 0);
+    
     if (!hasData) {
         alert("Please enter dimensions or weights before saving a preset.");
         return;
     }
 
-    // Save package data array directly to browser local storage
     localStorage.setItem("freight_calculator_preset", JSON.stringify(packages));
     alert("Preset saved! Your current package setup has been saved to your browser.");
 }
@@ -431,26 +436,15 @@ function loadPreset() {
     
     if (!packageList) return;
 
-    // Clear current package inputs completely
     packageList.innerHTML = "";
     packageCounter = 0;
 
-    // Rebuild package rows with loaded preset values
     packages.forEach(pkg => {
         addPackage(pkg);
     });
 
     renumberPackages();
     updatePackageCount();
-    clearResults();
-}
-
-    const packages = JSON.parse(saved);
-    if ($("package-list")) $("package-list").innerHTML = "";
-    packageCounter = 0;
-
-    packages.forEach(pkg => addPackage(pkg));
-    renumberPackages();
     clearResults();
 }
 
