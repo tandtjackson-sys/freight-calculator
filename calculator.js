@@ -207,18 +207,25 @@ function calculate() {
 }
 
 function getFreightClass(density) {
-    if (density < 1) return "500";
-    if (density < 2) return "400";
-    if (density < 3) return "300";
-    if (density < 4) return "250";
-    if (density < 6) return "175";
-    if (density < 8) return "125";
-    if (density < 10) return "100";
-    if (density < 12) return "92.5";
-    if (density < 15) return "85";
+    if (density <= 0 || isNaN(density)) return "N/A";
+    
+    // Standard NMFC Density-Based Classification Table
+    if (density < 1)    return "500";
+    if (density < 2)    return "400";
+    if (density < 3)    return "300";
+    if (density < 4)    return "250";
+    if (density < 5)    return "200";
+    if (density < 6)    return "175";
+    if (density < 7)    return "150";
+    if (density < 8)    return "125";
+    if (density < 9)    return "110";
+    if (density < 10.5) return "100";
+    if (density < 12)   return "92.5";
+    if (density < 15)   return "85";
     if (density < 22.5) return "70";
-    if (density < 30) return "65";
-    if (density < 35) return "60";
+    if (density < 30)   return "65";
+    if (density < 35)   return "60";
+    if (density < 50)   return "55";
     return "50";
 }
 
