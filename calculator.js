@@ -95,9 +95,9 @@ function updateRuleInfo() {
     const unitLabel = unit === "imperial" ? "cu in / lb" : "cu cm / kg";
 
     infoBox.innerHTML = `
-        <strong>${CARRIER_RULES[carrierKey].name} &mdash; ${rule.name}</strong><br>
+        <strong style="color: #1a202c;">${CARRIER_RULES[carrierKey].name} &mdash; ${rule.name}</strong><br>
         <span style="font-size: 0.85rem; color: #4a5568;">${rule.notes}</span><br>
-        <span style="font-size: 0.8rem; color: #718096;">DIM factor: ${divisor} ${unitLabel} | Effective: ${rule.effectiveFrom} | Verified: ${rule.lastVerified}</span>
+        <span style="font-size: 0.85rem; color: #4a5568;">DIM factor: ${divisor} ${unitLabel} | Effective: ${rule.effectiveFrom} | Verified: ${rule.lastVerified}</span>
     `;
 }
 
