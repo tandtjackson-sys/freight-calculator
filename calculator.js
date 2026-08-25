@@ -76,7 +76,6 @@ function updateRuleInfo() {
     `;
 }
 
-// Add auto-select on focus so typing replaces '0' naturally
 function addPackageRow(presetData = null) {
     packageCount++;
     const container = document.getElementById("package-rows");
@@ -118,6 +117,11 @@ function addPackageRow(presetData = null) {
     container.appendChild(row);
 }
 
+function removePackageRow(id) {
+    const row = document.getElementById(`package-row-${id}`);
+    if (row) row.remove();
+}
+
 function calculate() {
     const carrierKey = document.getElementById("carrier-select").value;
     const serviceKey = document.getElementById("service-select").value;
@@ -141,7 +145,6 @@ function calculate() {
         let h = parseFloat(document.getElementById(`h-${id}`).value) || 0;
         const wt = parseFloat(document.getElementById(`wt-${id}`).value) || 0;
 
-        // Apply carrier dimension rounding rules
         if (roundingRule === "up" || (roundingRule === "carrier" && rule.dimensionRounding === "up")) {
             l = Math.ceil(l);
             w = Math.ceil(w);
@@ -185,59 +188,13 @@ function calculate() {
             dims: `${l} x ${w} x ${h}`,
             volume: volume.toFixed(1),
             actualWt: lineActualWt.toFixed(1),
-            dimWt: lineDimWt.toFixed(2), // Show 2 decimals so table matches banner logic cleanly
+            dimWt: lineDimWt.toFixed(2),
             density: density > 0 ? density.toFixed(2) : "N/A",
             freightClass
         });
     });
 
-    // Billable weight uses Math.ceil on the final total per carrier standards
     const billableWeight = Math.ceil(Math.max(totalActualWeight, totalDimWeight));
-    lastCalculatedResults = { packageResults, totalActualWeight, totalDimWeight, billableWeight, rule };
-
-    displayResults();
-}
-
-        const volume = l * w * h;
-        let singleDimWeight = 0;
-
-        if (carrierKey === "usps" && unit === "imperial") {
-            if (volume > 1728) {
-                singleDimWeight = volume / divisor;
-            } else {
-                singleDimWeight = 0;
-            }
-        } else {
-            singleDimWeight = volume / divisor;
-        }
-
-        const lineActualWt = wt * qty;
-        const lineDimWt = singleDimWeight * qty;
-
-        totalActualWeight += lineActualWt;
-        totalDimWeight += lineDimWt;
-
-        let density = 0;
-        let freightClass = "N/A";
-        if (volume > 0) {
-            const cubicFeet = (volume / 1728);
-            density = wt / cubicFeet;
-            freightClass = getFreightClass(density);
-        }
-
-        packageResults.push({
-            num: index + 1,
-            qty,
-            dims: `${l} x ${w} x ${h}`,
-            volume: volume.toFixed(1),
-            actualWt: lineActualWt.toFixed(1),
-            dimWt: lineDimWt.toFixed(1),
-            density: density > 0 ? density.toFixed(2) : "N/A",
-            freightClass
-        });
-    });
-
-    const billableWeight = Math.max(totalActualWeight, totalDimWeight);
     lastCalculatedResults = { packageResults, totalActualWeight, totalDimWeight, billableWeight, rule };
 
     displayResults();
@@ -246,7 +203,6 @@ function calculate() {
 function getFreightClass(density) {
     if (density <= 0 || isNaN(density)) return "N/A";
     
-    // Standard NMFC Density-Based Classification Table
     if (density < 1)    return "500";
     if (density < 2)    return "400";
     if (density < 3)    return "300";
