@@ -45,8 +45,15 @@ function onCarrierChange() {
     const serviceSelect = document.getElementById("service-select");
     if (!carrierSelect || !serviceSelect) return;
 
-    const carrierKey = carrierSelect.value.toLowerCase().trim();
-    const carrierData = CARRIER_RULES[carrierKey];
+    // Normalize selected value for lookups
+    const rawValue = carrierSelect.value.trim();
+    
+    // Find matching key in CARRIER_RULES regardless of uppercase/lowercase
+    const actualKey = Object.keys(CARRIER_RULES).find(
+        key => key.toLowerCase() === rawValue.toLowerCase()
+    ) || rawValue;
+
+    const carrierData = CARRIER_RULES[actualKey];
     if (!carrierData) return;
 
     const services = carrierData.services;
@@ -59,16 +66,18 @@ function onCarrierChange() {
         serviceSelect.appendChild(option);
     });
 
-    // Update dynamic footer text banner
+    // Update dynamic footer banner
     const dynamicFooter = document.getElementById("dynamic-carrier-footer");
     if (dynamicFooter) {
+        const lowerKey = rawValue.toLowerCase();
         const pageMap = {
             'ups': 'ups-dim-calculator.html',
             'fedex': 'fedex-dim-calculator.html',
             'usps': 'usps-dim-calculator.html',
-            'dhl': 'dhl-dim-calculator.html'
+            'dhl': 'dhl-dim-calculator.html',
+            'dhl-express': 'dhl-dim-calculator.html'
         };
-        const pageUrl = pageMap[carrierKey] || 'index.html';
+        const pageUrl = pageMap[lowerKey] || 'index.html';
         dynamicFooter.innerHTML = `Currently calculating rules for <strong>${carrierData.name}</strong>. Learn more on our dedicated <a href="${pageUrl}" style="color: #2b6cb0; text-decoration: underline;">${carrierData.name} DIM Guide & Page</a>.`;
     }
 
