@@ -55,21 +55,26 @@
             </div>
         </div>
 <!-- Inside Section 1 Card -->
-<div id="rule-info" class="rule-info-box">
-    <!-- Carrier rules render here -->
+<div id="rule-info" class="rule-info-box" style="background-color: #ebf8ff; padding: 12px; border-radius: 6px;">
+    <!-- Carrier rules load here -->
 </div>
-<div id="dynamic-carrier-footer" style="margin-top: 12px; font-size: 0.85rem; color: #4a5568;">
-    <!-- Javascript populates dynamic carrier link here -->
+
+<!-- Combined Dynamic Notice & Carrier Links -->
+<div style="margin-top: 12px; padding: 10px; background: #f7fafc; border: 1px solid #e2e8f0; border-radius: 6px; text-align: center; font-size: 0.85rem;">
+    <!-- Dynamic Line -->
+    <div id="dynamic-carrier-footer" style="margin-bottom: 8px; font-weight: 500; color: #2d3748;">
+        <!-- Javascript populates dynamic carrier link here -->
+    </div>
+    
+    <!-- Permanent Nav Links -->
+    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; color: #4a5568;">
+        <a href="index.html" style="color: #2b6cb0; text-decoration: none;">Main Calculator</a> | 
+        <a href="ups-dim-calculator.html" style="color: #2b6cb0; text-decoration: none;">UPS Page</a> | 
+        <a href="fedex-dim-calculator.html" style="color: #2b6cb0; text-decoration: none;">FedEx Page</a> | 
+        <a href="usps-dim-calculator.html" style="color: #2b6cb0; text-decoration: none;">USPS Page</a> | 
+        <a href="dhl-dim-calculator.html" style="color: #2b6cb0; text-decoration: none;">DHL Page</a>
+    </div>
 </div>
-        <!-- Step 2: Package Dimensions -->
-        <div class="card">
-            <div class="card-header-actions">
-                <h2>2. Package Dimensions</h2>
-                <div class="preset-controls">
-                    <button type="button" class="btn-secondary" onclick="savePreset()">Save Preset</button>
-                    <button type="button" class="btn-secondary" onclick="loadPreset()">Load Preset</button>
-                </div>
-            </div>
 
             <div id="package-rows">
                 <!-- Package rows injected dynamically via calculator.js -->
