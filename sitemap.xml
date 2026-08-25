@@ -2,22 +2,27 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://freightdimcalc.com/</loc>
+    <lastmod>2026-08-25</lastmod>
     <priority>1.00</priority>
   </url>
   <url>
     <loc>https://freightdimcalc.com/ups-dim-calculator.html</loc>
+    <lastmod>2026-08-25</lastmod>
     <priority>0.80</priority>
   </url>
   <url>
     <loc>https://freightdimcalc.com/fedex-dim-calculator.html</loc>
+    <lastmod>2026-08-25</lastmod>
     <priority>0.80</priority>
   </url>
   <url>
     <loc>https://freightdimcalc.com/usps-dim-calculator.html</loc>
+    <lastmod>2026-08-25</lastmod>
     <priority>0.80</priority>
   </url>
   <url>
     <loc>https://freightdimcalc.com/dhl-dim-calculator.html</loc>
+    <lastmod>2026-08-25</lastmod>
     <priority>0.80</priority>
   </url>
 </urlset>
