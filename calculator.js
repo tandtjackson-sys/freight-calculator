@@ -45,8 +45,10 @@ function onCarrierChange() {
     const serviceSelect = document.getElementById("service-select");
     if (!carrierSelect || !serviceSelect) return;
 
-    const carrierKey = carrierSelect.value;
+    const carrierKey = carrierSelect.value.toLowerCase().trim();
     const carrierData = CARRIER_RULES[carrierKey];
+    if (!carrierData) return;
+
     const services = carrierData.services;
 
     serviceSelect.innerHTML = "";
@@ -57,7 +59,7 @@ function onCarrierChange() {
         serviceSelect.appendChild(option);
     });
 
-    // Update dynamic footer link banner automatically
+    // Update dynamic footer text banner
     const dynamicFooter = document.getElementById("dynamic-carrier-footer");
     if (dynamicFooter) {
         const pageMap = {
