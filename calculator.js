@@ -76,6 +76,7 @@ function updateRuleInfo() {
     `;
 }
 
+// Add auto-select on focus so typing replaces '0' naturally
 function addPackageRow(presetData = null) {
     packageCount++;
     const container = document.getElementById("package-rows");
@@ -93,33 +94,28 @@ function addPackageRow(presetData = null) {
         <div class="form-grid-5">
             <div class="form-group">
                 <label>Qty</label>
-                <input type="number" id="qty-${packageCount}" value="${presetData ? presetData.qty : 1}" min="1">
+                <input type="number" id="qty-${packageCount}" value="${presetData ? presetData.qty : 1}" min="1" onfocus="this.select()">
             </div>
             <div class="form-group">
                 <label>Length</label>
-                <input type="number" id="l-${packageCount}" value="${presetData ? presetData.l : 0}" step="0.1" min="0">
+                <input type="number" id="l-${packageCount}" value="${presetData ? presetData.l : 0}" step="0.1" min="0" onfocus="this.select()">
             </div>
             <div class="form-group">
                 <label>Width</label>
-                <input type="number" id="w-${packageCount}" value="${presetData ? presetData.w : 0}" step="0.1" min="0">
+                <input type="number" id="w-${packageCount}" value="${presetData ? presetData.w : 0}" step="0.1" min="0" onfocus="this.select()">
             </div>
             <div class="form-group">
                 <label>Height</label>
-                <input type="number" id="h-${packageCount}" value="${presetData ? presetData.h : 0}" step="0.1" min="0">
+                <input type="number" id="h-${packageCount}" value="${presetData ? presetData.h : 0}" step="0.1" min="0" onfocus="this.select()">
             </div>
             <div class="form-group">
                 <label>Actual weight</label>
-                <input type="number" id="wt-${packageCount}" value="${presetData ? presetData.wt : 0}" step="0.1" min="0">
+                <input type="number" id="wt-${packageCount}" value="${presetData ? presetData.wt : 0}" step="0.1" min="0" onfocus="this.select()">
             </div>
         </div>
     `;
 
     container.appendChild(row);
-}
-
-function removePackageRow(id) {
-    const row = document.getElementById(`package-row-${id}`);
-    if (row) row.remove();
 }
 
 function calculate() {
@@ -145,20 +141,61 @@ function calculate() {
         let h = parseFloat(document.getElementById(`h-${id}`).value) || 0;
         const wt = parseFloat(document.getElementById(`wt-${id}`).value) || 0;
 
-        if (roundingRule === "up") {
-    l = Math.ceil(l);
-    w = Math.ceil(w);
-    h = Math.ceil(h);
-} else if (roundingRule === "carrier") {
-    if (rule.dimensionRounding === "up") {
-        l = Math.ceil(l);
-        w = Math.ceil(w);
-        h = Math.ceil(h);
-    } else if (rule.dimensionRounding === "nearest") {
-        l = Math.round(l);
-        w = Math.round(w);
-        h = Math.round(h);
-    }
+        // Apply carrier dimension rounding rules
+        if (roundingRule === "up" || (roundingRule === "carrier" && rule.dimensionRounding === "up")) {
+            l = Math.ceil(l);
+            w = Math.ceil(w);
+            h = Math.ceil(h);
+        } else if (roundingRule === "carrier" && rule.dimensionRounding === "nearest") {
+            l = Math.round(l);
+            w = Math.round(w);
+            h = Math.round(h);
+        }
+
+        const volume = l * w * h;
+        let singleDimWeight = 0;
+
+        if (carrierKey === "usps" && unit === "imperial") {
+            if (volume > 1728) {
+                singleDimWeight = volume / divisor;
+            } else {
+                singleDimWeight = 0;
+            }
+        } else {
+            singleDimWeight = volume / divisor;
+        }
+
+        const lineActualWt = wt * qty;
+        const lineDimWt = singleDimWeight * qty;
+
+        totalActualWeight += lineActualWt;
+        totalDimWeight += lineDimWt;
+
+        let density = 0;
+        let freightClass = "N/A";
+        if (volume > 0) {
+            const cubicFeet = (volume / 1728);
+            density = wt / cubicFeet;
+            freightClass = getFreightClass(density);
+        }
+
+        packageResults.push({
+            num: index + 1,
+            qty,
+            dims: `${l} x ${w} x ${h}`,
+            volume: volume.toFixed(1),
+            actualWt: lineActualWt.toFixed(1),
+            dimWt: lineDimWt.toFixed(2), // Show 2 decimals so table matches banner logic cleanly
+            density: density > 0 ? density.toFixed(2) : "N/A",
+            freightClass
+        });
+    });
+
+    // Billable weight uses Math.ceil on the final total per carrier standards
+    const billableWeight = Math.ceil(Math.max(totalActualWeight, totalDimWeight));
+    lastCalculatedResults = { packageResults, totalActualWeight, totalDimWeight, billableWeight, rule };
+
+    displayResults();
 }
 
         const volume = l * w * h;
