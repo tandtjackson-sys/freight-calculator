@@ -56,6 +56,23 @@ function onCarrierChange() {
         serviceSelect.appendChild(option);
     });
 
+    // Update active highlight on footer links
+    const carrierLinkIds = ['ups', 'fedex', 'usps', 'dhl'];
+    carrierLinkIds.forEach(id => {
+        const link = document.getElementById(`link-${id}`);
+        if (link) {
+            if (id === carrierKey) {
+                link.style.fontWeight = 'bold';
+                link.style.backgroundColor = '#ebf8ff';
+                link.style.color = '#2b6cb0';
+            } else {
+                link.style.fontWeight = 'normal';
+                link.style.backgroundColor = 'transparent';
+                link.style.color = '#2b6cb0';
+            }
+        }
+    });
+
     updateRuleInfo();
 }
 
