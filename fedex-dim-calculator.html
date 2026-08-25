@@ -164,5 +164,14 @@
     </div>
     <p style="margin-top: 10px; font-size: 0.8rem; color: #a0aec0;">&copy; 2026 FreightDIMCalc.com &bull; All Rights Reserved.</p>
 </footer>
+    <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const carrierSelect = document.getElementById("carrier-select");
+    if (carrierSelect) {
+      carrierSelect.value = "fedex";
+      onCarrierChange();
+    }
+  });
+</script>
 </body>
 </html>
