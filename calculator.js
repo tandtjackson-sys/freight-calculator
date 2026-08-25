@@ -46,7 +46,8 @@ function onCarrierChange() {
     if (!carrierSelect || !serviceSelect) return;
 
     const carrierKey = carrierSelect.value;
-    const services = CARRIER_RULES[carrierKey].services;
+    const carrierData = CARRIER_RULES[carrierKey];
+    const services = carrierData.services;
 
     serviceSelect.innerHTML = "";
     Object.keys(services).forEach(sKey => {
@@ -56,22 +57,18 @@ function onCarrierChange() {
         serviceSelect.appendChild(option);
     });
 
-    // Update active highlight on footer links
-    const carrierLinkIds = ['ups', 'fedex', 'usps', 'dhl'];
-    carrierLinkIds.forEach(id => {
-        const link = document.getElementById(`link-${id}`);
-        if (link) {
-            if (id === carrierKey) {
-                link.style.fontWeight = 'bold';
-                link.style.backgroundColor = '#ebf8ff';
-                link.style.color = '#2b6cb0';
-            } else {
-                link.style.fontWeight = 'normal';
-                link.style.backgroundColor = 'transparent';
-                link.style.color = '#2b6cb0';
-            }
-        }
-    });
+    // Update dynamic footer link banner automatically
+    const dynamicFooter = document.getElementById("dynamic-carrier-footer");
+    if (dynamicFooter) {
+        const pageMap = {
+            'ups': 'ups-dim-calculator.html',
+            'fedex': 'fedex-dim-calculator.html',
+            'usps': 'usps-dim-calculator.html',
+            'dhl': 'dhl-dim-calculator.html'
+        };
+        const pageUrl = pageMap[carrierKey] || 'index.html';
+        dynamicFooter.innerHTML = `Currently calculating rules for <strong>${carrierData.name}</strong>. Learn more on our dedicated <a href="${pageUrl}" style="color: #2b6cb0; text-decoration: underline;">${carrierData.name} DIM Guide & Page</a>.`;
+    }
 
     updateRuleInfo();
 }
