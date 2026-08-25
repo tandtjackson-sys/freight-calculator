@@ -145,15 +145,21 @@ function calculate() {
         let h = parseFloat(document.getElementById(`h-${id}`).value) || 0;
         const wt = parseFloat(document.getElementById(`wt-${id}`).value) || 0;
 
-        if (roundingRule === "up" || (roundingRule === "carrier" && rule.dimensionRounding === "up")) {
-            l = Math.ceil(l);
-            w = Math.ceil(w);
-            h = Math.ceil(h);
-        } else if (roundingRule === "carrier" && rule.dimensionRounding === "nearest") {
-            l = Math.round(l);
-            w = Math.round(w);
-            h = Math.round(h);
-        }
+        if (roundingRule === "up") {
+    l = Math.ceil(l);
+    w = Math.ceil(w);
+    h = Math.ceil(h);
+} else if (roundingRule === "carrier") {
+    if (rule.dimensionRounding === "up") {
+        l = Math.ceil(l);
+        w = Math.ceil(w);
+        h = Math.ceil(h);
+    } else if (rule.dimensionRounding === "nearest") {
+        l = Math.round(l);
+        w = Math.round(w);
+        h = Math.round(h);
+    }
+}
 
         const volume = l * w * h;
         let singleDimWeight = 0;
