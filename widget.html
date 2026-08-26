@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freight & DIM Weight Calculator Widget</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: #ffffff;
+            color: #2d3748;
+            padding: 12px;
+            font-size: 14px;
+        }
+        .widget-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 14px;
+            background: #ffffff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .widget-header {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 10px;
+            text-align: center;
+            border-bottom: 1px solid #edf2f7;
+            padding-bottom: 8px;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+        label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        select, input {
+            width: 100%;
+            padding: 6px 8px;
+            border: 1px solid #cbd5e0;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            outline: none;
+        }
+        select:focus, input:focus {
+            border-color: #3182ce;
+            box-shadow: 0 0 0 2px rgba(49, 130, 206, 0.2);
+        }
+        .dims-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 6px;
+        }
+        .btn-calc {
+            width: 100%;
+            padding: 8px;
+            background-color: #2b6cb0;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: background-color 0.2s ease;
+        }
+        .btn-calc:hover {
+            background-color: #2c5282;
+        }
+        .widget-result {
+            margin-top: 10px;
+            padding: 8px 10px;
+            background-color: #f7fafc;
+            border-left: 4px solid #3182ce;
+            border-radius: 4px;
+            display: none;
+        }
+        .widget-result h4 {
+            font-size: 0.9rem;
+            color: #2d3748;
+        }
+        .widget-result p {
+            font-size: 0.75rem;
+            color: #718096;
+            margin-top: 2px;
+        }
+        .widget-footer {
+            margin-top: 12px;
+            padding-top: 8px;
+            border-top: 1px solid #edf2f7;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #718096;
+            line-height: 1.35;
+        }
+        .widget-footer a {
+            color: #2b6cb0;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="widget-card">
+        <div class="widget-header">
+            DIM Weight Calculator
+        </div>
+
+        <!-- Hidden elements required by calculator.js pipeline -->
+        <div style="display:none;">
+            <select id="rounding-select"><option value="carrier">Carrier Standard</option></select>
+            <div id="rule-info"></div>
+            <div id="status-list"></div>
+            <div id="package-rows"></div>
+            <div id="results-card"></div>
+            <div id="summary-banner"></div>
+            <table id="results-table"><tbody></tbody></table>
+            <div id="comparison-section"></div>
+            <table id="comparison-table"><tbody></tbody></table>
+        </div>
+
+        <div class="form-grid">
+            <div class="form-group full-width">
+                <label for="carrier-select">Carrier</label>
+                <select id="carrier-select"></select>
+            </div>
+            <div class="form-group full-width">
+                <label for="service-select">Service</label>
+                <select id="service-select"></select>
+            </div>
+            <div class="form-group full-width">
+                <label for="unit-select">Units</label>
+                <select id="unit-select">
+                    <option value="imperial">Imperial (in, lbs)</option>
+                    <option value="metric">Metric (cm, kg)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group full-width" style="margin-bottom: 8px;">
+            <label>Dimensions & Weight</label>
+            <div class="dims-grid">
+                <input type="number" id="widget-l" placeholder="L" min="0" step="0.1">
+                <input type="number" id="widget-w" placeholder="W" min="0" step="0.1">
+                <input type="number" id="widget-h" placeholder="H" min="0" step="0.1">
+                <input type="number" id="widget-wt" placeholder="Wt" min="0" step="0.1">
+            </div>
+        </div>
+
+        <button type="button" class="btn-calc" onclick="runWidgetCalc()">Calculate</button>
+
+        <div id="widget-result-box" class="widget-result">
+            <h4 id="widget-billable-text">Billable Weight: -</h4>
+            <p id="widget-explanation-text"></p>
+        </div>
+
+        <div class="widget-footer">
+            Powered by <a href="https://freightdimcalc.com" target="_blank" style="font-weight: bold; text-decoration: none;">freightDIMcalc.com</a>.<br>
+            <a href="https://freightdimcalc.com" target="_blank">Click this link to access our free, full DIM freight calculator</a>, featuring multi-package calculations, PDF exports, carrier comparisons, updated carrier rules, etc.
+        </div>
+    </div>
+
+    <script src="rules.js"></script>
+    <script src="calculator.js"></script>
+    <script>
+        function runWidgetCalc() {
+            const l = parseFloat(document.getElementById("widget-l").value) || 0;
+            const w = parseFloat(document.getElementById("widget-w").value) || 0;
+            const h = parseFloat(document.getElementById("widget-h").value) || 0;
+            const wt = parseFloat(document.getElementById("widget-wt").value) || 0;
+
+            if (l <= 0 || w <= 0 || h <= 0) {
+                alert("Please enter valid dimensions.");
+                return;
+            }
+
+            const pkgContainer = document.getElementById("package-rows");
+            pkgContainer.innerHTML = `
+                <div class="package-row" id="package-row-1">
+                    <input type="number" id="qty-1" value="1">
+                    <input type="number" id="l-1" value="${l}">
+                    <input type="number" id="w-1" value="${w}">
+                    <input type="number" id="h-1" value="${h}">
+                    <input type="number" id="wt-1" value="${wt}">
+                </div>
+            `;
+
+            // Execute master calculation function from calculator.js
+            calculate();
+
+            if (lastCalculatedResults) {
+                const { billableWeight, totalActualWeight, totalDimWeight, unit } = lastCalculatedResults;
+                const unitLabel = unit === "imperial" ? "lbs" : "kg";
+                const isDim = totalDimWeight > totalActualWeight;
+
+                const resBox = document.getElementById("widget-result-box");
+                const billableTxt = document.getElementById("widget-billable-text");
+                const explainTxt = document.getElementById("widget-explanation-text");
+
+                resBox.style.display = "block";
+                billableTxt.innerHTML = `Billable Weight: <strong>${Math.ceil(billableWeight)} ${unitLabel}</strong>`;
+                explainTxt.textContent = isDim 
+                    ? `Billed on DIM weight (${totalDimWeight.toFixed(1)} ${unitLabel})`
+                    : `Billed on actual weight (${totalActualWeight.toFixed(1)} ${unitLabel})`;
+            }
+        }
+    </script>
+</body>
+</html>
