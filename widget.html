@@ -126,31 +126,18 @@
             DIM Weight Calculator
         </div>
 
-        <!-- Hidden proxy elements expected by calculator.js -->
-        <div style="display:none;">
-            <select id="rounding-select"><option value="carrier">Carrier Standard</option></select>
-            <div id="rule-info"></div>
-            <div id="status-list"></div>
-            <div id="package-rows"></div>
-            <div id="results-card"></div>
-            <div id="summary-banner"></div>
-            <table id="results-table"><tbody></tbody></table>
-            <div id="comparison-section"></div>
-            <table id="comparison-table"><tbody></tbody></table>
-        </div>
-
         <div class="form-grid">
             <div class="form-group full-width">
-                <label for="carrier-select">Carrier</label>
-                <select id="carrier-select"></select>
+                <label for="widget-carrier">Carrier</label>
+                <select id="widget-carrier" onchange="updateWidgetServices()"></select>
             </div>
             <div class="form-group full-width">
-                <label for="service-select">Service</label>
-                <select id="service-select"></select>
+                <label for="widget-service">Service</label>
+                <select id="widget-service"></select>
             </div>
             <div class="form-group full-width">
-                <label for="unit-select">Units</label>
-                <select id="unit-select">
+                <label for="widget-unit">Units</label>
+                <select id="widget-unit">
                     <option value="imperial">Imperial (in, lbs)</option>
                     <option value="metric">Metric (cm, kg)</option>
                 </select>
@@ -180,56 +167,82 @@
         </div>
     </div>
 
-    <!-- Sequential Script Execution -->
-    <script src="rules.js"></script>
-    <script src="calculator.js"></script>
     <script>
-        window.addEventListener("load", () => {
-            if (typeof populateCarriers === "function") {
-                populateCarriers();
-            }
-        });
+        const WIDGET_RULES = {
+            "ups": { name: "UPS", services: { "daily": { name: "Daily / Standard", imperialDivisor: 139, metricDivisor: 5000 } } },
+            "fedex": { name: "FedEx", services: { "express": { name: "Express / Ground", imperialDivisor: 139, metricDivisor: 5000 } } },
+            "usps": { name: "USPS", services: { "priority": { name: "Priority Mail / Ground Advantage", imperialDivisor: 166, metricDivisor: 6000, isUSPS: true } } },
+            "dhl": { name: "DHL Express", services: { "express": { name: "Express Worldwide", imperialDivisor: 139, metricDivisor: 5000 } } }
+        };
+
+        function initWidget() {
+            const carrierSelect = document.getElementById("widget-carrier");
+            carrierSelect.innerHTML = "";
+            Object.keys(WIDGET_RULES).forEach(key => {
+                const opt = document.createElement("option");
+                opt.value = key;
+                opt.textContent = WIDGET_RULES[key].name;
+                carrierSelect.appendChild(opt);
+            });
+            updateWidgetServices();
+        }
+
+        function updateWidgetServices() {
+            const carrierKey = document.getElementById("widget-carrier").value;
+            const serviceSelect = document.getElementById("widget-service");
+            const carrier = WIDGET_RULES[carrierKey];
+            serviceSelect.innerHTML = "";
+            Object.keys(carrier.services).forEach(sKey => {
+                const opt = document.createElement("option");
+                opt.value = sKey;
+                opt.textContent = carrier.services[sKey].name;
+                serviceSelect.appendChild(opt);
+            });
+        }
 
         function runWidgetCalc() {
+            const carrierKey = document.getElementById("widget-carrier").value;
+            const serviceKey = document.getElementById("widget-service").value;
+            const unit = document.getElementById("widget-unit").value;
+
             const l = parseFloat(document.getElementById("widget-l").value) || 0;
             const w = parseFloat(document.getElementById("widget-w").value) || 0;
             const h = parseFloat(document.getElementById("widget-h").value) || 0;
-            const wt = parseFloat(document.getElementById("widget-wt").value) || 0;
+            const actualWt = parseFloat(document.getElementById("widget-wt").value) || 0;
 
             if (l <= 0 || w <= 0 || h <= 0) {
-                alert("Please enter valid length, width, and height.");
+                alert("Please enter valid dimensions (Length, Width, Height).");
                 return;
             }
 
-            const pkgContainer = document.getElementById("package-rows");
-            pkgContainer.innerHTML = `
-                <div class="package-row" id="package-row-1">
-                    <input type="number" id="qty-1" value="1">
-                    <input type="number" id="l-1" value="${l}">
-                    <input type="number" id="w-1" value="${w}">
-                    <input type="number" id="h-1" value="${h}">
-                    <input type="number" id="wt-1" value="${wt}">
-                </div>
-            `;
+            const rule = WIDGET_RULES[carrierKey].services[serviceKey];
+            const divisor = unit === "imperial" ? rule.imperialDivisor : rule.metricDivisor;
+            const volume = l * w * h;
 
-            calculate();
-
-            if (lastCalculatedResults) {
-                const { billableWeight, totalActualWeight, totalDimWeight, unit } = lastCalculatedResults;
-                const unitLabel = unit === "imperial" ? "lbs" : "kg";
-                const isDim = totalDimWeight > totalActualWeight;
-
-                const resBox = document.getElementById("widget-result-box");
-                const billableTxt = document.getElementById("widget-billable-text");
-                const explainTxt = document.getElementById("widget-explanation-text");
-
-                resBox.style.display = "block";
-                billableTxt.innerHTML = `Billable Weight: <strong>${Math.ceil(billableWeight)} ${unitLabel}</strong>`;
-                explainTxt.textContent = isDim 
-                    ? `Billed on DIM weight (${totalDimWeight.toFixed(1)} ${unitLabel})`
-                    : `Billed on actual weight (${totalActualWeight.toFixed(1)} ${unitLabel})`;
+            let dimWeight = 0;
+            if (rule.isUSPS) {
+                const threshold = unit === "imperial" ? 1728 : 28317;
+                dimWeight = volume > threshold ? volume / divisor : 0;
+            } else {
+                dimWeight = volume / divisor;
             }
+
+            const billable = Math.ceil(Math.max(actualWt, dimWeight));
+            const unitLabel = unit === "imperial" ? "lbs" : "kg";
+            const isDim = dimWeight > actualWt;
+
+            const resBox = document.getElementById("widget-result-box");
+            const billableTxt = document.getElementById("widget-billable-text");
+            const explainTxt = document.getElementById("widget-explanation-text");
+
+            resBox.style.display = "block";
+            billableTxt.innerHTML = `Billable Weight: <strong>${billable} ${unitLabel}</strong>`;
+            explainTxt.textContent = isDim 
+                ? `Billed on DIM weight (${dimWeight.toFixed(1)} ${unitLabel})`
+                : `Billed on actual weight (${actualWt.toFixed(1)} ${unitLabel})`;
         }
+
+        document.addEventListener("DOMContentLoaded", initWidget);
     </script>
 </body>
 </html>
