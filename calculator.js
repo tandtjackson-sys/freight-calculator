@@ -85,10 +85,14 @@ function onCarrierChange() {
 }
 
 function updateRuleInfo() {
-    const carrierKey = document.getElementById("carrier-select").value;
+    const carrierSelectVal = document.getElementById("carrier-select").value;
     const serviceKey = document.getElementById("service-select").value;
     const unit = document.getElementById("unit-select").value;
     const infoBox = document.getElementById("rule-info");
+
+    const carrierKey = Object.keys(CARRIER_RULES).find(
+        k => k.toLowerCase() === carrierSelectVal.toLowerCase()
+    ) || carrierSelectVal;
 
     const rule = CARRIER_RULES[carrierKey].services[serviceKey];
     const divisor = unit === "imperial" ? rule.imperialDivisor : rule.metricDivisor;
@@ -148,10 +152,14 @@ function removePackageRow(id) {
 }
 
 function calculate() {
-    const carrierKey = document.getElementById("carrier-select").value;
+    const carrierSelectVal = document.getElementById("carrier-select").value;
     const serviceKey = document.getElementById("service-select").value;
     const unit = document.getElementById("unit-select").value;
     const roundingRule = document.getElementById("rounding-select").value;
+
+    const carrierKey = Object.keys(CARRIER_RULES).find(
+        k => k.toLowerCase() === carrierSelectVal.toLowerCase()
+    ) || carrierSelectVal;
 
     const rule = CARRIER_RULES[carrierKey].services[serviceKey];
     const divisor = unit === "imperial" ? rule.imperialDivisor : rule.metricDivisor;
@@ -186,7 +194,7 @@ function calculate() {
         // USPS threshold check: 1 cu ft (1,728 cu in or ~28,317 cu cm)
         const uspsThreshold = unit === "imperial" ? 1728 : 28317;
 
-        if (carrierKey === "usps") {
+        if (carrierKey.toLowerCase() === "usps") {
             if (volume > uspsThreshold) {
                 singleDimWeight = volume / divisor;
             } else {
@@ -205,8 +213,9 @@ function calculate() {
         let density = 0;
         let freightClass = "N/A";
         if (volume > 0) {
-            const cubicFeet = (volume / 1728);
-            density = wt / cubicFeet;
+            const cubicFeet = unit === "imperial" ? (volume / 1728) : (volume / 28316.85);
+            const wtInLbs = unit === "imperial" ? wt : (wt * 2.20462);
+            density = wtInLbs / cubicFeet;
             freightClass = getFreightClass(density);
         }
 
@@ -223,7 +232,7 @@ function calculate() {
     });
 
     const billableWeight = Math.ceil(Math.max(totalActualWeight, totalDimWeight));
-    lastCalculatedResults = { packageResults, totalActualWeight, totalDimWeight, billableWeight, rule };
+    lastCalculatedResults = { packageResults, totalActualWeight, totalDimWeight, billableWeight, rule, unit };
 
     displayResults();
 }
@@ -258,12 +267,13 @@ function displayResults() {
     resultsCard.style.display = "block";
     tbody.innerHTML = "";
 
-    const { totalActualWeight, totalDimWeight, billableWeight, packageResults } = lastCalculatedResults;
+    const { totalActualWeight, totalDimWeight, billableWeight, packageResults, unit } = lastCalculatedResults;
+    const weightLabel = unit === "imperial" ? "lbs" : "kg";
 
     const isDimBilled = totalDimWeight > totalActualWeight;
     summaryBanner.className = `summary-banner ${isDimBilled ? "warning" : "success"}`;
     summaryBanner.innerHTML = `
-        <h3>Billable Weight: <strong>${Math.ceil(billableWeight)} lbs</strong></h3>
+        <h3>Billable Weight: <strong>${Math.ceil(billableWeight)} ${weightLabel}</strong></h3>
         <p>${isDimBilled ? "Dimensional weight exceeds actual weight. You will be billed on DIM weight." : "Actual weight exceeds dimensional weight. You will be billed on actual weight."}</p>
     `;
 
@@ -290,94 +300,81 @@ function compareServices() {
     const compSection = document.getElementById("comparison-section");
     const compTbody = document.querySelector("#comparison-table tbody");
     const unit = document.getElementById("unit-select").value;
-const roundingRule = document.getElementById("rounding-select").value;
+    const roundingRule = document.getElementById("rounding-select").value;
 
     compSection.style.display = "block";
     compTbody.innerHTML = "";
 
     const rows = document.querySelectorAll(".package-row");
-    let totalVol = 0;
     let totalActual = 0;
 
     rows.forEach(row => {
         const id = row.id.split("-")[2];
         const qty = parseFloat(document.getElementById(`qty-${id}`).value) || 0;
-        let l = parseFloat(document.getElementById(`l-${id}`).value) || 0;
-let w = parseFloat(document.getElementById(`w-${id}`).value) || 0;
-let h = parseFloat(document.getElementById(`h-${id}`).value) || 0;
-const wt = parseFloat(document.getElementById(`wt-${id}`).value) || 0;
-
-if (roundingRule === "up") {
-    l = Math.ceil(l);
-    w = Math.ceil(w);
-    h = Math.ceil(h);
-} else if (roundingRule === "carrier") {
-    // Each carrier/service will be handled individually below.
-    // Do not round here.
-}
-
-        totalVol += (l * w * h) * qty;
+        const wt = parseFloat(document.getElementById(`wt-${id}`).value) || 0;
         totalActual += wt * qty;
     });
 
-Object.keys(CARRIER_RULES).forEach(cKey => {
-    const carrier = CARRIER_RULES[cKey];
+    Object.keys(CARRIER_RULES).forEach(cKey => {
+        const carrier = CARRIER_RULES[cKey];
 
-    Object.keys(carrier.services).forEach(sKey => {
-        const service = carrier.services[sKey];
+        Object.keys(carrier.services).forEach(sKey => {
+            const service = carrier.services[sKey];
 
-        const divisor = unit === "imperial"
-            ? service.imperialDivisor
-            : service.metricDivisor;
+            const divisor = unit === "imperial"
+                ? service.imperialDivisor
+                : service.metricDivisor;
 
-      // Calculate volume using this specific service's dimension-rounding rule
-        let serviceVolume = 0;
+            let serviceDimWeight = 0;
 
-        rows.forEach(row => {
-            const id = row.id.split("-")[2];
-            const qty = parseFloat(document.getElementById(`qty-${id}`).value) || 0;
-            let l = parseFloat(document.getElementById(`l-${id}`).value) || 0;
-            let w = parseFloat(document.getElementById(`w-${id}`).value) || 0;
-            let h = parseFloat(document.getElementById(`h-${id}`).value) || 0;
+            rows.forEach(row => {
+                const id = row.id.split("-")[2];
+                const qty = parseFloat(document.getElementById(`qty-${id}`).value) || 0;
+                let l = parseFloat(document.getElementById(`l-${id}`).value) || 0;
+                let w = parseFloat(document.getElementById(`w-${id}`).value) || 0;
+                let h = parseFloat(document.getElementById(`h-${id}`).value) || 0;
 
-            if (roundingRule === "up" || (roundingRule === "carrier" && service.dimensionRounding === "up")) {
-                l = Math.ceil(l);
-                w = Math.ceil(w);
-                h = Math.ceil(h);
-            } else if (roundingRule === "carrier" && service.dimensionRounding === "nearest") {
-                l = Math.round(l);
-                w = Math.round(w);
-                h = Math.round(h);
-            }
+                if (roundingRule === "up" || (roundingRule === "carrier" && service.dimensionRounding === "up")) {
+                    l = Math.ceil(l);
+                    w = Math.ceil(w);
+                    h = Math.ceil(h);
+                } else if (roundingRule === "carrier" && service.dimensionRounding === "nearest") {
+                    l = Math.round(l);
+                    w = Math.round(w);
+                    h = Math.round(h);
+                }
 
-            const pkgVol = l * w * h;
-            const uspsThreshold = unit === "imperial" ? 1728 : 28317;
+                const pkgVol = l * w * h;
+                const uspsThreshold = unit === "imperial" ? 1728 : 28317;
 
-            // Apply threshold logic for USPS during comparison
-            if (cKey === "usps" && pkgVol <= uspsThreshold) {
-                // Volume under 1 cu ft is billed on actual weight only
-                serviceVolume += 0;
-            } else {
-                serviceVolume += pkgVol * qty;
-            }
+                let singleDimWeight = 0;
+                if (cKey.toLowerCase() === "usps") {
+                    if (pkgVol > uspsThreshold) {
+                        singleDimWeight = pkgVol / divisor;
+                    } else {
+                        singleDimWeight = 0;
+                    }
+                } else {
+                    singleDimWeight = pkgVol / divisor;
+                }
+
+                serviceDimWeight += singleDimWeight * qty;
+            });
+
+            const billable = Math.max(totalActual, serviceDimWeight);
+
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td><strong>${carrier.name}</strong> - ${service.name}</td>
+                <td>${divisor}</td>
+                <td>${totalActual.toFixed(1)}</td>
+                <td>${serviceDimWeight.toFixed(1)}</td>
+                <td><strong>${Math.ceil(billable)}</strong></td>
+            `;
+
+            compTbody.appendChild(tr);
         });
-
-        const dimWt = serviceVolume / divisor;
-        const billable = Math.max(totalActual, dimWt);
-
-        const tr = document.createElement("tr");
-
-        tr.innerHTML = `
-            <td><strong>${carrier.name}</strong> - ${service.name}</td>
-            <td>${divisor}</td>
-            <td>${totalActual.toFixed(1)}</td>
-            <td>${dimWt.toFixed(1)}</td>
-            <td><strong>${Math.ceil(billable)}</strong></td>
-        `;
-
-        compTbody.appendChild(tr);
     });
-});
 }
 
 function renderCarrierStatus() {
