@@ -183,8 +183,11 @@ function calculate() {
         const volume = l * w * h;
         let singleDimWeight = 0;
 
-        if (carrierKey === "usps" && unit === "imperial") {
-            if (volume > 1728) {
+        // USPS threshold check: 1 cu ft (1,728 cu in or ~28,317 cu cm)
+        const uspsThreshold = unit === "imperial" ? 1728 : 28317;
+
+        if (carrierKey === "usps") {
+            if (volume > uspsThreshold) {
                 singleDimWeight = volume / divisor;
             } else {
                 singleDimWeight = 0;
@@ -327,50 +330,36 @@ Object.keys(CARRIER_RULES).forEach(cKey => {
             ? service.imperialDivisor
             : service.metricDivisor;
 
-        // Calculate volume using this specific service's
-        // dimension-rounding rule.
+      // Calculate volume using this specific service's dimension-rounding rule
         let serviceVolume = 0;
 
         rows.forEach(row => {
             const id = row.id.split("-")[2];
+            const qty = parseFloat(document.getElementById(`qty-${id}`).value) || 0;
+            let l = parseFloat(document.getElementById(`l-${id}`).value) || 0;
+            let w = parseFloat(document.getElementById(`w-${id}`).value) || 0;
+            let h = parseFloat(document.getElementById(`h-${id}`).value) || 0;
 
-            const qty = parseFloat(
-                document.getElementById(`qty-${id}`).value
-            ) || 0;
-
-            let l = parseFloat(
-                document.getElementById(`l-${id}`).value
-            ) || 0;
-
-            let w = parseFloat(
-                document.getElementById(`w-${id}`).value
-            ) || 0;
-
-            let h = parseFloat(
-                document.getElementById(`h-${id}`).value
-            ) || 0;
-
-            if (roundingRule === "up") {
+            if (roundingRule === "up" || (roundingRule === "carrier" && service.dimensionRounding === "up")) {
                 l = Math.ceil(l);
                 w = Math.ceil(w);
                 h = Math.ceil(h);
-            } else if (
-                roundingRule === "carrier" &&
-                service.dimensionRounding === "up"
-            ) {
-                l = Math.ceil(l);
-                w = Math.ceil(w);
-                h = Math.ceil(h);
-            } else if (
-                roundingRule === "carrier" &&
-                service.dimensionRounding === "nearest"
-            ) {
+            } else if (roundingRule === "carrier" && service.dimensionRounding === "nearest") {
                 l = Math.round(l);
                 w = Math.round(w);
                 h = Math.round(h);
             }
 
-            serviceVolume += (l * w * h) * qty;
+            const pkgVol = l * w * h;
+            const uspsThreshold = unit === "imperial" ? 1728 : 28317;
+
+            // Apply threshold logic for USPS during comparison
+            if (cKey === "usps" && pkgVol <= uspsThreshold) {
+                // Volume under 1 cu ft is billed on actual weight only
+                serviceVolume += 0;
+            } else {
+                serviceVolume += pkgVol * qty;
+            }
         });
 
         const dimWt = serviceVolume / divisor;
