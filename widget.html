@@ -126,7 +126,7 @@
             DIM Weight Calculator
         </div>
 
-        <!-- Hidden elements required by calculator.js pipeline -->
+        <!-- Hidden proxy elements expected by calculator.js -->
         <div style="display:none;">
             <select id="rounding-select"><option value="carrier">Carrier Standard</option></select>
             <div id="rule-info"></div>
@@ -180,9 +180,16 @@
         </div>
     </div>
 
+    <!-- Sequential Script Execution -->
     <script src="rules.js"></script>
     <script src="calculator.js"></script>
     <script>
+        window.addEventListener("load", () => {
+            if (typeof populateCarriers === "function") {
+                populateCarriers();
+            }
+        });
+
         function runWidgetCalc() {
             const l = parseFloat(document.getElementById("widget-l").value) || 0;
             const w = parseFloat(document.getElementById("widget-w").value) || 0;
@@ -190,7 +197,7 @@
             const wt = parseFloat(document.getElementById("widget-wt").value) || 0;
 
             if (l <= 0 || w <= 0 || h <= 0) {
-                alert("Please enter valid dimensions.");
+                alert("Please enter valid length, width, and height.");
                 return;
             }
 
@@ -205,7 +212,6 @@
                 </div>
             `;
 
-            // Execute master calculation function from calculator.js
             calculate();
 
             if (lastCalculatedResults) {
