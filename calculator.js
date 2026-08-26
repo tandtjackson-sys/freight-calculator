@@ -287,6 +287,7 @@ function compareServices() {
     const compSection = document.getElementById("comparison-section");
     const compTbody = document.querySelector("#comparison-table tbody");
     const unit = document.getElementById("unit-select").value;
+const roundingRule = document.getElementById("rounding-select").value;
 
     compSection.style.display = "block";
     compTbody.innerHTML = "";
@@ -299,42 +300,95 @@ function compareServices() {
         const id = row.id.split("-")[2];
         const qty = parseFloat(document.getElementById(`qty-${id}`).value) || 0;
         let l = parseFloat(document.getElementById(`l-${id}`).value) || 0;
-        let w = parseFloat(document.getElementById(`w-${id}`).value) || 0;
-        let h = parseFloat(document.getElementById(`h-${id}`).value) || 0;
-        const wt = parseFloat(document.getElementById(`wt-${id}`).value) || 0;
+let w = parseFloat(document.getElementById(`w-${id}`).value) || 0;
+let h = parseFloat(document.getElementById(`h-${id}`).value) || 0;
+const wt = parseFloat(document.getElementById(`wt-${id}`).value) || 0;
 
-        l = Math.ceil(l);
-        w = Math.ceil(w);
-        h = Math.ceil(h);
+if (roundingRule === "up") {
+    l = Math.ceil(l);
+    w = Math.ceil(w);
+    h = Math.ceil(h);
+} else if (roundingRule === "carrier") {
+    // Each carrier/service will be handled individually below.
+    // Do not round here.
+}
 
         totalVol += (l * w * h) * qty;
         totalActual += wt * qty;
     });
 
-    Object.keys(CARRIER_RULES).forEach(cKey => {
-        const carrier = CARRIER_RULES[cKey];
-        Object.keys(carrier.services).forEach(sKey => {
-            const service = carrier.services[sKey];
-            const divisor = unit === "imperial" ? service.imperialDivisor : service.metricDivisor;
-            
-            let dimWt = totalVol / divisor;
-            if (cKey === "usps" && unit === "imperial" && totalVol <= 1728) {
-                dimWt = 0;
+Object.keys(CARRIER_RULES).forEach(cKey => {
+    const carrier = CARRIER_RULES[cKey];
+
+    Object.keys(carrier.services).forEach(sKey => {
+        const service = carrier.services[sKey];
+
+        const divisor = unit === "imperial"
+            ? service.imperialDivisor
+            : service.metricDivisor;
+
+        // Calculate volume using this specific service's
+        // dimension-rounding rule.
+        let serviceVolume = 0;
+
+        rows.forEach(row => {
+            const id = row.id.split("-")[2];
+
+            const qty = parseFloat(
+                document.getElementById(`qty-${id}`).value
+            ) || 0;
+
+            let l = parseFloat(
+                document.getElementById(`l-${id}`).value
+            ) || 0;
+
+            let w = parseFloat(
+                document.getElementById(`w-${id}`).value
+            ) || 0;
+
+            let h = parseFloat(
+                document.getElementById(`h-${id}`).value
+            ) || 0;
+
+            if (roundingRule === "up") {
+                l = Math.ceil(l);
+                w = Math.ceil(w);
+                h = Math.ceil(h);
+            } else if (
+                roundingRule === "carrier" &&
+                service.dimensionRounding === "up"
+            ) {
+                l = Math.ceil(l);
+                w = Math.ceil(w);
+                h = Math.ceil(h);
+            } else if (
+                roundingRule === "carrier" &&
+                service.dimensionRounding === "nearest"
+            ) {
+                l = Math.round(l);
+                w = Math.round(w);
+                h = Math.round(h);
             }
 
-            const billable = Math.max(totalActual, dimWt);
-
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-                <td><strong>${carrier.name}</strong> - ${service.name}</td>
-                <td>${divisor}</td>
-                <td>${totalActual.toFixed(1)}</td>
-                <td>${dimWt.toFixed(1)}</td>
-                <td><strong>${Math.ceil(billable)}</strong></td>
-            `;
-            compTbody.appendChild(tr);
+            serviceVolume += (l * w * h) * qty;
         });
+
+        const dimWt = serviceVolume / divisor;
+        const billable = Math.max(totalActual, dimWt);
+
+        const tr = document.createElement("tr");
+
+        tr.innerHTML = `
+            <td><strong>${carrier.name}</strong> - ${service.name}</td>
+            <td>${divisor}</td>
+            <td>${totalActual.toFixed(1)}</td>
+            <td>${dimWt.toFixed(1)}</td>
+            <td><strong>${Math.ceil(billable)}</strong></td>
+        `;
+
+        compTbody.appendChild(tr);
     });
+});
 }
 
 function renderCarrierStatus() {
