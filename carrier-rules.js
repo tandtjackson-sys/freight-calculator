@@ -9,20 +9,29 @@ const CARRIER_RULES = {
         name: "UPS",
         services: {
             standard: {
-                name: "Daily / Standard Rates",
+                name: "Daily / Standard Rates (Domestic)",
                 imperialDivisor: 139,
                 metricDivisor: 5000,
                 dimensionRounding: "up",
-                notes: "Applies 139 divisor for packages exceeding 1,728 cubic inches or daily rates.",
+                notes: "Applies 139 divisor for domestic packages exceeding 1,728 cubic inches or daily rates.",
                 effectiveFrom: "2026-01-01",
                 lastVerified: "2026-08-24"
             },
             retail: {
-                name: "Retail / Counter Rates",
+                name: "Retail / Counter Rates (Domestic)",
                 imperialDivisor: 166,
                 metricDivisor: 6000,
                 dimensionRounding: "up",
-                notes: "Applies 166 divisor for retail counter shipments.",
+                notes: "Applies 166 divisor for domestic retail counter shipments.",
+                effectiveFrom: "2026-01-01",
+                lastVerified: "2026-08-24"
+            },
+            international: {
+                name: "UPS Worldwide / International",
+                imperialDivisor: 139,
+                metricDivisor: 5000,
+                dimensionRounding: "up",
+                notes: "Standard global 139 imperial / 5000 metric divisor for export and import shipments.",
                 effectiveFrom: "2026-01-01",
                 lastVerified: "2026-08-24"
             }
@@ -32,11 +41,29 @@ const CARRIER_RULES = {
         name: "FedEx",
         services: {
             express: {
-                name: "Express & Ground",
+                name: "Daily / Standard Rates (Domestic)",
                 imperialDivisor: 139,
                 metricDivisor: 5000,
                 dimensionRounding: "up",
-                notes: "Applies standard 139 divisor across all domestic FedEx services.",
+                notes: "Applies standard 139 divisor across domestic FedEx Express and Ground services.",
+                effectiveFrom: "2026-01-01",
+                lastVerified: "2026-08-24"
+            },
+            retail: {
+                name: "Retail Rates (Domestic)",
+                imperialDivisor: 166,
+                metricDivisor: 6000,
+                dimensionRounding: "up",
+                notes: "Applies 166 divisor for retail/counter shipments.",
+                effectiveFrom: "2026-01-01",
+                lastVerified: "2026-08-24"
+            },
+            international: {
+                name: "FedEx International Economy / Priority",
+                imperialDivisor: 139,
+                metricDivisor: 5000,
+                dimensionRounding: "up",
+                notes: "Standard international express divisor (139 imperial / 5000 metric).",
                 effectiveFrom: "2026-01-01",
                 lastVerified: "2026-08-24"
             }
@@ -46,7 +73,7 @@ const CARRIER_RULES = {
         name: "USPS",
         services: {
             priority: {
-                name: "Priority Mail / Ground Advantage",
+                name: "Priority Mail / Ground Advantage (> 1 cu ft)",
                 imperialDivisor: 166,
                 metricDivisor: 6000,
                 dimensionRounding: "nearest",
@@ -60,7 +87,7 @@ const CARRIER_RULES = {
         name: "DHL Express",
         services: {
             express: {
-                name: "Express Worldwide",
+                name: "DHL Express Worldwide",
                 imperialDivisor: 139,
                 metricDivisor: 5000,
                 dimensionRounding: "up",
