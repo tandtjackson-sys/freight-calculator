@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- SEO Title -->
-    <title>Freight & DIM Weight Calculator | UPS, FedEx & Density</title>
+    <title>Freight & DIM Weight Calculator | UPS, FedEx & Density Guide</title>
     
     <!-- SEO Meta Description -->
     <meta name="description" content="Instantly calculate accurate dimensional weight, freight class, and density across major carriers. Always up-to-date and 100% free with no sign-up.">
@@ -15,11 +15,11 @@
 <body>
     <div class="container">
         <header>
-           <h1>Freight Dimensional Weight Calculator</h1>
-<p class="subtitle">
-    Instantly calculate accurate dimensional weight, freight class, and density across major carriers.<br>
-    Always up-to-date, and totally free (ad-supported, with NO sign-up of any kind.)
-</p>
+            <h1>Freight Dimensional Weight Calculator</h1>
+            <p class="subtitle">
+                Instantly calculate accurate dimensional weight, freight class, and density across major carriers.<br>
+                Always up-to-date, and totally free (ad-supported, with NO sign-up of any kind.)
+            </p>
         </header>
 
         <!-- Top Navigation Bar -->
@@ -30,28 +30,29 @@
             <a href="ups-vs-fedex-dim.html" class="nav-link">UPS vs. FedEx Rules</a>
             <a href="embed-widget.html" class="nav-link">Free Widget</a>
         </nav>
-<!-- Instructional Content Block for AdSense Approval -->
-<section style="background-color: #ffffff; padding: 24px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 25px;">
-    <h2 style="font-size: 1.25rem; color: #1e293b; margin-bottom: 12px; font-weight: 600;">How to Calculate Package Dimensional Weight & Density</h2>
-    <p style="color: #475569; font-size: 0.95rem; line-height: 1.6; margin-bottom: 15px;">
-        Commercial freight and parcel carriers evaluate shipments using two distinct metrics: gross scale weight and volumetric dimensional (DIM) weight. Because light, bulky packages occupy valuable cargo space inside delivery vehicles, logistics providers bill based on whichever value is higher. Follow the steps below to compute accurate billable weights for single packages or multi-piece shipments across all major carriers:
-    </p>
-    <ol style="padding-left: 20px; color: #334155; line-height: 1.7; font-size: 0.95rem;">
-        <li style="margin-bottom: 8px;">
-            <strong>Select Carrier & Account Rate Type:</strong> Choose UPS, FedEx, DHL, or USPS from the dropdown menu. This dynamically updates the calculation formula to match specific carrier divisors—such as the standard domestic 139 factor for daily rates, the 166 factor for retail counter pricing, or international express standards.
-        </li>
-        <li style="margin-bottom: 8px;">
-            <strong>Enter Package Measurements:</strong> Measure the maximum exterior dimensions (length, width, and height) of your container, including any bulges or handles. Select your preferred measurement unit system: Imperial (inches and pounds) or Metric (centimeters and kilograms).
-        </li>
-        <li style="margin-bottom: 8px;">
-            <strong>Configure Rounding Rules:</strong> Select standard carrier rounding (which automatically rounds fractional measurements up to the next whole inch prior to multiplying) or choose exact decimal calculations to review raw mathematical totals.
-        </li>
-        <li style="margin-bottom: 8px;">
-            <strong>Analyze Density & Freight Class Results:</strong> Click <em>Calculate Billable Weight</em> to view your complete breakdown. The tool instantly flags whether actual or dimensional weight will dictate your shipping costs, calculates total cubic feet volume, and determines your estimated National Motor Freight Traffic Association (NMFTA) LTL density class.
-        </li>
-    </ol>
 
-</section>
+        <!-- How-To Instructional Block -->
+        <section style="background-color: #ffffff; padding: 24px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 25px;">
+            <h2 style="font-size: 1.25rem; color: #1e293b; margin-bottom: 12px; font-weight: 600;">How to Calculate Package Dimensional Weight & Density</h2>
+            <p style="color: #475569; font-size: 0.95rem; line-height: 1.6; margin-bottom: 15px;">
+                Commercial freight and parcel carriers evaluate shipments using two distinct metrics: gross scale weight and volumetric dimensional (DIM) weight. Because light, bulky packages occupy valuable cargo space inside delivery vehicles, logistics providers bill based on whichever value is higher. Follow the steps below to compute accurate billable weights for single packages or multi-piece shipments across all major carriers:
+            </p>
+            <ol style="padding-left: 20px; color: #334155; line-height: 1.7; font-size: 0.95rem;">
+                <li style="margin-bottom: 8px;">
+                    <strong>Select Carrier & Rate Type:</strong> Choose UPS, FedEx, DHL, or USPS. This dynamically updates the formula to match specific carrier divisors—such as the standard domestic 139 factor for daily rates or the 166 factor for retail counter pricing.
+                </li>
+                <li style="margin-bottom: 8px;">
+                    <strong>Enter Package Measurements:</strong> Measure maximum exterior dimensions (length, width, height) including bulges. Choose Imperial (in, lb) or Metric (cm, kg).
+                </li>
+                <li style="margin-bottom: 8px;">
+                    <strong>Configure Rounding Rules:</strong> Select standard carrier rounding (rounding fractional measurements up to the next whole inch) or choose exact decimal calculations.
+                </li>
+                <li style="margin-bottom: 8px;">
+                    <strong>Analyze Density & Freight Class:</strong> Click <em>Calculate Billable Weight</em> to view your breakdown, including cubic volume and estimated NMFTA LTL density class.
+                </li>
+            </ol>
+        </section>
+
         <!-- Step 1: Carrier & Rule Selection -->
         <div class="card">
             <h2>1. Select Carrier & Rules</h2>
@@ -80,37 +81,27 @@
                     </select>
                 </div>
             </div>
-            <div id="rule-info" class="info-box">
+
+            <div id="rule-info" class="rule-info-box" style="background-color: #ebf8ff; padding: 12px; border-radius: 6px; margin-top: 15px;">
                 Loading rule info...
             </div>
-        </div>
-<!-- Inside Section 1 Card -->
-<div id="rule-info" class="rule-info-box" style="background-color: #ebf8ff; padding: 12px; border-radius: 6px;">
-    <!-- Carrier rules load here -->
-</div>
 
-<!-- Combined Dynamic Notice & Carrier Links -->
-<div style="margin-top: 12px; padding: 10px; background: #f7fafc; border: 1px solid #e2e8f0; border-radius: 6px; text-align: center; font-size: 0.85rem;">
-    <!-- Dynamic Line -->
-    <div id="dynamic-carrier-footer" style="margin-bottom: 8px; font-weight: 500; color: #2d3748;">
-        <!-- Javascript populates dynamic carrier link here -->
-    </div>
-    
-    <!-- Permanent Nav Links -->
-    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; color: #4a5568;">
-        <a href="index.html" style="color: #2b6cb0; text-decoration: none;">Main Calculator</a> | 
-        <a href="ups-dim-calculator.html" style="color: #2b6cb0; text-decoration: none;">UPS Page</a> | 
-        <a href="fedex-dim-calculator.html" style="color: #2b6cb0; text-decoration: none;">FedEx Page</a> | 
-        <a href="usps-dim-calculator.html" style="color: #2b6cb0; text-decoration: none;">USPS Page</a> | 
-        <a href="dhl-dim-calculator.html" style="color: #2b6cb0; text-decoration: none;">DHL Page</a>
-    </div>
-</div>
+            <div style="margin-top: 12px; padding: 10px; background: #f7fafc; border: 1px solid #e2e8f0; border-radius: 6px; text-align: center; font-size: 0.85rem;">
+                <div id="dynamic-carrier-footer" style="margin-bottom: 8px; font-weight: 500; color: #2d3748;"></div>
+                <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; color: #4a5568;">
+                    <a href="index.html" style="color: #2b6cb0; text-decoration: none;">Main Calculator</a> | 
+                    <a href="ups-dim-calculator.html" style="color: #2b6cb0; text-decoration: none;">UPS Page</a> | 
+                    <a href="fedex-dim-calculator.html" style="color: #2b6cb0; text-decoration: none;">FedEx Page</a> | 
+                    <a href="usps-dim-calculator.html" style="color: #2b6cb0; text-decoration: none;">USPS Page</a> | 
+                    <a href="dhl-dim-calculator.html" style="color: #2b6cb0; text-decoration: none;">DHL Page</a>
+                </div>
+            </div>
 
-            <div id="package-rows">
+            <div id="package-rows" style="margin-top: 20px;">
                 <!-- Package rows injected dynamically via calculator.js -->
             </div>
 
-            <div class="button-group">
+            <div class="button-group" style="margin-top: 20px;">
                 <button type="button" class="btn-secondary" onclick="addPackageRow()">+ Add package</button>
                 <button type="button" class="btn-primary" onclick="calculate()">Calculate billable weight &rarr;</button>
                 <button type="button" class="btn-dark" onclick="compareServices()">Compare Services</button>
@@ -174,94 +165,130 @@
             <h2>Active Carrier Rules & Verification</h2>
             <div class="status-grid" id="status-list"></div>
         </div>
-    </div>
-<!-- Dynamic Carrier Info Footer -->
-<footer style="margin-top: 40px; padding: 20px 0; border-top: 1px solid #e2e8f0; text-align: center; font-size: 0.9rem; color: #4a5568;">
-    <div id="dynamic-carrier-footer" style="margin-bottom: 12px; font-weight: 500;">
-        <!-- Javascript populates this dynamically -->
-    </div>
-    <div style="max-width: 1000px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; font-size: 0.85rem;">
-        <a href="index.html" style="color: #2b6cb0; text-decoration: none;">Main Calculator</a> | 
-        <a href="ups-dim-calculator.html" style="color: #2b6cb0; text-decoration: none;">UPS Page</a> | 
-        <a href="fedex-dim-calculator.html" style="color: #2b6cb0; text-decoration: none;">FedEx Page</a> | 
-        <a href="usps-dim-calculator.html" style="color: #2b6cb0; text-decoration: none;">USPS Page</a> | 
-        <a href="dhl-dim-calculator.html" style="color: #2b6cb0; text-decoration: none;">DHL Page</a>
+
         <!-- Widget Promotion Banner -->
-<div style="background-color: #f8f9fa; border: 1px solid #e9ecef; border-left: 4px solid #1a568c; padding: 20px; border-radius: 6px; margin: 30px 0; text-align: center;">
-    <h3 style="margin-top: 0; color: #1a568c; font-size: 1.15rem;">Want to add this calculator to your website?</h3>
-    <p style="margin-bottom: 15px; color: #495057; font-size: 0.95rem;">
-        Offer your visitors accurate DIM weight calculations directly on your site with our free, lightweight embeddable widget.
-    </p>
-    <a href="embed-widget.html" style="background-color: #1a568c; color: white; padding: 10px 18px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 0.9rem; display: inline-block;">
-        Get Free Embed Code →
-    </a>
-</div>
+        <div style="background-color: #f8f9fa; border: 1px solid #e9ecef; border-left: 4px solid #1a568c; padding: 20px; border-radius: 6px; margin: 30px 0; text-align: center;">
+            <h3 style="margin-top: 0; color: #1a568c; font-size: 1.15rem;">Want to add this calculator to your website?</h3>
+            <p style="margin-bottom: 15px; color: #495057; font-size: 0.95rem;">
+                Offer your visitors accurate DIM weight calculations directly on your site with our free, lightweight embeddable widget.
+            </p>
+            <a href="embed-widget.html" style="background-color: #1a568c; color: white; padding: 10px 18px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 0.9rem; display: inline-block;">
+                Get Free Embed Code →
+            </a>
+        </div>
     </div>
-    <p style="margin-top: 10px; font-size: 0.8rem; color: #a0aec0;">&copy; 2026 FreightDIMCalc.com &bull; All Rights Reserved.</p>
-</footer>
+
+    <!-- Comprehensive Industry Guide Section (Fixes "Low Value Content") -->
+    <section class="freight-guide-container" style="max-width: 900px; margin: 40px auto; padding: 25px; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; line-height: 1.7; color: #1e293b;">
+        
+        <h2 style="color: #0284c7; border-bottom: 2px solid #cbd5e1; padding-bottom: 8px;">The Complete Guide to Freight Dimensional Weight (DIM Weight) Calculation</h2>
+        
+        <p>In the modern shipping, parcel, and freight logistics ecosystem, calculating costs solely based on actual physical weight on a scale is an outdated practice. Major global carriers including FedEx, UPS, DHL, and commercial freight forwarders rely heavily on <strong>Dimensional Weight (DIM Weight)</strong>—also known as volumetric weight—to establish shipping tariffs and billable rates.</p>
+        
+        <p>If you ship lightweight items in oversized boxes, understanding how volumetric weight is calculated can save your business thousands of dollars annually in unexpected billing adjustments, carrier surcharges, and dimensional weight penalties.</p>
+
+        <hr style="margin: 30px 0; border: none; border-top: 1px solid #e2e8f0;">
+
+        <h3 style="color: #0f172a; font-size: 1.15rem; font-weight: 700;">What is Dimensional Weight and Why Do Carriers Use It?</h3>
+        <p>Dimensional weight is a pricing technique used by logistics providers to account for the actual volume of space a package occupies inside a delivery vehicle, cargo aircraft, or ocean shipping container. A truck filled with 500 pounds of styrofoam coolers takes up the same physical space as a truck loaded with 20,000 pounds of steel hardware. If carriers charged purely by scale weight, transporting low-density, bulky items would result in unprofitable routes.</p>
+        
+        <p>To maximize cargo capacity and balance profitability, carriers calculate both the <strong>actual scale weight</strong> and the <strong>dimensional weight</strong> of every shipment, billing the shipper for whichever value is greater. This final weight is officially referred to as the <strong>Billable Weight</strong>.</p>
+
+        <h3 style="color: #0f172a; font-size: 1.15rem; font-weight: 700;">How to Calculate Dimensional Weight: Step-by-Step Formula</h3>
+        <p>Calculating volumetric weight requires three simple physical measurements and a standardized industry conversion factor known as the <strong>DIM Divisor</strong>:</p>
+
+        <ol style="padding-left: 20px; margin-bottom: 15px;">
+            <li><strong>Measure Exterior Dimensions:</strong> Measure length, width, and height at the widest points, rounding up to the nearest whole inch (or centimeter).</li>
+            <li><strong>Calculate Total Volume:</strong> Multiply Length × Width × Height ($L \times W \times H$) to obtain volume in cubic inches or centimeters.</li>
+            <li><strong>Apply the DIM Divisor:</strong> Divide total cubic volume by the carrier's designated DIM Factor/Divisor.</li>
+        </ol>
+
+        <div style="background-color: #f8fafc; padding: 15px; border-left: 4px solid #0284c7; margin: 20px 0; color: #1e293b;">
+            <strong>Standard Formulas:</strong><br>
+            • <strong>Imperial Formula (Inches / Pounds):</strong><br>
+            <code>DIM Weight (lbs) = (Length × Width × Height in inches) ÷ DIM Divisor</code><br><br>
+            • <strong>Metric Formula (Centimeters / Kilograms):</strong><br>
+            <code>DIM Weight (kg) = (Length × Width × Height in cm) ÷ Metric Divisor (usually 5000)</code>
+        </div>
+
+        <h3 style="color: #0f172a; font-size: 1.15rem; font-weight: 700;">Carrier DIM Factors & Divisors Comparison</h3>
+        <p>A <em>lower divisor</em> results in a <em>higher dimensional weight</em>, which leads to higher shipping rates. Divisors vary based on service level and shipping destination:</p>
+
+        <div style="overflow-x: auto;">
+            <table border="1" cellpadding="8" cellspacing="0" style="width:100%; border-collapse: collapse; margin: 20px 0; border-color: #cbd5e1; font-size: 0.9rem;">
+                <thead>
+                    <tr style="background-color: #0284c7; color: white; text-align: left;">
+                        <th>Carrier / Service Level</th>
+                        <th>Standard Divisor (Imperial)</th>
+                        <th>Standard Divisor (Metric)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>FedEx (Domestic & Express)</strong></td>
+                        <td>139</td>
+                        <td>5000</td>
+                    </tr>
+                    <tr>
+                        <td><strong>UPS (Daily / Commercial Rates)</strong></td>
+                        <td>139</td>
+                        <td>5000</td>
+                    </tr>
+                    <tr>
+                        <td><strong>UPS (Retail / Standard Rates)</strong></td>
+                        <td>166</td>
+                        <td>6000</td>
+                    </tr>
+                    <tr>
+                        <td><strong>USPS (Priority Mail > 1 cu. ft.)</strong></td>
+                        <td>166</td>
+                        <td>6000</td>
+                    </tr>
+                    <tr>
+                        <td><strong>DHL Express (International)</strong></td>
+                        <td>139</td>
+                        <td>5000</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 style="color: #0f172a; font-size: 1.15rem; font-weight: 700;">4 Packaging Strategies to Minimize Billable Freight Costs</h3>
+        <ul style="padding-left: 20px; line-height: 1.7;">
+            <li><strong>Right-Size Packaging:</strong> Trim excess box height using variable-depth cartons instead of standard oversized boxes.</li>
+            <li><strong>Switch to Poly Mailers:</strong> Flexible poly mailers bypass dimensional weight formulas for soft goods like apparel.</li>
+            <li><strong>Negotiate Custom Divisors:</strong> High-volume shippers can request negotiated DIM divisors (e.g., 180 or 200) in commercial contracts.</li>
+            <li><strong>Minimize Void Fill:</strong> Avoid bulky interior packing materials that force you into larger container sizes.</li>
+        </ul>
+
+        <hr style="margin: 30px 0; border: none; border-top: 1px solid #e2e8f0;">
+
+        <h3 style="color: #0f172a; font-size: 1.15rem; font-weight: 700;">Frequently Asked Questions (FAQ)</h3>
+        
+        <p><strong>Q: What is Dimensional Weight (DIM Weight)?</strong><br>
+        A: Volumetric weight reflects the space a package occupies relative to its actual weight. Carriers charge based on whichever is higher.</p>
+
+        <p><strong>Q: What is Freight Density and Freight Class?</strong><br>
+        A: Freight density measures weight per cubic foot. In LTL shipping, the NMFTA assigns classes from Class 50 (dense items) to Class 500 (light, bulky items).</p>
+
+        <p><strong>Q: What happens if my box bulges?</strong><br>
+        A: Automated 3D laser scanners measure the outermost points. A bulging box increases billable DIM weight, so secure outer flaps tightly.</p>
+    </section>
+
+    <!-- Unified Footer with Compliance Links -->
+    <footer style="text-align: center; padding: 30px 10px; border-top: 1px solid #cbd5e1; margin-top: 40px; color: #475569; font-size: 0.9rem;">
+        <p><strong>Quick Navigation:</strong></p>
+        <p style="margin: 10px 0;">
+            <a href="index.html" style="color: #0284c7; text-decoration: none; margin: 0 8px;">Main Calculator</a> | 
+            <a href="freight-class-guide.html" style="color: #0284c7; text-decoration: none; margin: 0 8px;">Freight Class Guide</a> |
+            <a href="dim-weight-explainer.html" style="color: #0284c7; text-decoration: none; margin: 0 8px;">DIM Weight Explainer</a> |
+            <a href="ups-vs-fedex-dim.html" style="color: #0284c7; text-decoration: none; margin: 0 8px;">UPS vs. FedEx Rules</a> |
+            <a href="privacy.html" style="color: #0284c7; text-decoration: none; margin: 0 8px;">Privacy Policy</a>
+        </p>
+        <p style="margin-top: 15px; font-size: 0.8rem; color: #94a3b8;">&copy; 2026 FreightDIMCalc.com &bull; All Rights Reserved.</p>
+    </footer>
 
     <script src="carrier-rules.js"></script>
     <script src="calculator.js"></script>
-   <!-- REPLACE PREVIOUS FAQ & FOOTER WITH THIS HIGH-CONTRAST VERSION -->
-    <section style="max-width: 900px; margin: 40px auto; padding: 20px; color: #1e293b; line-height: 1.7;">
-        <h2 style="color: #0284c7; border-bottom: 2px solid #cbd5e1; padding-bottom: 8px;">Frequently Asked Questions About Freight DIM Weight</h2>
-        
-        <article style="margin-top: 20px;">
-            <h3 style="color: #0f172a; font-weight: 700;">What is Dimensional Weight (DIM Weight)?</h3>
-            <p style="color: #334155;">Dimensional weight, or volumetric weight, is a billing technique used by commercial freight carriers (including FedEx, UPS, DHL, and USPS) to reflect the space a package occupies in a vehicle relative to its actual gross weight. Carriers charge based on whichever value is greater: the actual scale weight or the calculated dimensional weight.</p>
-        </article>
-
-        <article style="margin-top: 20px;">
-            <h3 style="color: #0f172a; font-weight: 700;">How is Dimensional Weight calculated?</h3>
-            <p style="color: #334155;">Dimensional weight is calculated by multiplying the length, width, and height of a package (in inches) to determine its total cubic volume, then dividing that figure by a specific standard divisor known as the <strong>DIM Factor</strong>. The standard DIM factor for domestic US shipments is typically 139 for express air freight and parcel carriers, though exact factors vary by carrier and contract terms.</p>
-        </article>
-
-        <article style="margin-top: 20px;">
-            <h3 style="color: #0f172a; font-weight: 700;">What is Freight Density and Freight Class?</h3>
-            <p style="color: #334155;">Freight density measures the weight per cubic foot of a shipment. In Less-Than-Truckload (LTL) shipping, the National Motor Freight Traffic Association (NMFTA) assigns shipments a freight class ranging from Class 50 (clean, dense cargo like steel) to Class 500 (light, bulky items like ping-pong balls). Lower freight classes generally cost less to ship per pound.</p>
-        </article>
-
-        <article style="margin-top: 20px;">
-            <h3 style="color: #0f172a; font-weight: 700;">How can shippers reduce DIM weight charges?</h3>
-            <p style="color: #334155;">Shippers can minimize dimensional charges by using custom-sized corrugated boxes, trimming excess packaging material, nesting items efficiently, or switching from rigid boxes to poly mailers where appropriate. Accurately measuring dimensions before tendering shipments prevents costly carrier adjustment fees.</p>
-        </article>
-    </section>
-<!-- Supporting Content Section for Search Engines -->
-<section class="seo-info-block" style="margin-top: 40px; padding: 20px; background-color: #f8fafc; border-radius: 8px; max-width: 900px; margin-left: auto; margin-right: auto; text-align: left;">
-    <h2 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 10px;">How to Calculate Freight & Parcel DIM Weight</h2>
-    <p style="margin-bottom: 12px; font-size: 0.95rem; line-height: 1.5;">
-        Dimensional weight (DIM weight) reflects package density and is calculated using the industry standard formula: 
-        <strong>(Length × Width × Height) / DIM Factor</strong>.
-    </p>
-    
-    <h3 style="font-size: 1.05rem; font-weight: 600; margin-top: 15px; margin-bottom: 8px;">Standard Carrier Divisors</h3>
-    <ul style="padding-left: 20px; font-size: 0.95rem; line-height: 1.6;">
-        <li><strong>UPS & FedEx Domestic Daily Rates:</strong> 139</li>
-        <li><strong>Retail / Counter Rates:</strong> 166</li>
-        <li><strong>International & Ocean Freight:</strong> 139 or 166 (depending on terms)</li>
-    </ul>
-</section>
-    <!-- Standard Footer with Compliance Links -->
-    <footer style="text-align: center; padding: 30px 10px; border-top: 1px solid #cbd5e1; margin-top: 40px; color: #475569; font-size: 0.9rem;">
-        <p>&copy; 2026 Freight DIM Calc. All rights reserved.</p>
-        <p style="margin-top: 10px;">
-            <a href="freight-class-guide.html" style="color: #0284c7; text-decoration: none; margin: 0 10px;">Freight Class Guide</a> |
-            <a href="dim-weight-explainer.html" style="color: #0284c7; text-decoration: none; margin: 0 10px;">DIM Weight Explainer</a> |
-            <a href="ups-vs-fedex-dim.html" style="color: #0284c7; text-decoration: none; margin: 0 10px;">UPS vs. FedEx Rules</a> |
-            <a href="privacy.html" style="color: #0284c7; text-decoration: none; margin: 0 10px;">Privacy Policy</a>
-        </p>
-    </footer>
-<!-- SEO Internal Footer Links -->
-<footer style="margin-top: 50px; padding: 25px 15px; border-top: 1px solid #e2e8f0; text-align: center; font-size: 0.9rem; color: #64748b;">
-    <p style="margin-bottom: 8px;">
-        <strong>Quick Tools & Guides:</strong>
-    </p>
-    <p>
-        <a href="https://freightdimcalc.com/" style="color: #0284c7; text-decoration: none; font-weight: 500;">Freight DIM Calculator</a> &bull; 
-        <a href="https://freightdimcalc.com/#ups" style="color: #0284c7; text-decoration: none;">UPS Dim Rules</a> &bull; 
-        <a href="https://freightdimcalc.com/#fedex" style="color: #0284c7; text-decoration: none;">FedEx Dim Rules</a> &bull; 
-        <a href="https://freightdimcalc.com/#guide" style="color: #0284c7; text-decoration: none;">Freight Class Guide</a>
-    </p>
-</footer>
 </body>
 </html>
