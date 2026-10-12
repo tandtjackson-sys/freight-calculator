@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>USPS DIM Weight Calculator | Priority Mail & Ground Advantage</title>
-    <meta name="description" content="Calculate billable dimensional weight for USPS Priority Mail, Priority Mail Express, and Ground Advantage using official 166 DIM factors.">
+    <title>USPS DIM Weight Calculator | Priority Mail & Ground Advantage Rules</title>
+    <meta name="description" content="Calculate dimensional weight for USPS Priority Mail and Ground Advantage packages using official USPS divisors and cubic thresholds.">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4218227228599951" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -12,7 +12,7 @@
     <div class="container">
         <header>
             <h1>USPS Dimensional Weight Calculator</h1>
-            <p>Determine billable weight for USPS Priority Mail, Ground Advantage, and International packages.</p>
+            <p>Determine exact billable weight and cubic pricing rules for USPS Priority Mail and Ground Advantage.</p>
         </header>
 
         <!-- Navigation Bar -->
@@ -122,18 +122,15 @@
 
         <!-- SEO Content Section -->
         <div class="card guide-content">
-            <h2>Understanding USPS Dimensional Weight Rules</h2>
-            <p>The United States Postal Service applies dimensional (DIM) weight rules to domestic and international packages that exceed specific size thresholds. Unlike commercial parcel carriers like UPS or FedEx that use a 139 divisor, USPS uses a **166 DIM factor**, making dimensional weight charges slightly more favorable for shippers.</p>
+            <h2>How USPS Calculates Dimensional Weight</h2>
+            <p>Unlike commercial carriers that apply dimensional weight to all package sizes, USPS applies DIM weight rules primarily to <strong>Priority Mail and Ground Advantage</strong> packages that exceed 1 cubic foot (1,728 cubic inches) when shipped to Zones 5 through 9.</p>
             
-            <h3>The 1 Cubic Foot Threshold Rule</h3>
-            <p>USPS only calculates dimensional weight for packages that exceed **1 cubic foot (1,728 cubic inches)**. If your total cubic volume is 1,728 cubic inches or less, USPS bills strictly by actual physical weight regardless of the box size.</p>
-
-            <h3>USPS Imperial DIM Formula</h3>
-            <p>For packages greater than 1,728 cubic inches, multiply <strong>Length × Width × Height</strong> and divide by <strong>166</strong>:</p>
+            <h3>USPS Imperial DIM Formula & Divisor</h3>
+            <p>When a package exceeds 1 cubic foot, USPS divides total cubic inches by a divisor of <strong>166</strong>:</p>
             <p><code>(Length × Width × Height) ÷ 166 = Dimensional Weight (lbs)</code></p>
 
-            <h3>Non-Standard Length & Dimension Surcharges</h3>
-            <p>In addition to DIM weight, USPS charges non-standard length fees for large boxes: packages exceeding 22 inches in length incur a length surcharge, and packages exceeding 30 inches or 2 cubic feet (3,456 cu in) are subject to additional handling fees.</p>
+            <h3>USPS Cubic Pricing vs. Standard DIM</h3>
+            <p>For high-volume shippers utilizing commercial pricing tiers, USPS also offers <em>Cubic Priority Mail</em>, which bases rates directly on package volume tiers (up to 0.5, 1.0, 2.0 cubic feet) rather than standard weight calculations, often yielding substantial savings on heavy, small-form-factor boxes.</p>
         </div>
 
         <div class="card">
@@ -141,6 +138,20 @@
             <div class="status-grid" id="status-list"></div>
         </div>
     </div>
+
+    <!-- Unified Footer Links for SEO -->
+    <footer style="margin-top: 40px; padding: 20px 0; border-top: 1px solid #e2e8f0; text-align: center; font-size: 0.9rem; color: #4a5568;">
+        <div style="max-width: 1000px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
+            <strong>Quick Navigation:</strong>
+            <a href="index.html" style="color: #2b6cb0; text-decoration: none;">Main Calculator</a> | 
+            <a href="freight-class-guide.html" style="color: #2b6cb0; text-decoration: none;">Freight Class Guide</a> | 
+            <a href="dim-weight-explainer.html" style="color: #2b6cb0; text-decoration: none;">DIM Weight Explainer</a> | 
+            <a href="ups-vs-fedex-dim.html" style="color: #2b6cb0; text-decoration: none;">UPS vs. FedEx Rules</a> |
+            <a href="privacy.html" style="color: #2b6cb0; text-decoration: none;">Privacy Policy</a> |
+            <a href="terms.html" style="color: #2b6cb0; text-decoration: none;">Terms of Service</a>
+        </div>
+        <p style="margin-top: 10px; font-size: 0.8rem; color: #a0aec0;">&copy; 2026 FreightDIMCalc.com &bull; All Rights Reserved.</p>
+    </footer>
 
     <script src="carrier-rules.js"></script>
     <script src="calculator.js"></script>
@@ -154,26 +165,5 @@
             }
         });
     </script>
-    <!-- Internal Footer Links for SEO -->
-<footer style="margin-top: 40px; padding: 20px 0; border-top: 1px solid #e2e8f0; text-align: center; font-size: 0.9rem; color: #4a5568;">
-    <div style="max-width: 1000px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
-        <strong>Carrier Calculators:</strong>
-        <a href="index.html" style="color: #2b6cb0; text-decoration: none;">Main Calculator</a> | 
-        <a href="ups-dim-calculator.html" style="color: #2b6cb0; text-decoration: none;">UPS DIM Calculator</a> | 
-        <a href="fedex-dim-calculator.html" style="color: #2b6cb0; text-decoration: none;">FedEx DIM Calculator</a> | 
-        <a href="usps-dim-calculator.html" style="color: #2b6cb0; text-decoration: none;">USPS DIM Calculator</a> | 
-        <a href="dhl-dim-calculator.html" style="color: #2b6cb0; text-decoration: none;">DHL Volumetric Calculator</a>
-    </div>
-    <p style="margin-top: 10px; font-size: 0.8rem; color: #a0aec0;">&copy; 2026 FreightDIMCalc.com &bull; All Rights Reserved.</p>
-</footer>
-    <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const carrierSelect = document.getElementById("carrier-select");
-    if (carrierSelect) {
-      carrierSelect.value = "usps";
-      onCarrierChange();
-    }
-  });
-</script>
 </body>
 </html>
