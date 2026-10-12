@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DHL Express DIM Weight Calculator | Volumetric Weight Tool</title>
-    <meta name="description" content="Calculate volumetric dimensional weight for DHL Express Worldwide and international air shipments using standard 5000 metric and 139 imperial divisors.">
+    <title>DHL Volumetric Weight Calculator | International Express Rules</title>
+    <meta name="description" content="Calculate volumetric and dimensional weight for DHL Express international shipments using global air freight standards.">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4218227228599951" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>DHL Express Dimensional Weight Calculator</h1>
-            <p>Determine exact volumetric mass, dimensional weight, and billable mass for DHL Express international shipments.</p>
+            <h1>DHL Volumetric Weight Calculator</h1>
+            <p>Calculate billable volumetric weight for international air freight and DHL Express global shipments.</p>
         </header>
 
         <!-- Navigation Bar -->
@@ -122,17 +122,15 @@
 
         <!-- SEO Content Section -->
         <div class="card guide-content">
-            <h2>Understanding DHL Express Volumetric Weight Calculations</h2>
-            <p>DHL Express applies volumetric (dimensional) weight calculations to all international air express cargo. Volumetric weight reflects package density—calculating how much space a box occupies inside an aircraft cargo hold relative to its actual deadweight.</p>
+            <h2>How DHL Express Calculates Volumetric Weight</h2>
+            <p>Because international air cargo capacity is limited by cargo hold volume rather than aircraft weight limits, DHL Express relies heavily on volumetric (dimensional) weight calculations for cross-border shipments.</p>
             
-            <h3>DHL Volumetric Weight Formulas (Metric & Imperial)</h3>
-            <p>For international shipments using metric measurements (centimeters and kilograms), DHL uses the standard IATA volumetric divisor of <strong>5000</strong>:</p>
+            <h3>DHL Metric Air Freight Formula</h3>
+            <p>For international shipments measured in centimeters and kilograms, DHL applies the global standard air cargo divisor of <strong>5000</strong>:</p>
             <p><code>(Length × Width × Height in cm) ÷ 5000 = Volumetric Weight (kg)</code></p>
-            <p>For shipments measured in inches and pounds, DHL uses the imperial conversion divisor of <strong>139</strong>:</p>
-            <p><code>(Length × Width × Height in inches) ÷ 139 = Dimensional Weight (lbs)</code></p>
 
-            <h3>DHL Rounding & Oversize Surcharges</h3>
-            <p>DHL rounds measurements up to the next whole unit prior to volume calculation. Packages exceeding 120 cm (47 inches) on any single side or weighing more than 70 kg (154 lbs) incur individual Non-Stackable or Over-Piece / Oversize surcharges.</p>
+            <h3>DHL Imperial Conversion Formula</h3>
+            <p>When utilizing imperial measurements (inches and pounds) for express shipments, DHL applies the standard <strong>139</strong> divisor, billing whichever is greater between the scale weight and volumetric weight.</p>
         </div>
 
         <div class="card">
@@ -140,6 +138,20 @@
             <div class="status-grid" id="status-list"></div>
         </div>
     </div>
+
+    <!-- Unified Footer Links for SEO -->
+    <footer style="margin-top: 40px; padding: 20px 0; border-top: 1px solid #e2e8f0; text-align: center; font-size: 0.9rem; color: #4a5568;">
+        <div style="max-width: 1000px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
+            <strong>Quick Navigation:</strong>
+            <a href="index.html" style="color: #2b6cb0; text-decoration: none;">Main Calculator</a> | 
+            <a href="freight-class-guide.html" style="color: #2b6cb0; text-decoration: none;">Freight Class Guide</a> | 
+            <a href="dim-weight-explainer.html" style="color: #2b6cb0; text-decoration: none;">DIM Weight Explainer</a> | 
+            <a href="ups-vs-fedex-dim.html" style="color: #2b6cb0; text-decoration: none;">UPS vs. FedEx Rules</a> |
+            <a href="privacy.html" style="color: #2b6cb0; text-decoration: none;">Privacy Policy</a> |
+            <a href="terms.html" style="color: #2b6cb0; text-decoration: none;">Terms of Service</a>
+        </div>
+        <p style="margin-top: 10px; font-size: 0.8rem; color: #a0aec0;">&copy; 2026 FreightDIMCalc.com &bull; All Rights Reserved.</p>
+    </footer>
 
     <script src="carrier-rules.js"></script>
     <script src="calculator.js"></script>
@@ -153,26 +165,5 @@
             }
         });
     </script>
-    <!-- Internal Footer Links for SEO -->
-<footer style="margin-top: 40px; padding: 20px 0; border-top: 1px solid #e2e8f0; text-align: center; font-size: 0.9rem; color: #4a5568;">
-    <div style="max-width: 1000px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
-        <strong>Carrier Calculators:</strong>
-        <a href="index.html" style="color: #2b6cb0; text-decoration: none;">Main Calculator</a> | 
-        <a href="ups-dim-calculator.html" style="color: #2b6cb0; text-decoration: none;">UPS DIM Calculator</a> | 
-        <a href="fedex-dim-calculator.html" style="color: #2b6cb0; text-decoration: none;">FedEx DIM Calculator</a> | 
-        <a href="usps-dim-calculator.html" style="color: #2b6cb0; text-decoration: none;">USPS DIM Calculator</a> | 
-        <a href="dhl-dim-calculator.html" style="color: #2b6cb0; text-decoration: none;">DHL Volumetric Calculator</a>
-    </div>
-    <p style="margin-top: 10px; font-size: 0.8rem; color: #a0aec0;">&copy; 2026 FreightDIMCalc.com &bull; All Rights Reserved.</p>
-</footer>
-    <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const carrierSelect = document.getElementById("carrier-select");
-    if (carrierSelect) {
-      carrierSelect.value = "dhl";
-      onCarrierChange();
-    }
-  });
-</script>
 </body>
 </html>
